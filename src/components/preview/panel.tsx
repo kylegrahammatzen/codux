@@ -1,7 +1,7 @@
 "use client";
 
-import { PreviewHeader } from "@/components/preview-header";
-import { PreviewFooter } from "@/components/preview-footer";
+import { PreviewHeader } from "@/components/preview/header";
+import { PreviewFooter } from "@/components/preview/footer";
 
 export const PreviewPanel = () => {
   return (

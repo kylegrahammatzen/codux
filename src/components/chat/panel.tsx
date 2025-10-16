@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ChatInput } from "@/components/chat-input";
-import { useAppContext } from "@/components/app-context";
+import { ChatInput } from "@/components/chat/input";
+import { useProjectContext } from "@/components/project-context";
 
 export const ChatPanel = () => {
-  const { toggleChatPanel } = useAppContext();
+  const { toggleChat } = useProjectContext();
 
   return (
     <div className="w-full h-full bg-white rounded-md flex flex-col">
@@ -48,7 +48,7 @@ export const ChatPanel = () => {
             </svg>
             <span className="sr-only">History</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={toggleChatPanel}>
+          <Button variant="ghost" size="sm" onClick={toggleChat}>
             <svg
               className="w-4 h-4"
               fill="none"
