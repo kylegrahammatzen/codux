@@ -1,20 +1,23 @@
 "use client";
 
 import { useAppContext } from "@/components/app-context";
-import { ChatPanel } from "@/components/chat-panel";
-import { PreviewPanel } from "@/components/preview-panel";
+import { useProjectContext } from "@/components/project-context";
+import { ChatPanel } from "@/components/chat/panel";
+import { PreviewPanel } from "@/components/preview/panel";
+import { IntegrationsPanel } from "@/components/integrations/panel";
 import { cn } from "@/lib/utils";
 
 export const AppLayout = () => {
-  const { isChatPanelVisible, isMobile } = useAppContext();
+  const { isMobile } = useAppContext();
+  const { showChat, showIntegrations } = useProjectContext();
 
   return (
-    <div className={cn("flex h-full", isChatPanelVisible && !isMobile && "gap-2")}>
+    <div className="flex flex-1">
       {!isMobile && (
         <div
           className={cn(
             "transition-[width] ease-in-out duration-300 overflow-hidden",
-            isChatPanelVisible ? "w-[40%]" : "w-0"
+            showChat ? "w-[40%] mr-2" : "w-0"
           )}
         >
           <ChatPanel />
@@ -22,6 +25,17 @@ export const AppLayout = () => {
       )}
 
       <PreviewPanel />
+
+      {!isMobile && (
+        <div
+          className={cn(
+            "transition-[width] ease-in-out duration-300 overflow-hidden",
+            showIntegrations ? "w-[40%] ml-2" : "w-0"
+          )}
+        >
+          <IntegrationsPanel />
+        </div>
+      )}
     </div>
   );
 };

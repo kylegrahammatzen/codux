@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppProvider } from "@/components/app-context";
-import { AppHeader } from "@/components/app-header";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -34,10 +33,7 @@ export default function RootLayout(props: RootLayoutProps) {
           "antialiased bg-gray-200 p-2 h-screen flex flex-col gap-2"
         )}
       >
-        <AppProvider>
-          <AppHeader />
-          <div className="flex-1 overflow-hidden">{props.children}</div>
-        </AppProvider>
+        <AppProvider>{props.children}</AppProvider>
       </body>
     </html>
   );
