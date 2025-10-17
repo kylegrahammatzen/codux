@@ -4,9 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
 import { useProjectContext } from "@/components/project-context";
-import { cn } from "@/lib/utils";
 
 export const AppHeader = () => {
   const pathname = usePathname();
