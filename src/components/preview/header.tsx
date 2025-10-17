@@ -12,12 +12,10 @@ export const PreviewHeader = () => {
       {/* Left side - Project preview */}
       <div className="text-sm font-medium shrink-0">Project preview</div>
 
-      {/* Center - Viewport controls */}
-      {!isMobile && (
-        <div className="hidden lg:flex items-center gap-2">
-          <ViewportControls />
-        </div>
-      )}
+      {/* Center - Viewport controls - only show on xl+ */}
+      <div className="hidden xl:flex items-center gap-2">
+        <ViewportControls />
+      </div>
 
       {/* Right side - Reload and Fullscreen buttons */}
       <div className="flex items-center gap-2 shrink-0">

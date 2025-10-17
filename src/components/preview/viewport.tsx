@@ -93,11 +93,11 @@ export const PreviewViewport = () => {
           </div>
         </div>
 
-        {/* Resize handle - only show for desktop on large screens */}
+        {/* Resize handle - only show for desktop on xl+ screens */}
         {device === "desktop" && (
           <div
             className={cn(
-              "hidden lg:block absolute top-1/2 -translate-y-1/2 right-2 w-1.5 h-16 bg-gray-400 hover:bg-gray-600 cursor-ew-resize transition-colors rounded-full z-10",
+              "hidden xl:block absolute top-1/2 -translate-y-1/2 right-2 w-1.5 h-16 bg-gray-400 hover:bg-gray-600 cursor-ew-resize transition-colors rounded-full z-10",
               isDragging && "bg-gray-600"
             )}
             onMouseDown={() => setIsDragging(true)}
