@@ -12,11 +12,11 @@ export const AppLayout = () => {
   const { showChat, showIntegrations } = useProjectContext();
 
   return (
-    <div className="flex flex-1">
+    <div className="flex flex-1 overflow-hidden">
       {!isMobile && (
         <div
           className={cn(
-            "transition-[width] ease-in-out duration-300 overflow-hidden",
+            "transition-[width] ease-in-out duration-300 overflow-hidden flex-shrink-0",
             showChat ? "w-[40%] mr-2" : "w-0"
           )}
         >
@@ -29,7 +29,7 @@ export const AppLayout = () => {
       {!isMobile && (
         <div
           className={cn(
-            "transition-[width] ease-in-out duration-300 overflow-hidden",
+            "transition-[width] ease-in-out duration-300 overflow-hidden flex-shrink-0",
             showIntegrations ? "w-[40%] ml-2" : "w-0"
           )}
         >
