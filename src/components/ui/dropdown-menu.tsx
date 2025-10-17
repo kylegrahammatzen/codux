@@ -25,9 +25,16 @@ function DropdownMenuTrigger({
 }
 
 function DropdownMenuPositioner({
+	className,
 	...props
 }: React.ComponentProps<typeof BaseMenu.Positioner>) {
-	return <BaseMenu.Positioner data-slot="dropdown-menu-positioner" {...props} />
+	return (
+		<BaseMenu.Positioner
+			data-slot="dropdown-menu-positioner"
+			className={cn("absolute", className)}
+			{...props}
+		/>
+	)
 }
 
 function DropdownMenuContent({
