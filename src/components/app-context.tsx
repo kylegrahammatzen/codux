@@ -14,7 +14,7 @@ type AppProviderProps = {
 };
 
 export const AppProvider = (props: AppProviderProps) => {
-  const isMobile = useMobile();
+  const isMobile = useMobile(1280); // Use xl breakpoint
 
   return (
     <AppContext.Provider
