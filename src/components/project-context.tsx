@@ -20,21 +20,13 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
   const [showIntegrations, setShowIntegrations] = useState(false);
 
   const toggleChat = () => {
-    setShowChat((prev) => {
-      if (!prev) {
-        setShowIntegrations(false);
-      }
-      return !prev;
-    });
+    setShowChat((prev) => !prev);
+    setShowIntegrations(false);
   };
 
   const toggleIntegrations = () => {
-    setShowIntegrations((prev) => {
-      if (!prev) {
-        setShowChat(false);
-      }
-      return !prev;
-    });
+    setShowIntegrations((prev) => !prev);
+    setShowChat(false);
   };
 
   return (
