@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export const ChatInput = () => {
   return (
-    <div className="bg-gray-100 rounded-md relative p-2 mx-1 mb-1 flex flex-col gap-2 border border-transparent hover:border-ring/70 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] outline-none">
+    <div className="bg-gray-100 rounded-md relative p-2 mx-0.5 mb-0.5 flex flex-col gap-2 border border-border focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] outline-none">
       <Textarea
         placeholder="Type a message..."
         className="bg-transparent border-none shadow-none min-h-12 resize-none focus-visible:ring-0 p-0"
