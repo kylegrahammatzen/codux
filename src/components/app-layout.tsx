@@ -12,14 +12,12 @@ export const AppLayout = () => {
   const { showChat, showIntegrations } = useProjectContext();
 
   return (
-    <div className="flex flex-1 overflow-hidden min-h-0">
+    <div className="flex flex-1 overflow-hidden min-h-0 gap-2">
       {!isMobile && (
-        <div
-          className={cn(
-            "transition-[width] ease-in-out duration-300 overflow-hidden flex-shrink-0",
-            showChat ? "w-[40%] mr-2" : "w-0"
-          )}
-        >
+        <div className={cn(
+          "flex-shrink-0 transition-all ease-in-out duration-300 overflow-hidden",
+          showChat ? "w-[40%]" : "w-0"
+        )}>
           <ChatPanel />
         </div>
       )}
@@ -27,12 +25,10 @@ export const AppLayout = () => {
       <PreviewPanel />
 
       {!isMobile && (
-        <div
-          className={cn(
-            "transition-[width] ease-in-out duration-300 overflow-hidden flex-shrink-0",
-            showIntegrations ? "w-[40%] ml-2" : "w-0"
-          )}
-        >
+        <div className={cn(
+          "flex-shrink-0 transition-all ease-in-out duration-300 overflow-hidden",
+          showIntegrations ? "w-[40%]" : "w-0"
+        )}>
           <IntegrationsPanel />
         </div>
       )}
