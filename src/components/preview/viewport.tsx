@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import { useAppContext } from "@/components/app-context";
 import { usePreviewContext } from "@/components/preview/preview-context";
 import { cn } from "@/lib/utils";
 
@@ -13,13 +14,14 @@ const DEVICE_WIDTHS = {
 const MIN_WIDTH = 320;
 
 export const PreviewViewport = () => {
+  const { isMobile } = useAppContext();
   const { device, customWidth, setCustomWidth, setDimensions } = usePreviewContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const maxWidth = customWidth || DEVICE_WIDTHS[device];
+  const targetWidth = customWidth || DEVICE_WIDTHS[device];
 
-  // Track dimensions
+  // Track dimensions with ResizeObserver
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -32,12 +34,11 @@ export const PreviewViewport = () => {
       }
     };
 
-    updateDimensions();
     const resizeObserver = new ResizeObserver(updateDimensions);
     resizeObserver.observe(containerRef.current);
 
     return () => resizeObserver.disconnect();
-  }, [maxWidth, setDimensions]);
+  }, [setDimensions]);
 
   // Handle dragging
   useEffect(() => {
@@ -79,10 +80,11 @@ export const PreviewViewport = () => {
           "relative h-full bg-white",
           device === "desktop" && "w-full",
           device !== "desktop" && "border-x",
-          !isDragging && "transition-[width] duration-300 ease-in-out"
+          !isDragging && "transition-[width,max-width] duration-300 ease-in-out"
         )}
         style={{
-          width: maxWidth ? `${maxWidth}px` : undefined,
+          maxWidth: targetWidth ? `${targetWidth}px` : undefined,
+          width: device !== "desktop" && targetWidth ? `${targetWidth}px` : undefined,
         }}
       >
         {/* Loading spinner in center */}
@@ -93,11 +95,11 @@ export const PreviewViewport = () => {
           </div>
         </div>
 
-        {/* Resize handle - only show for desktop on xl+ screens */}
-        {device === "desktop" && (
+        {/* Resize handle - only show on xl+ screens */}
+        {!isMobile && device === "desktop" && (
           <div
             className={cn(
-              "hidden xl:block absolute top-1/2 -translate-y-1/2 right-2 w-1.5 h-16 bg-gray-400 hover:bg-gray-600 cursor-ew-resize transition-colors rounded-full z-10",
+              "absolute top-1/2 -translate-y-1/2 right-2 w-1.5 h-16 bg-gray-400 hover:bg-gray-600 cursor-ew-resize transition-colors rounded-full z-10",
               isDragging && "bg-gray-600"
             )}
             onMouseDown={() => setIsDragging(true)}
