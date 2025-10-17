@@ -64,7 +64,7 @@ export const PreviewHeader = () => {
               </svg>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuRadioGroup value={device} onValueChange={handleDeviceChange}>
+              <DropdownMenuRadioGroup value={activeDevice} onValueChange={handleDeviceChange}>
                 <DropdownMenuRadioItem value="desktop">
                   Desktop
                 </DropdownMenuRadioItem>
@@ -73,6 +73,9 @@ export const PreviewHeader = () => {
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="mobile">
                   Mobile
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="custom" disabled>
+                  Custom
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>

@@ -11,11 +11,6 @@ const DEVICE_WIDTHS = {
 };
 
 const MIN_WIDTH = 320;
-const SNAP_THRESHOLD = 40; // Pixels from snap point to apply magnetic effect
-const BASE_SNAP_POINTS = [375, 768]; // Mobile and tablet only
-
-// Easing function for smooth magnetic pull
-const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 export const PreviewViewport = () => {
   const { device, customWidth, setCustomWidth, setDimensions } = usePreviewContext();
@@ -68,42 +63,16 @@ export const PreviewViewport = () => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current || !parentRef.current) return;
 
+      const parentRect = parentRef.current.getBoundingClientRect();
       const containerRect = containerRef.current.getBoundingClientRect();
+
+      // Calculate width based on mouse position relative to container's left edge
       let newWidth = e.clientX - containerRect.left;
 
-      // Clamp to bounds [MIN_WIDTH, currentMaxWidth]
-      newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, currentMaxWidth || Infinity));
+      // Clamp to bounds [MIN_WIDTH, parent width]
+      newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, parentRect.width));
 
-      // Build dynamic snap points (base points + max available width)
-      const snapPoints = [...BASE_SNAP_POINTS];
-      if (currentMaxWidth && currentMaxWidth > 768) {
-        snapPoints.push(currentMaxWidth);
-      }
-
-      // Apply smooth magnetic pull to nearest snap point
-      let finalWidth = newWidth;
-      let closestSnapPoint: number | null = null;
-      let closestDistance = Infinity;
-
-      for (const snapPoint of snapPoints) {
-        const distance = Math.abs(newWidth - snapPoint);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestSnapPoint = snapPoint;
-        }
-      }
-
-      // If within threshold of a snap point, apply smooth interpolation
-      if (closestSnapPoint !== null && closestDistance < SNAP_THRESHOLD) {
-        // Calculate pull strength (0 to 1, where 1 is strongest at snap point)
-        const pullStrength = 1 - (closestDistance / SNAP_THRESHOLD);
-        // Apply easing for smooth feel
-        const easedPull = easeOutCubic(pullStrength);
-        // Interpolate between current width and snap point
-        finalWidth = newWidth + (closestSnapPoint - newWidth) * easedPull * 0.7;
-      }
-
-      setCustomWidth(Math.round(finalWidth));
+      setCustomWidth(Math.round(newWidth));
     };
 
     const handleMouseUp = () => {
@@ -126,7 +95,8 @@ export const PreviewViewport = () => {
         className={cn(
           "relative h-full bg-white",
           device === "desktop" && "w-full",
-          device !== "desktop" && "border-x shadow-lg"
+          device !== "desktop" && "border-x shadow-lg",
+          !isDragging && "transition-[width] duration-300 ease-in-out"
         )}
         style={{
           width: maxWidth ? `${maxWidth}px` : undefined,
