@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
 import { useProjectContext } from "@/components/project-context";
 
 export const AppHeader = () => {
@@ -33,7 +34,7 @@ export const AppHeader = () => {
 
         <span className="text-sm font-medium">Logo</span>
 
-        <span className="text-border text-xl">/</span>
+        <Separator orientation="vertical" className="h-4 rotate-12" />
 
         <span className="text-sm">Untitled Project</span>
       </div>

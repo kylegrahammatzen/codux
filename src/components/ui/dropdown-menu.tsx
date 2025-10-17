@@ -25,41 +25,31 @@ function DropdownMenuTrigger({
 }
 
 function DropdownMenuPositioner({
-	className,
 	...props
 }: React.ComponentProps<typeof BaseMenu.Positioner>) {
-	return (
-		<BaseMenu.Positioner
-			data-slot="dropdown-menu-positioner"
-			className={cn("absolute", className)}
-			{...props}
-		/>
-	)
+	return <BaseMenu.Positioner data-slot="dropdown-menu-positioner" {...props} />
 }
 
 function DropdownMenuContent({
 	className,
 	sideOffset = 4,
 	align = "center",
-	side = "bottom",
 	...props
 }: React.ComponentProps<typeof BaseMenu.Popup> & {
 	align?: BaseMenu.Positioner.Props["align"]
 	sideOffset?: BaseMenu.Positioner.Props["sideOffset"]
-	side?: BaseMenu.Positioner.Props["side"]
 }) {
 	return (
 		<DropdownMenuPortal>
 			<DropdownMenuPositioner
 				className="max-h-[var(--available-height)]"
 				sideOffset={sideOffset}
-				side={side}
 				align={align}
 			>
 				<BaseMenu.Popup
 					data-slot="dropdown-menu-content"
 					className={cn(
-						"bg-popover data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 text-popover-foreground data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[12rem] origin-[var(--transform-origin)] overflow-hidden rounded-md border p-1 shadow-md",
+						"bg-popover data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 text-popover-foreground data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[12rem] origin-[var(--transform-origin)] overflow-hidden rounded-md border p-1 shadow-md focus:outline-none focus-visible:outline-none",
 						className
 					)}
 					{...props}
@@ -90,7 +80,7 @@ function DropdownMenuItem({
 			data-inset={inset}
 			data-variant={variant}
 			className={cn(
-				"focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:*:[svg]:!text-destructive focus:data-[variant=destructive]:*:[svg]:!text-destructive-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden transition-all select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:transition-all [&_svg:not([class*='size-'])]:size-4",
+				"hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:hover:bg-destructive data-[variant=destructive]:hover:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:*:[svg]:!text-destructive hover:data-[variant=destructive]:*:[svg]:!text-destructive-foreground focus:data-[variant=destructive]:*:[svg]:!text-destructive-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden focus:outline-none focus-visible:outline-none select-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 				className
 			)}
 			{...props}
@@ -157,7 +147,7 @@ function DropdownMenuCheckboxItem({
 		<BaseMenu.CheckboxItem
 			data-slot="dropdown-menu-checkbox-item"
 			className={cn(
-				"focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+				"focus:bg-accent focus:text-accent-foreground relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden focus:outline-none focus-visible:outline-none select-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 				className
 			)}
 			checked={checked}
@@ -190,7 +180,7 @@ function DropdownMenuRadioItem({
 		<BaseMenu.RadioItem
 			data-slot="dropdown-menu-radio-item"
 			className={cn(
-				"focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+				"focus:bg-accent focus:text-accent-foreground relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden focus:outline-none focus-visible:outline-none select-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 				className
 			)}
 			{...props}
@@ -231,7 +221,7 @@ function DropdownMenuSubTrigger({
 			data-slot="dropdown-menu-sub-trigger"
 			data-inset={inset}
 			className={cn(
-				"focus:bg-accent focus:text-accent-foreground data-popup-open:bg-accent data-popup-open:text-accent-foreground flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8",
+				"focus:bg-accent focus:text-accent-foreground data-popup-open:bg-accent data-popup-open:text-accent-foreground flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden focus:outline-none focus-visible:outline-none select-none data-[inset]:pl-8",
 				className
 			)}
 			{...props}
@@ -245,23 +235,26 @@ function DropdownMenuSubTrigger({
 function DropdownMenuSubContent({
 	className,
 	sideOffset = 0,
+	alignOffset = 0,
 	align = "start",
 	...props
 }: React.ComponentProps<typeof BaseMenu.Popup> & {
 	align?: BaseMenu.Positioner.Props["align"]
 	sideOffset?: BaseMenu.Positioner.Props["sideOffset"]
+	alignOffset?: BaseMenu.Positioner.Props["alignOffset"]
 }) {
 	return (
 		<DropdownMenuPortal>
 			<DropdownMenuPositioner
 				className="max-h-[var(--available-height)]"
 				sideOffset={sideOffset}
+				alignOffset={alignOffset}
 				align={align}
 			>
 				<BaseMenu.Popup
 					data-slot="dropdown-menu-content"
 					className={cn(
-						"bg-popover text-popover-foreground data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[12rem] origin-[var(--transform-origin)] overflow-hidden rounded-md border p-1 shadow-md",
+						"bg-popover text-popover-foreground data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[12rem] origin-[var(--transform-origin)] overflow-hidden rounded-md border p-1 shadow-md focus:outline-none focus-visible:outline-none",
 						className
 					)}
 					{...props}
