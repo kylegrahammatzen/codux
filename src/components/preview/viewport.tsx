@@ -15,26 +15,11 @@ const MIN_WIDTH = 320;
 export const PreviewViewport = () => {
   const { device, customWidth, setCustomWidth, setDimensions } = usePreviewContext();
   const containerRef = useRef<HTMLDivElement>(null);
-  const parentRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [maxAvailableWidth, setMaxAvailableWidth] = useState<number | null>(null);
 
   const maxWidth = customWidth || DEVICE_WIDTHS[device];
 
-  // Track the parent container width (only on mount, not during panel toggles)
-  useEffect(() => {
-    if (!parentRef.current) return;
-
-    const updateMaxWidth = () => {
-      if (parentRef.current) {
-        setMaxAvailableWidth(parentRef.current.offsetWidth);
-      }
-    };
-
-    // Only set on mount
-    updateMaxWidth();
-  }, []);
-
+  // Track dimensions
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -54,16 +39,14 @@ export const PreviewViewport = () => {
     return () => resizeObserver.disconnect();
   }, [maxWidth, setDimensions]);
 
+  // Handle dragging
   useEffect(() => {
     if (!isDragging) return;
 
-    const currentCustomWidth = customWidth;
-    const currentMaxWidth = maxAvailableWidth;
-
     const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current || !parentRef.current) return;
+      if (!containerRef.current?.parentElement) return;
 
-      const parentRect = parentRef.current.getBoundingClientRect();
+      const parentRect = containerRef.current.parentElement.getBoundingClientRect();
       const containerRect = containerRef.current.getBoundingClientRect();
 
       // Calculate width based on mouse position relative to container's left edge
@@ -89,7 +72,7 @@ export const PreviewViewport = () => {
   }, [isDragging, setCustomWidth]);
 
   return (
-    <div ref={parentRef} data-preview-parent className="flex-1 flex items-center justify-center bg-gray-200 overflow-hidden">
+    <div className="flex-1 flex items-center justify-center bg-gray-200 overflow-hidden">
       <div
         ref={containerRef}
         className={cn(
