@@ -8,7 +8,7 @@ export const IntegrationsPanel = () => {
 
   return (
     <div className="w-full h-full bg-white rounded-md flex flex-col">
-      <div className="h-12 flex items-center justify-between p-2">
+      <div className="h-12 border-b flex items-center justify-between px-2">
         <span className="text-sm font-medium">Integrations</span>
         <Button variant="ghost" size="sm" onClick={toggleIntegrations}>
           <svg

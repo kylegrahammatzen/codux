@@ -9,7 +9,7 @@ export const ChatPanel = () => {
 
   return (
     <div className="w-full h-full bg-white rounded-md flex flex-col">
-      <div className="h-12 flex items-center justify-between p-2">
+      <div className="h-12 border-b flex items-center justify-between px-2">
         <div className="flex items-center gap-2">
           <div className="size-6 bg-black rounded-sm flex items-center justify-center">
             <span className="text-white text-xs font-semibold">St</span>

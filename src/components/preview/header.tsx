@@ -7,7 +7,7 @@ export const PreviewHeader = () => {
   const { isMobile } = useAppContext();
 
   return (
-    <div className="h-12 border-b flex items-center justify-between px-4">
+    <div className="h-12 border-b flex items-center justify-between px-2">
       {/* Left side - Project preview */}
       <div className="text-sm font-medium">Project preview</div>
 

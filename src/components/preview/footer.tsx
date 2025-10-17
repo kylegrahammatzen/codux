@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export const PreviewFooter = () => {
   return (
-    <div className="h-10 border-t flex items-center justify-between px-4">
+    <div className="h-14 border-t flex items-center justify-between px-2">
       {/* Left side - Console button */}
       <Button variant="ghost" size="sm">
         <svg
