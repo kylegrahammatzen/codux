@@ -78,7 +78,7 @@ export const PreviewViewport = () => {
         className={cn(
           "relative h-full bg-white",
           device === "desktop" && "w-full",
-          device !== "desktop" && "border-x shadow-lg",
+          device !== "desktop" && "border-x",
           !isDragging && "transition-[width] duration-300 ease-in-out"
         )}
         style={{
