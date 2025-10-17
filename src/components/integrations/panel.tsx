@@ -7,7 +7,7 @@ export const IntegrationsPanel = () => {
   const { toggleIntegrations } = useProjectContext();
 
   return (
-    <div className="w-full h-full bg-white rounded-md flex flex-col">
+    <div className="min-w-max h-full bg-white rounded-md flex flex-col">
       <div className="h-12 border-b flex items-center justify-between px-2">
         <span className="text-sm font-medium">Integrations</span>
         <Button variant="ghost" size="sm" onClick={toggleIntegrations}>

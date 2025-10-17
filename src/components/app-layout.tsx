@@ -12,7 +12,7 @@ export const AppLayout = () => {
   const { showChat, showIntegrations } = useProjectContext();
 
   return (
-    <div className="flex flex-1 overflow-hidden">
+    <div className="flex flex-1 overflow-hidden min-h-0">
       {!isMobile && (
         <div
           className={cn(

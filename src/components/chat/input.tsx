@@ -5,17 +5,17 @@ import { Textarea } from "@/components/ui/textarea";
 
 export const ChatInput = () => {
   return (
-    <div className="bg-gray-100 rounded-md relative p-2 mx-0.5 mb-0.5 flex flex-col gap-2 border border-border focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] outline-none">
+    <div className="bg-gray-50 rounded-md relative p-2 mx-0.5 mb-0.5 flex flex-col gap-2 border border-border focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] outline-none">
       <Textarea
         placeholder="Type a message..."
-        className="bg-transparent border-none shadow-none min-h-12 resize-none focus-visible:ring-0 p-0"
+        className="bg-transparent border-none shadow-none min-h-12 resize-none focus-visible:ring-0 px-2"
       />
 
       {/* Buttons positioned at bottom */}
       <div className="flex justify-between items-center">
         {/* Three action buttons on the left */}
         <div className="flex gap-2">
-          <Button variant="outline" size="icon-sm">
+          <Button variant="outline" size="icon-sm" className="bg-white">
             <svg
               className="w-4 h-4"
               fill="none"
@@ -30,7 +30,7 @@ export const ChatInput = () => {
               />
             </svg>
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="bg-white">
             <svg
               className="w-4 h-4"
               fill="none"
@@ -46,7 +46,7 @@ export const ChatInput = () => {
             </svg>
             <span>Attach</span>
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="bg-white">
             <svg
               className="w-4 h-4"
               fill="none"
