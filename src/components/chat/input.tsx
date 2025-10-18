@@ -6,7 +6,7 @@ import { ChatInputActions } from "@/components/chat/input-actions";
 
 export const ChatInput = () => {
   return (
-    <div className="bg-gray-50 rounded-md relative p-2 mx-0.5 mb-0.5 flex flex-col gap-2 border border-border focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] outline-none">
+    <div className="bg-gray-50 rounded-md relative p-2 m-1.5 flex flex-col gap-2 border border-border shadow-sm focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] outline-none">
       <Textarea
         placeholder="Type a message..."
         className="bg-transparent border-none shadow-none min-h-12 resize-none focus-visible:ring-0 px-2"
