@@ -7,7 +7,7 @@ import { ChatInput } from "@/components/chat/input";
 export const ChatPanel = () => {
   return (
     <div className="flex flex-col h-full min-w-max">
-      <div className="flex items-center justify-between px-2 border-b h-12">
+      <div className="flex items-center justify-between px-2 border-b h-12 bg-white rounded-t-md">
         <div className="flex items-center gap-2">
           <div className="size-6 bg-black rounded-sm flex items-center justify-center">
             <span className="text-white text-xs font-semibold">St</span>
@@ -35,9 +35,7 @@ export const ChatPanel = () => {
         <p className="text-gray-400 text-sm">Chat panel</p>
       </CardContent>
 
-      <div className="p-4">
-        <ChatInput />
-      </div>
+      <ChatInput />
     </div>
   );
 };

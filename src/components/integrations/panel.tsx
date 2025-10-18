@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 export const IntegrationsPanel = () => {
   return (
     <div className="flex flex-col h-full min-w-max">
-      <div className="flex items-center justify-between px-2 border-b h-12">
+      <div className="flex items-center justify-between px-2 border-b h-12 bg-white rounded-t-md">
         <span className="text-sm font-medium">Integrations</span>
         <Button variant="ghost" size="sm">
           <svg
