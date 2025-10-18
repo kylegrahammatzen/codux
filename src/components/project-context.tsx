@@ -2,11 +2,35 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 
+type ViewportMode = "desktop" | "tablet" | "mobile" | "custom";
+
+type Dimensions = {
+  width: number;
+  height: number;
+};
+
+type PreviewMode = "preview" | "code";
+
 type ProjectContextType = {
-  showChat: boolean;
-  showIntegrations: boolean;
-  toggleChat: () => void;
-  toggleIntegrations: () => void;
+  // Layout state - which panels are open
+  leftPanel: "chat" | null;
+  rightPanel: "integrations" | null;
+  setLeftPanel: (panel: "chat" | null) => void;
+  setRightPanel: (panel: "integrations" | null) => void;
+
+  // Preview viewport state
+  viewportMode: ViewportMode;
+  setViewportMode: (mode: ViewportMode) => void;
+  customDimensions: Dimensions | null;
+  setCustomDimensions: (dims: Dimensions | null) => void;
+
+  // UI mode state
+  previewMode: PreviewMode;
+  setPreviewMode: (mode: PreviewMode) => void;
+  fullscreen: boolean;
+  setFullscreen: (fullscreen: boolean) => void;
+  showFileTree: boolean;
+  setShowFileTree: (show: boolean) => void;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -16,53 +40,54 @@ type ProjectProviderProps = {
 };
 
 export const ProjectProvider = (props: ProjectProviderProps) => {
-  const [showChat, setShowChat] = useState(true);
-  const [showIntegrations, setShowIntegrations] = useState(false);
-  const [previousPanel, setPreviousPanel] = useState<"chat" | "integrations" | null>(null);
+  // Layout state
+  const [leftPanel, setLeftPanel] = useState<"chat" | null>("chat");
+  const [rightPanel, setRightPanel] = useState<"integrations" | null>(null);
+  const [previousLeftPanel, setPreviousLeftPanel] = useState<"chat" | null>(null);
+  const [previousRightPanel, setPreviousRightPanel] = useState<"integrations" | null>(null);
 
-  const toggleChat = () => {
-    setShowChat((prev) => {
-      if (!prev) {
-        // Opening chat
-        if (showIntegrations) {
-          setPreviousPanel("integrations");
-          setShowIntegrations(false);
-        }
-        return true;
-      } else {
-        // Closing chat
-        if (previousPanel === "integrations") {
-          setShowIntegrations(true);
-          setPreviousPanel(null);
-        }
-        return false;
-      }
-    });
-  };
+  // Viewport state
+  const [viewportMode, setViewportMode] = useState<ViewportMode>("desktop");
+  const [customDimensions, setCustomDimensions] = useState<Dimensions | null>(null);
 
-  const toggleIntegrations = () => {
-    setShowIntegrations((prev) => {
-      if (!prev) {
-        // Opening integrations
-        if (showChat) {
-          setPreviousPanel("chat");
-          setShowChat(false);
-        }
-        return true;
-      } else {
-        // Closing integrations
-        if (previousPanel === "chat") {
-          setShowChat(true);
-          setPreviousPanel(null);
-        }
-        return false;
-      }
-    });
+  // UI mode state
+  const [previewMode, setPreviewMode] = useState<PreviewMode>("preview");
+  const [fullscreen, setFullscreenState] = useState(false);
+  const [showFileTree, setShowFileTree] = useState(true);
+
+  const setFullscreen = (value: boolean) => {
+    if (value) {
+      // Entering fullscreen - save current panel state and close panels
+      setPreviousLeftPanel(leftPanel);
+      setPreviousRightPanel(rightPanel);
+      setLeftPanel(null);
+      setRightPanel(null);
+    } else {
+      // Exiting fullscreen - restore previous panel state
+      setLeftPanel(previousLeftPanel);
+      setRightPanel(previousRightPanel);
+    }
+    setFullscreenState(value);
   };
 
   return (
     <ProjectContext.Provider
-      value={{ showChat, showIntegrations, toggleChat, toggleIntegrations }}
+      value={{
+        leftPanel,
+        rightPanel,
+        setLeftPanel,
+        setRightPanel,
+        viewportMode,
+        setViewportMode,
+        customDimensions,
+        setCustomDimensions,
+        previewMode,
+        setPreviewMode,
+        fullscreen,
+        setFullscreen,
+        showFileTree,
+        setShowFileTree,
+      }}
     >
       {props.children}
     </ProjectContext.Provider>
