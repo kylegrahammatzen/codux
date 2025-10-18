@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { AppProvider } from "@/components/app-context";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,8 +13,8 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout(props: RootLayoutProps) {
   return (
     <html lang="en" className="h-full">
-      <body className="antialiased bg-gray-100 p-2 h-full flex flex-col overflow-hidden">
-        <AppProvider>{props.children}</AppProvider>
+      <body className="antialiased bg-gray-100 h-full flex flex-col overflow-hidden">
+        {props.children}
       </body>
     </html>
   );
