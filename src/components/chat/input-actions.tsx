@@ -63,7 +63,9 @@ export const ChatInputActions = () => {
       </Button>
       {/* Slide Edit button on mobile using transitions */}
       <div className="overflow-hidden -ml-2 pl-2">
-        <Button variant="outline" size="sm" className="bg-white transition-all duration-500 ease-in-out -translate-x-[10rem] opacity-0 pointer-events-none xl:translate-x-0 xl:opacity-100 xl:pointer-events-auto">
+        <Button variant="outline" size="sm" className="bg-white transition-all duration-300 -translate-x-[10rem] opacity-0 pointer-events-none xl:translate-x-0 xl:opacity-100 xl:pointer-events-auto" style={{
+          transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
+        }}>
           <svg
             className="w-4 h-4"
             fill="none"

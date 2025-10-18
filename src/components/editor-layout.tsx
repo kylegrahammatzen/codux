@@ -14,14 +14,14 @@ export const EditorLayout = () => {
   return (
     <div
       className={cn(
-        "flex flex-col h-full transition-all duration-300",
+        "flex flex-col h-full transition-all ease-[cubic-bezier(.165,.84,.44,1)] duration-300",
         fullscreen ? "gap-0 p-0" : "gap-2 p-2"
       )}
     >
       {/* AppHeader with transition */}
       <div
         className={cn(
-          "transition-all ease-in-out duration-300 overflow-hidden",
+          "transition-all ease-[cubic-bezier(.165,.84,.44,1)] duration-300 overflow-hidden",
           fullscreen ? "h-0 opacity-0" : "h-auto opacity-100"
         )}
       >

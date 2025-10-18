@@ -22,18 +22,21 @@ export const PanelWrapper = (props: PanelWrapperProps) => {
   return (
     <div
       className={cn(
-        "flex-shrink-0 transition-all ease-in-out duration-500",
+        "flex-shrink-0 transition-all duration-300",
         isOpen ? margin : ""
       )}
       style={{
         width: isOpen ? width : 0,
-        overflow: isOpen ? "visible" : "hidden"
+        overflow: isOpen ? "visible" : "hidden",
+        transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
       }}
     >
       <Card className={cn(
-        "h-full gap-0 py-0 transition-all duration-500",
+        "h-full gap-0 py-0 transition-opacity duration-300",
         isOpen ? "opacity-100" : "opacity-0"
-      )}>
+      )} style={{
+        transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
+      }}>
         {props.children}
       </Card>
     </div>
