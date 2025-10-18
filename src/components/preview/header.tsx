@@ -1,6 +1,5 @@
 "use client";
 
-import { useAppContext } from "@/components/app-context";
 import { usePreviewContext } from "@/components/preview/preview-context";
 import { useProjectContext } from "@/components/project-context";
 import { ViewportControls } from "@/components/preview/viewport-controls";
@@ -9,7 +8,6 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 
 export const PreviewHeader = () => {
-  const { isMobile } = useAppContext();
   const { showCode, setShowCode, isFullscreen, setFullscreen } = usePreviewContext();
   const { showChat, showIntegrations, toggleChat, toggleIntegrations } = useProjectContext();
 

@@ -1,11 +1,10 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useProjectContext } from "@/components/project-context";
 import { PreviewModeToggle } from "@/components/preview/mode-toggle";
-import { cn } from "@/lib/utils";
 
 export const PreviewPanel = () => {
   const { leftPanel, setLeftPanel, rightPanel, setRightPanel, fullscreen, setFullscreen, previewMode } = useProjectContext();
