@@ -18,6 +18,12 @@ type PreviewContextType = {
   setCustomHeight: (height: number | null) => void;
   dimensions: Dimensions;
   setDimensions: (dimensions: Dimensions) => void;
+  showCode: boolean;
+  setShowCode: (show: boolean) => void;
+  showFileTree: boolean;
+  setShowFileTree: (show: boolean) => void;
+  isFullscreen: boolean;
+  setFullscreen: (fullscreen: boolean) => void;
 };
 
 const PreviewContext = createContext<PreviewContextType | undefined>(undefined);
@@ -31,10 +37,28 @@ export const PreviewProvider = (props: PreviewProviderProps) => {
   const [customWidth, setCustomWidth] = useState<number | null>(null);
   const [customHeight, setCustomHeight] = useState<number | null>(null);
   const [dimensions, setDimensions] = useState<Dimensions>({ width: 0, height: 0 });
+  const [showCode, setShowCode] = useState(false);
+  const [showFileTree, setShowFileTree] = useState(true);
+  const [isFullscreen, setFullscreen] = useState(false);
 
   return (
     <PreviewContext.Provider
-      value={{ device, setDevice, customWidth, setCustomWidth, customHeight, setCustomHeight, dimensions, setDimensions }}
+      value={{
+        device,
+        setDevice,
+        customWidth,
+        setCustomWidth,
+        customHeight,
+        setCustomHeight,
+        dimensions,
+        setDimensions,
+        showCode,
+        setShowCode,
+        showFileTree,
+        setShowFileTree,
+        isFullscreen,
+        setFullscreen
+      }}
     >
       {props.children}
     </PreviewContext.Provider>

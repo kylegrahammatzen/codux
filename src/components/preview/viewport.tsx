@@ -15,7 +15,7 @@ const MIN_WIDTH = 320;
 
 export const PreviewViewport = () => {
   const { isMobile } = useAppContext();
-  const { device, customWidth, setCustomWidth, setDimensions } = usePreviewContext();
+  const { device, customWidth, setCustomWidth, setDimensions, isFullscreen } = usePreviewContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -78,13 +78,14 @@ export const PreviewViewport = () => {
         ref={containerRef}
         className={cn(
           "relative h-full bg-white",
-          device === "desktop" && "w-full",
-          device !== "desktop" && "border-x",
-          !isDragging && "transition-[width,max-width] duration-300 ease-in-out"
+          !isFullscreen && device === "desktop" && "w-full",
+          !isFullscreen && device !== "desktop" && "border-x",
+          isFullscreen && "w-full",
+          !isFullscreen && !isDragging && "transition-[width,max-width] duration-300 ease-in-out"
         )}
         style={{
-          maxWidth: targetWidth ? `${targetWidth}px` : undefined,
-          width: device !== "desktop" && targetWidth ? `${targetWidth}px` : undefined,
+          maxWidth: !isFullscreen && targetWidth ? `${targetWidth}px` : undefined,
+          width: !isFullscreen && device !== "desktop" && targetWidth ? `${targetWidth}px` : undefined,
         }}
       >
         {/* Loading spinner in center */}
@@ -95,8 +96,8 @@ export const PreviewViewport = () => {
           </div>
         </div>
 
-        {/* Resize handle - only show on xl+ screens */}
-        {!isMobile && device === "desktop" && (
+        {/* Resize handle - only show on xl+ screens and not in fullscreen */}
+        {!isMobile && !isFullscreen && device === "desktop" && (
           <div
             className={cn(
               "absolute top-1/2 -translate-y-1/2 right-2 w-1.5 h-16 bg-gray-400 hover:bg-gray-600 cursor-ew-resize transition-colors rounded-full z-10",

@@ -1,21 +1,68 @@
 "use client";
 
 import { useAppContext } from "@/components/app-context";
+import { usePreviewContext } from "@/components/preview/preview-context";
+import { useProjectContext } from "@/components/project-context";
 import { ViewportControls } from "@/components/preview/viewport-controls";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
 
 export const PreviewHeader = () => {
   const { isMobile } = useAppContext();
+  const { showCode, setShowCode, isFullscreen, setFullscreen } = usePreviewContext();
+  const { showChat, showIntegrations, toggleChat, toggleIntegrations } = useProjectContext();
+
+  const handleFullscreenToggle = () => {
+    // Close any open panels when entering fullscreen
+    if (!isFullscreen) {
+      if (showChat) toggleChat();
+      if (showIntegrations) toggleIntegrations();
+    }
+    setFullscreen(!isFullscreen);
+  };
 
   return (
     <div className="h-12 border-b flex items-center justify-between px-2 gap-2 min-w-0 overflow-hidden">
-      {/* Left side - Project preview */}
-      <div className="text-sm font-medium shrink-0">Project preview</div>
+      {/* Left side - Code switch and label (hide in fullscreen) */}
+      {!isFullscreen && (
+        <div className="flex items-center gap-2 shrink-0">
+          <Switch
+            checked={showCode}
+            onCheckedChange={setShowCode}
+            size="lg"
+            icon={
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                />
+              </svg>
+            }
+          />
+          <Separator orientation="vertical" className="h-4" />
+          <div className="text-sm font-medium">{showCode ? "Code viewer" : "Project preview"}</div>
+        </div>
+      )}
 
-      {/* Center - Viewport controls - only show on xl+ */}
-      <div className="hidden xl:flex items-center gap-2">
-        <ViewportControls />
-      </div>
+      {/* Show just label in fullscreen */}
+      {isFullscreen && (
+        <div className="text-sm font-medium shrink-0">Project preview</div>
+      )}
+
+      {/* Center - Viewport controls - only show on xl+ and not in code mode or fullscreen */}
+      {!showCode && !isFullscreen && (
+        <div className="hidden xl:flex items-center gap-2">
+          <ViewportControls />
+        </div>
+      )}
 
       {/* Right side - Reload and Fullscreen buttons */}
       <div className="flex items-center gap-2 shrink-0">
@@ -35,7 +82,7 @@ export const PreviewHeader = () => {
           </svg>
           <span>Reload</span>
         </Button>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" onClick={handleFullscreenToggle}>
           <svg
             className="w-4 h-4"
             fill="none"
@@ -49,7 +96,7 @@ export const PreviewHeader = () => {
               d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5M4 16v4m0 0h4m-4 0l5-5"
             />
           </svg>
-          <span>Fullscreen</span>
+          <span>{isFullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
         </Button>
       </div>
     </div>
