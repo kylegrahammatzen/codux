@@ -53,7 +53,7 @@ export const PreviewPanel = () => {
           <div className="flex items-center gap-2 transition-all duration-300" style={{
             transform: previewMode === "code" ? 'translateX(20rem)' : 'translateX(0)',
             opacity: previewMode === "code" ? 0 : 1,
-            transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
+            transitionTimingFunction: "cubic-bezier(.77, 0, .175, 1)"
           }}>
             <Button variant="ghost" size="sm">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
