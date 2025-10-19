@@ -1,32 +1,5 @@
-import { AuthTabs } from "@/components/auth/auth-tabs";
-import { CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { LoginForm } from "@/components/auth/login-form";
 
 export default function LoginPage() {
-  return (
-    <>
-      <CardHeader className="space-y-2">
-        <AuthTabs />
-      </CardHeader>
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
-        <CardDescription>Login to your account to continue</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" placeholder="Email" type="email" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="Password" type="password" />
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button className="w-full">Login</Button>
-      </CardFooter>
-    </>
-  );
+  return <LoginForm />;
 }
