@@ -21,8 +21,8 @@ export const EditorLayout = () => {
       {/* AppHeader with transition */}
       <div
         className={cn(
-          "transition-all ease-[cubic-bezier(.165,.84,.44,1)] duration-300 overflow-hidden",
-          fullscreen ? "h-0 opacity-0" : "h-auto opacity-100"
+          "transition-all ease-[cubic-bezier(.165,.84,.44,1)] duration-300",
+          fullscreen ? "h-0 opacity-0 overflow-hidden" : "h-auto opacity-100"
         )}
       >
         <AppHeader />
