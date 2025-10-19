@@ -13,12 +13,25 @@ export const CodePanel = () => {
 
   return (
     <div className="flex flex-1 min-h-0 relative">
-      {/* File tree - conditionally shown */}
-      {showFileTree && (
-        <div className="w-64 bg-accent flex-shrink-0 border-r">
+      {/* File tree - conditionally shown with width animation */}
+      <div
+        className="flex-shrink-0 transition-all duration-300"
+        style={{
+          width: showFileTree ? "16rem" : 0,
+          overflow: showFileTree ? "visible" : "hidden",
+          transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
+        }}
+      >
+        <div
+          className="w-64 bg-accent border-r h-full transition-opacity duration-300"
+          style={{
+            transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)",
+            opacity: showFileTree ? 1 : 0
+          }}
+        >
           <p className="p-4">File Tree</p>
         </div>
-      )}
+      </div>
 
       {/* Code editor */}
       <div className="flex-1 bg-green-500">
