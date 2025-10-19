@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useProjectContext } from "@/components/project-context";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ArrowLeftToLine, ArrowRightToLine, Copy, Download, ChevronDown, File } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -34,16 +35,22 @@ export const CodePanel = () => {
               <span>app</span>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <div className="ml-5 space-y-0.5">
-                {/* File: globals.css */}
-                <div className="flex items-center gap-1 hover:bg-gray-100 rounded px-1 py-1 text-sm">
-                  <File className="size-4 text-gray-500" />
-                  <span>globals.css</span>
+              <div className="flex">
+                {/* Vertical separator aligned with chevron */}
+                <div className="flex items-start px-1 py-1">
+                  <Separator orientation="vertical" className="h-full" />
                 </div>
-                {/* File: page.tsx */}
-                <div className="flex items-center gap-1 hover:bg-gray-100 rounded px-1 py-1 text-sm">
-                  <File className="size-4 text-gray-500" />
-                  <span>page.tsx</span>
+                <div className="flex-1 space-y-0.5">
+                  {/* File: globals.css */}
+                  <div className="flex items-center gap-1 hover:bg-gray-100 rounded px-1 py-1 text-sm">
+                    <File className="size-4 text-gray-500" />
+                    <span>globals.css</span>
+                  </div>
+                  {/* File: page.tsx */}
+                  <div className="flex items-center gap-1 hover:bg-gray-100 rounded px-1 py-1 text-sm">
+                    <File className="size-4 text-gray-500" />
+                    <span>page.tsx</span>
+                  </div>
                 </div>
               </div>
             </CollapsibleContent>
