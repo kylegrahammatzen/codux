@@ -79,7 +79,9 @@ export const PreviewFooter = () => {
         </div>
       </div>
 
-      <PreviewConsole isOpen={isConsoleOpen} />
+      <div className={cn("px-2", isConsoleOpen && "pb-2")}>
+        <PreviewConsole isOpen={isConsoleOpen} />
+      </div>
     </div>
   );
 };
