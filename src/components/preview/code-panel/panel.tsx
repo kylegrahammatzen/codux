@@ -22,7 +22,7 @@ export const CodePanel = () => {
           transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
         }}
       >
-        <div className="w-64 bg-accent border-r h-full">
+        <div className="w-64 bg-gray-50 border-r h-full">
           <p className="p-4">File Tree</p>
         </div>
       </div>
