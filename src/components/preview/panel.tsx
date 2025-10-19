@@ -10,7 +10,7 @@ import { FileTreePanel } from "@/components/preview/file-tree-panel";
 import { CodeViewerPanel } from "@/components/preview/code-viewer-panel";
 import { PreviewFooter } from "@/components/preview/footer";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, RefreshCcw, Expand, Shrink } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, RefreshCcw, Expand, Shrink } from "lucide-react";
 
 export const PreviewPanel = () => {
   const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode } = useProjectContext();
@@ -35,7 +35,7 @@ export const PreviewPanel = () => {
           {!fullscreen && (
             <>
               <Button variant="ghost" size="sm" onClick={togglePanel}>
-                {panelOpen ? <ChevronLeft className="size-4" /> : <ChevronRight className="size-4" />}
+                {panelOpen ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
               </Button>
               <Separator orientation="vertical" className="h-6" />
               <PreviewModeToggle />
