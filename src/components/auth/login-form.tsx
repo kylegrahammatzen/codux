@@ -8,11 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { login } from "@/actions/account";
-
-export const loginSchema = z.object({
-  email: z.email({ message: "Please enter a valid email address." }),
-  password: z.string().min(1, { message: "Password is required." }),
-});
+import { loginSchema } from "@/lib/zod-schemas";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 

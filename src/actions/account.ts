@@ -1,8 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { loginSchema } from "@/components/auth/login-form";
-import { signupSchema } from "@/components/auth/signup-form";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { loginSchema, signupSchema } from "@/lib/zod-schemas";
 
 export async function login(data: z.infer<typeof loginSchema>) {
   const validated = loginSchema.safeParse(data);
@@ -13,13 +15,14 @@ export async function login(data: z.infer<typeof loginSchema>) {
       errors: validated.error.flatten().fieldErrors,
     };
   }
-
-  // TODO: Implement actual login logic
   console.log("Login:", validated.data);
-
-  return {
-    success: true,
-  };
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signInWithPassword(data)
+  if (error) {
+    redirect('/error')
+  }
+  revalidatePath('/', 'layout')
+  redirect('/')
 }
 
 export async function signup(data: z.infer<typeof signupSchema>) {
@@ -31,11 +34,18 @@ export async function signup(data: z.infer<typeof signupSchema>) {
       errors: validated.error.flatten().fieldErrors,
     };
   }
-
-  // TODO: Implement actual signup logic
   console.log("Signup:", validated.data);
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signUp(data)
+  if (error) {
+    redirect('/error')
+  }
+  revalidatePath('/', 'layout')
+  redirect('/')
+}
 
-  return {
-    success: true,
-  };
+export async function signOut() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/login");
 }
