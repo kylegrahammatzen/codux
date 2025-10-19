@@ -8,7 +8,7 @@ import { PanelWrapper } from "@/components/panel-wrapper";
 import { cn } from "@/lib/utils";
 
 export const EditorLayout = () => {
-  const { panelOpen, fullscreen } = useProjectContext();
+  const { panelOpen, fullscreen, isMobile } = useProjectContext();
 
   return (
     <div
@@ -29,7 +29,7 @@ export const EditorLayout = () => {
 
       {/* Panel layout */}
       <div className="flex flex-1 overflow-hidden min-h-0">
-        <PanelWrapper isOpen={panelOpen}>
+        <PanelWrapper isOpen={panelOpen && !isMobile}>
           <ChatPanel />
         </PanelWrapper>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { useMobile } from "@/hooks/use-mobile";
 
 type ViewportMode = "desktop" | "tablet" | "mobile" | "custom";
 
@@ -15,6 +16,9 @@ type ProjectContextType = {
   // Layout state
   panelOpen: boolean;
   setPanelOpen: (isOpen: boolean) => void;
+
+  // Responsive state
+  isMobile: boolean;
 
   // Preview viewport state
   viewportMode: ViewportMode;
@@ -42,6 +46,9 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
   const [panelOpen, setPanelOpen] = useState(true);
   const [previousPanelState, setPreviousPanelState] = useState(false);
 
+  // Responsive state
+  const isMobile = useMobile(1280); // Below xl breakpoint
+
   // Viewport state
   const [viewportMode, setViewportMode] = useState<ViewportMode>("desktop");
   const [customDimensions, setCustomDimensions] = useState<Dimensions | null>(null);
@@ -68,6 +75,7 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
       value={{
         panelOpen,
         setPanelOpen,
+        isMobile,
         viewportMode,
         setViewportMode,
         customDimensions,
