@@ -11,12 +11,19 @@ type FileTreeNode = {
   children?: FileTreeNode[];
 };
 
+type BuildNode = {
+  name: string;
+  path: string;
+  type: "file" | "folder";
+  children?: Record<string, BuildNode>;
+};
+
 export const FileTree = () => {
-  const { files, activeFile, setActiveFile } = useProjectContext();
+  const { files, activeFile, setActiveFile, showFileTree } = useProjectContext();
 
   // Build tree structure from flat file list
   const buildTree = (filePaths: string[]): FileTreeNode[] => {
-    const root: Record<string, FileTreeNode> = {};
+    const root: Record<string, BuildNode> = {};
 
     filePaths.forEach((path) => {
       const parts = path.split("/").filter(Boolean);
@@ -35,18 +42,20 @@ export const FileTree = () => {
           };
         }
 
-        if (!isFile) {
-          currentLevel = currentLevel[part].children as Record<string, FileTreeNode>;
+        if (!isFile && currentLevel[part].children) {
+          currentLevel = currentLevel[part].children!;
         }
       });
     });
 
     // Convert to array and sort: folders first, then files
-    const toArray = (obj: Record<string, FileTreeNode>): FileTreeNode[] => {
+    const toArray = (obj: Record<string, BuildNode>): FileTreeNode[] => {
       return Object.values(obj)
         .map((node) => ({
-          ...node,
-          children: node.children ? toArray(node.children as Record<string, FileTreeNode>) : undefined,
+          name: node.name,
+          path: node.path,
+          type: node.type,
+          children: node.children ? toArray(node.children) : undefined,
         }))
         .sort((a, b) => {
           if (a.type === b.type) return a.name.localeCompare(b.name);
@@ -82,8 +91,17 @@ export const FileTree = () => {
   const tree = buildTree(Object.keys(files));
 
   return (
-    <div className="w-64 bg-gray-50 border-r h-full p-2 overflow-y-auto">
-      {renderTree(tree)}
+    <div
+      className="flex-shrink-0 transition-all duration-300 h-full bg-green-500"
+      style={{
+        width: showFileTree ? "16rem" : 0,
+        overflow: "hidden",
+        transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
+      }}
+    >
+      <div className="w-64 bg-gray-50 border-r h-full p-2 overflow-y-auto">
+        {renderTree(tree)}
+      </div>
     </div>
   );
 };
