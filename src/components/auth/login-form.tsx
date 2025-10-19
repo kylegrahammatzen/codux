@@ -7,25 +7,32 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
+import { login } from "@/actions/account";
 
-const schema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
+export const loginSchema = z.object({
+  email: z.email({ message: "Please enter a valid email address." }),
   password: z.string().min(1, { message: "Password is required." }),
 });
 
-type LoginFormValues = z.infer<typeof schema>;
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const LoginForm = () => {
   const form = useForm<LoginFormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormValues) => {
+    const result = await login(data);
+
+    if (result.success) {
+      console.log("Login successful");
+    } else {
+      console.log("Login failed:", result.errors);
+    }
   };
 
   return (

@@ -7,25 +7,32 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
+import { signup } from "@/actions/account";
 
-const schema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
+export const signupSchema = z.object({
+  email: z.email({ message: "Please enter a valid email address." }),
   password: z.string().min(8, { message: "Password must be at least 8 characters." }),
 });
 
-type SignupFormValues = z.infer<typeof schema>;
+type SignupFormValues = z.infer<typeof signupSchema>;
 
 export const SignupForm = () => {
   const form = useForm<SignupFormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: SignupFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: SignupFormValues) => {
+    const result = await signup(data);
+
+    if (result.success) {
+      console.log("Signup successful");
+    } else {
+      console.log("Signup failed:", result.errors);
+    }
   };
 
   return (
