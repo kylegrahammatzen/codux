@@ -5,11 +5,11 @@ import { useSandpackContext } from "@/components/sandpack-context";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftToLine, Copy, Download } from "lucide-react";
 import { FileTree } from "./file-tree";
-import Editor from "@monaco-editor/react";
+import { SandpackCodeEditor } from "@codesandbox/sandpack-react";
 
 export const CodePanel = () => {
   const { showFileTree, setShowFileTree } = useProjectContext();
-  const { files, activeFile, updateFile } = useSandpackContext();
+  const { files, activeFile } = useSandpackContext();
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
@@ -17,32 +17,6 @@ export const CodePanel = () => {
 
   const getFileName = (path: string) => {
     return path.split("/").pop() || path;
-  };
-
-  const getFileLanguage = (path: string) => {
-    const ext = path.split(".").pop()?.toLowerCase();
-    switch (ext) {
-      case "ts":
-      case "tsx":
-        return "typescript";
-      case "js":
-      case "jsx":
-        return "javascript";
-      case "css":
-        return "css";
-      case "json":
-        return "json";
-      case "html":
-        return "html";
-      default:
-        return "plaintext";
-    }
-  };
-
-  const handleEditorChange = (value: string | undefined) => {
-    if (activeFile && value !== undefined) {
-      updateFile(activeFile, value);
-    }
   };
 
   const handleCopy = () => {
@@ -98,19 +72,11 @@ export const CodePanel = () => {
 
         <div className="flex-1 min-h-0">
           {activeFile ? (
-            <Editor
-              height="100%"
-              language={getFileLanguage(activeFile)}
-              value={files[activeFile]?.code || ""}
-              onChange={handleEditorChange}
-              theme="light"
-              options={{
-                minimap: { enabled: false },
-                fontSize: 14,
-                lineNumbers: "on",
-                scrollBeyondLastLine: false,
-                automaticLayout: true,
-              }}
+            <SandpackCodeEditor
+              showLineNumbers
+              showInlineErrors
+              showTabs={false}
+              showRunButton={false}
             />
           ) : (
             <div className="flex items-center justify-center h-full">
