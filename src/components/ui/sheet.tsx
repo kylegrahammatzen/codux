@@ -36,7 +36,7 @@ function SheetOverlay({
 		<BaseSheet.Backdrop
 			data-slot="sheet-overlay"
 			className={cn(
-				"fixed inset-0 bg-black/50 transition-all duration-200 [&[data-ending-style]]:opacity-0 [&[data-starting-style]]:opacity-0",
+				"fixed inset-0 bg-black/50 transition-all ease-[cubic-bezier(.25,.46,.45,.94)] duration-300 [&[data-ending-style]]:opacity-0 [&[data-starting-style]]:opacity-0",
 				className
 			)}
 			{...props}
@@ -60,7 +60,7 @@ function SheetContent({
 			<BaseSheet.Popup
 				data-slot="sheet-content"
 				className={cn(
-					"bg-popover text-popover-foreground fixed z-50 flex flex-col gap-4 rounded-lg shadow-lg outline-hidden transition ease-in-out data-closed:duration-300 data-open:duration-500",
+					"bg-popover text-popover-foreground fixed z-50 flex flex-col gap-4 rounded-lg shadow-lg outline-hidden transition ease-[cubic-bezier(.25,.46,.45,.94)] duration-300",
 					side === "right" &&
 					"top-[3rem] bottom-2 right-2 h-[calc(100vh-3.5rem)] w-3/4 origin-right border sm:max-w-sm [&[data-ending-style]]:translate-x-full [&[data-starting-style]]:translate-x-full",
 					side === "left" &&
