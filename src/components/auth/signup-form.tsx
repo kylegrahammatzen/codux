@@ -54,7 +54,7 @@ export const SignupForm = () => {
             )}
           />
         </CardContent>
-        <CardFooter>
+        <CardFooter className="pt-2">
           <Button type="submit" className="w-full">Sign up</Button>
         </CardFooter>
       </form>

@@ -54,8 +54,8 @@ export const LoginForm = () => {
             )}
           />
         </CardContent>
-        <CardFooter>
-          <Button type="submit" className="w-full">Login</Button>
+        <CardFooter className="pt-2">
+          <Button type="submit" className="w-full">Log in</Button>
         </CardFooter>
       </form>
     </Form>
