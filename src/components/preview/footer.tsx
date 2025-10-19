@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PreviewConsole } from "@/components/preview/console";
 import { cn } from "@/lib/utils";
-import { SquareTerminal, Funnel, ChevronDown } from "lucide-react";
+import { SquareTerminal, Funnel, ChevronsDown } from "lucide-react";
 
 export const PreviewFooter = () => {
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
@@ -36,7 +36,7 @@ export const PreviewFooter = () => {
           <Separator orientation="vertical" className="h-4" />
 
           <Button variant="ghost" size="icon-sm" onClick={() => setIsConsoleOpen(!isConsoleOpen)}>
-            <ChevronDown
+            <ChevronsDown
               className={cn(
                 "size-4 transition-transform duration-200",
                 isConsoleOpen && "rotate-180"
