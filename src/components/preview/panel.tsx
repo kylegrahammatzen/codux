@@ -12,8 +12,11 @@ import { cn } from "@/lib/utils";
 import { ChevronsLeft, ChevronsRight, RefreshCcw, Expand, Shrink } from "lucide-react";
 
 export const PreviewPanel = () => {
-  const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode } = useProjectContext();
+  const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode, isMobile } = useProjectContext();
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Panel is only visible if panelOpen is true AND not on mobile
+  const isPanelVisible = panelOpen && !isMobile;
 
   const togglePanel = () => {
     setPanelOpen(!panelOpen);
@@ -34,7 +37,7 @@ export const PreviewPanel = () => {
           {!fullscreen && (
             <>
               <Button variant="ghost" size="sm" onClick={togglePanel}>
-                {panelOpen ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
+                {isPanelVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
               </Button>
               <Separator orientation="vertical" className="h-6" />
               <PreviewModeToggle />
