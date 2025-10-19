@@ -15,7 +15,7 @@ export const PreviewFooter = () => {
         {/* Left side - Console label */}
         <div className="flex items-center gap-2 text-sm">
           <svg
-            className="w-4 h-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -41,7 +41,7 @@ export const PreviewFooter = () => {
 
           <Button variant="ghost" size="sm">
             <svg
-              className="w-4 h-4"
+              className="size-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -61,7 +61,7 @@ export const PreviewFooter = () => {
           <Button variant="ghost" size="icon-sm" onClick={() => setIsConsoleOpen(!isConsoleOpen)}>
             <svg
               className={cn(
-                "w-4 h-4 transition-transform duration-200",
+                "size-4 transition-transform duration-200",
                 isConsoleOpen && "rotate-180"
               )}
               fill="none"

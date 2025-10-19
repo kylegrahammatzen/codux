@@ -31,7 +31,7 @@ export const PreviewHeader = () => {
             size="lg"
             icon={
               <svg
-                className="w-3 h-3"
+                className="size-3"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -66,7 +66,7 @@ export const PreviewHeader = () => {
       <div className="flex items-center gap-2 shrink-0">
         <Button variant="ghost" size="sm">
           <svg
-            className="w-4 h-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -82,7 +82,7 @@ export const PreviewHeader = () => {
         </Button>
         <Button variant="ghost" size="sm" onClick={handleFullscreenToggle}>
           <svg
-            className="w-4 h-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

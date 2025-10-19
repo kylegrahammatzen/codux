@@ -14,7 +14,7 @@ export const ChatInputActions = () => {
       <DropdownMenu openOnHover>
         <DropdownMenuTrigger render={<Button variant="outline" size="icon-sm" />} className="bg-white">
           <svg
-            className="w-4 h-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -30,7 +30,7 @@ export const ChatInputActions = () => {
         <DropdownMenuContent align="start">
           <DropdownMenuItem>
             <svg
-              className="w-4 h-4"
+              className="size-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -48,7 +48,7 @@ export const ChatInputActions = () => {
       </DropdownMenu>
       <Button variant="outline" size="icon-sm" className="bg-white relative z-10">
         <svg
-          className="w-4 h-4"
+          className="size-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -67,7 +67,7 @@ export const ChatInputActions = () => {
           transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
         }} disabled>
           <svg
-            className="w-4 h-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

@@ -35,7 +35,7 @@ export const PreviewPanel = () => {
             <>
               <Button variant="ghost" size="sm" onClick={togglePanel}>
                 <svg
-                  className="w-4 h-4"
+                  className={cn("size-4 transition-transform duration-200", !panelOpen && "rotate-180")}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -59,7 +59,7 @@ export const PreviewPanel = () => {
             previewMode === "code" ? "translate-x-[20rem] opacity-0" : "translate-x-0 opacity-100"
           )}>
             <Button variant="ghost" size="sm">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -70,7 +70,7 @@ export const PreviewPanel = () => {
               <span>Reload</span>
             </Button>
             <Button ref={fullscreenButtonRef} variant="ghost" size="sm" onClick={handleFullscreen}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
