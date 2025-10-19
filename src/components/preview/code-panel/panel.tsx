@@ -5,11 +5,11 @@ import { useSandpackContext } from "@/components/sandpack-context";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftToLine, Copy, Download } from "lucide-react";
 import { FileTree } from "./file-tree";
-import { SandpackCodeEditor } from "@codesandbox/sandpack-react";
+import Editor from "@monaco-editor/react";
 
 export const CodePanel = () => {
   const { showFileTree, setShowFileTree } = useProjectContext();
-  const { files, activeFile } = useSandpackContext();
+  const { files, activeFile, updateFile } = useSandpackContext();
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
@@ -17,6 +17,32 @@ export const CodePanel = () => {
 
   const getFileName = (path: string) => {
     return path.split("/").pop() || path;
+  };
+
+  const getFileLanguage = (path: string) => {
+    const ext = path.split(".").pop()?.toLowerCase();
+    switch (ext) {
+      case "ts":
+      case "tsx":
+        return "typescript";
+      case "js":
+      case "jsx":
+        return "javascript";
+      case "css":
+        return "css";
+      case "json":
+        return "json";
+      case "html":
+        return "html";
+      default:
+        return "plaintext";
+    }
+  };
+
+  const handleEditorChange = (value: string | undefined) => {
+    if (activeFile && value !== undefined) {
+      updateFile(activeFile, value);
+    }
   };
 
   const handleCopy = () => {
@@ -51,35 +77,40 @@ export const CodePanel = () => {
       </div>
 
       <div className="flex-1 bg-white flex flex-col">
-        <div className="h-10 border-b bg-white flex items-center justify-between px-2">
-          <div className="flex items-center gap-1 text-sm">
-            {activeFile ? (
-              <>
-                <span className="text-gray-600">{activeFile.split("/").slice(0, -1).join("/")}</span>
-                {activeFile.split("/").length > 2 && <span className="text-gray-400">/</span>}
-                <span className="text-gray-900 font-medium">{getFileName(activeFile)}</span>
-              </>
-            ) : (
-              <span className="text-gray-400">No file selected</span>
-            )}
-          </div>
+        {activeFile && (
+          <div className="h-10 border-b bg-white flex items-center justify-between px-2">
+            <div className="flex items-center gap-1 text-sm">
+              <span className="text-gray-600">{activeFile.split("/").slice(0, -1).join("/")}</span>
+              {activeFile.split("/").length > 2 && <span className="text-gray-400">/</span>}
+              <span className="text-gray-900 font-medium">{getFileName(activeFile)}</span>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon-sm" onClick={handleCopy} disabled={!activeFile}>
-              <Copy className="size-4" />
-            </Button>
-            <Button variant="ghost" size="icon-sm" onClick={handleDownload} disabled={!activeFile}>
-              <Download className="size-4" />
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon-sm" onClick={handleCopy}>
+                <Copy className="size-4" />
+              </Button>
+              <Button variant="ghost" size="icon-sm" onClick={handleDownload}>
+                <Download className="size-4" />
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 min-h-0">
           {activeFile ? (
-            <SandpackCodeEditor
-              showLineNumbers
-              showInlineErrors
-              style={{ height: "100%" }}
+            <Editor
+              height="100%"
+              language={getFileLanguage(activeFile)}
+              value={files[activeFile]?.code || ""}
+              onChange={handleEditorChange}
+              theme="light"
+              options={{
+                minimap: { enabled: false },
+                fontSize: 14,
+                lineNumbers: "on",
+                scrollBeyondLastLine: false,
+                automaticLayout: true,
+              }}
             />
           ) : (
             <div className="flex items-center justify-center h-full">
