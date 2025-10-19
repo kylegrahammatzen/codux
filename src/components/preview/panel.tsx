@@ -10,6 +10,7 @@ import { FileTreePanel } from "@/components/preview/file-tree-panel";
 import { CodeViewerPanel } from "@/components/preview/code-viewer-panel";
 import { PreviewFooter } from "@/components/preview/footer";
 import { cn } from "@/lib/utils";
+import { ChevronLeft, RefreshCcw, Expand, Shrink } from "lucide-react";
 
 export const PreviewPanel = () => {
   const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode } = useProjectContext();
@@ -34,19 +35,7 @@ export const PreviewPanel = () => {
           {!fullscreen && (
             <>
               <Button variant="ghost" size="sm" onClick={togglePanel}>
-                <svg
-                  className={cn("size-4 transition-transform duration-200", !panelOpen && "rotate-180")}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-                  />
-                </svg>
+                <ChevronLeft className={cn("size-4 transition-transform duration-200", !panelOpen && "rotate-180")} />
               </Button>
               <Separator orientation="vertical" className="h-6" />
               <PreviewModeToggle />
@@ -59,25 +48,11 @@ export const PreviewPanel = () => {
             previewMode === "code" ? "translate-x-[20rem] opacity-0" : "translate-x-0 opacity-100"
           )}>
             <Button variant="ghost" size="sm">
-              <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
+              <RefreshCcw className="size-4" />
               <span>Reload</span>
             </Button>
             <Button ref={fullscreenButtonRef} variant="ghost" size="sm" onClick={handleFullscreen}>
-              <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5M4 16v4m0 0h4m-4 0l5-5"
-                />
-              </svg>
+              {fullscreen ? <Shrink className="size-4" /> : <Expand className="size-4" />}
               <span>{fullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
             </Button>
           </div>

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ChatInputActions } from "@/components/chat/input-actions";
+import { MoveUp } from "lucide-react";
 
 export const ChatInput = () => {
   return (
@@ -17,19 +18,7 @@ export const ChatInput = () => {
         <ChatInputActions />
 
         <Button variant="default" size="icon-sm">
-          <svg
-            className="size-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 10l7-7m0 0l7 7m-7-7v18"
-            />
-          </svg>
+          <MoveUp className="size-4" />
         </Button>
       </div>
     </div>
