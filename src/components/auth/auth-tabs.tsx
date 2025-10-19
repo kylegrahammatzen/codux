@@ -9,11 +9,11 @@ export const AuthTabs = (props: AuthTabsProps) => {
   return (
     <Tabs value={props.currentTab} className="w-full">
       <TabsList className="w-full">
-        <TabsTrigger value="login" className="flex-1" asChild>
-          <Link href="/login">Login</Link>
+        <TabsTrigger value="login" className="flex-1" render={<Link href="/login" />}>
+          Login
         </TabsTrigger>
-        <TabsTrigger value="signup" className="flex-1" asChild>
-          <Link href="/signup">Sign up</Link>
+        <TabsTrigger value="signup" className="flex-1" render={<Link href="/signup" />}>
+          Sign up
         </TabsTrigger>
       </TabsList>
     </Tabs>
