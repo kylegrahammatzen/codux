@@ -1,11 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { useProjectContext } from "@/components/project-context";
 import { Button } from "@/components/ui/button";
-import { ArrowLeftToLine, ArrowRightToLine, Copy, Download } from "lucide-react";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+import { ArrowLeftToLine, ArrowRightToLine, Copy, Download, ChevronDown, File } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const CodePanel = () => {
   const { showFileTree, setShowFileTree } = useProjectContext();
+  const [appFolderOpen, setAppFolderOpen] = useState(true);
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
@@ -22,8 +26,34 @@ export const CodePanel = () => {
           transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
         }}
       >
-        <div className="w-64 bg-gray-50 border-r h-full">
-          <p className="p-4">File Tree</p>
+        <div className="w-64 bg-gray-50 border-r h-full p-2">
+          {/* Folder: app */}
+          <Collapsible open={appFolderOpen} onOpenChange={setAppFolderOpen}>
+            <CollapsibleTrigger className="flex items-center gap-1 w-full hover:bg-gray-100 rounded px-1 py-1 text-sm">
+              <ChevronDown className={cn("size-4 transition-transform duration-200", !appFolderOpen && "-rotate-90")} />
+              <span>app</span>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="ml-5 space-y-0.5">
+                {/* File: globals.css */}
+                <div className="flex items-center gap-1 hover:bg-gray-100 rounded px-1 py-1 text-sm">
+                  <File className="size-4 text-gray-500" />
+                  <span>globals.css</span>
+                </div>
+                {/* File: page.tsx */}
+                <div className="flex items-center gap-1 hover:bg-gray-100 rounded px-1 py-1 text-sm">
+                  <File className="size-4 text-gray-500" />
+                  <span>page.tsx</span>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+
+          {/* File: package.json */}
+          <div className="flex items-center gap-1 hover:bg-gray-100 rounded px-1 py-1 text-sm">
+            <File className="size-4 text-gray-500" />
+            <span>package.json</span>
+          </div>
         </div>
       </div>
 
