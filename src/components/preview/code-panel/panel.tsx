@@ -1,15 +1,18 @@
 "use client";
 
 import { useProjectContext } from "@/components/project-context";
-import { useSandpackContext } from "@/components/sandpack-context";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftToLine, Copy, Download } from "lucide-react";
 import { FileTree } from "./file-tree";
 import { SandpackCodeEditor } from "@codesandbox/sandpack-react";
 
-export const CodePanel = () => {
-  const { showFileTree, setShowFileTree } = useProjectContext();
-  const { files, activeFile } = useSandpackContext();
+type CodePanelProps = {
+  width: number;
+  height: number;
+};
+
+export const CodePanel = (props: CodePanelProps) => {
+  const { showFileTree, setShowFileTree, files, activeFile } = useProjectContext();
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
@@ -38,7 +41,7 @@ export const CodePanel = () => {
   };
 
   return (
-    <div className="flex flex-1 min-h-0 relative">
+    <div className="flex flex-1 min-h-0 relative w-full">
       <div
         className="flex-shrink-0 transition-all duration-300"
         style={{
@@ -50,7 +53,7 @@ export const CodePanel = () => {
         <FileTree />
       </div>
 
-      <div className="flex-1 bg-white flex flex-col">
+      <div className="flex-1 bg-white flex flex-col min-w-0">
         {activeFile && (
           <div className="h-10 border-b bg-white flex items-center justify-between px-2">
             <div className="flex items-center gap-1 text-sm">
@@ -73,13 +76,18 @@ export const CodePanel = () => {
         <div className="flex-1 min-h-0">
           {activeFile ? (
             <SandpackCodeEditor
+              key={activeFile}
               showLineNumbers
               showInlineErrors
               showTabs={false}
               showRunButton={false}
+              style={{
+                width: `${props.width}px`,
+                height: `${props.height - 40}px`
+              }}
             />
           ) : (
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-center w-full h-full">
               <p className="text-gray-400 text-sm">Select a file to edit</p>
             </div>
           )}
