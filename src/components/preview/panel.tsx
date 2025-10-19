@@ -35,64 +35,64 @@ export const PreviewPanel = () => {
   };
 
   const content = (
-    <SandpackProvider
-      template="react"
-      files={files}
-      options={{
-        activeFile: activeFile || undefined,
-      }}
-    >
-      <SandpackErrorListener />
-      <div className="flex flex-col flex-1 min-h-0">
-          <div className="flex items-center justify-between px-2 border-b h-12 bg-white rounded-t-md overflow-hidden">
-            <div className="flex items-center gap-2">
-              {!fullscreen && (
-                <>
-                  <Button variant="ghost" size="sm" onClick={togglePanel}>
-                    {isPanelVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
-                  </Button>
-                  <Separator orientation="vertical" className="h-6" />
-                  <PreviewModeToggle />
-                </>
-              )}
-            </div>
-            <div className="flex items-center gap-2">
-              <div className={cn(
-                "flex items-center gap-2 transition-all ease-[cubic-bezier(.77,0,.175,1)] duration-300",
-                previewMode === "code" ? "translate-x-[20rem] opacity-0" : "translate-x-0 opacity-100"
-              )}>
-                <Button variant="ghost" size="sm">
-                  <RefreshCcw className="size-4" />
-                  <span>Reload</span>
-                </Button>
-                <Button ref={fullscreenButtonRef} variant="ghost" size="sm" onClick={handleFullscreen}>
-                  {fullscreen ? <Shrink className="size-4" /> : <Expand className="size-4" />}
-                  <span>{fullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
-                </Button>
-              </div>
-            </div>
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex items-center justify-between px-2 border-b h-12 bg-white rounded-t-md overflow-hidden">
+        <div className="flex items-center gap-2">
+          {!fullscreen && (
+            <>
+              <Button variant="ghost" size="sm" onClick={togglePanel}>
+                {isPanelVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
+              </Button>
+              <Separator orientation="vertical" className="h-6" />
+              <PreviewModeToggle />
+            </>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <div className={cn(
+            "flex items-center gap-2 transition-all ease-[cubic-bezier(.77,0,.175,1)] duration-300",
+            previewMode === "code" ? "translate-x-[20rem] opacity-0" : "translate-x-0 opacity-100"
+          )}>
+            <Button variant="ghost" size="sm">
+              <RefreshCcw className="size-4" />
+              <span>Reload</span>
+            </Button>
+            <Button ref={fullscreenButtonRef} variant="ghost" size="sm" onClick={handleFullscreen}>
+              {fullscreen ? <Shrink className="size-4" /> : <Expand className="size-4" />}
+              <span>{fullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
+            </Button>
           </div>
-
-          <div className="flex-1 flex min-h-0">
-            {previewMode === "code" ? (
-              <CodePanel />
-            ) : (
-              <div className="flex-1 bg-gray-200">
-                <SandpackPreview
-                  showRefreshButton={false}
-                  showOpenInCodeSandbox={false}
-                />
-              </div>
-            )}
-          </div>
-
-        {!fullscreen && (
-          <div className="bg-white rounded-b-md">
-            <PreviewFooter />
-          </div>
-        )}
+        </div>
       </div>
-    </SandpackProvider>
+
+      <div className="flex-1 flex min-h-0">
+        <SandpackProvider
+          template="react"
+          files={files}
+          options={{
+            activeFile: activeFile || undefined,
+          }}
+        >
+          <SandpackErrorListener />
+          {previewMode === "code" ? (
+            <CodePanel />
+          ) : (
+            <div className="flex-1 bg-gray-200">
+              <SandpackPreview
+                showRefreshButton={false}
+                showOpenInCodeSandbox={false}
+              />
+            </div>
+          )}
+        </SandpackProvider>
+      </div>
+
+      {!fullscreen && (
+        <div className="bg-white rounded-b-md">
+          <PreviewFooter />
+        </div>
+      )}
+    </div>
   );
 
   if (fullscreen) {
