@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardFooter } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 
 type SignupFormValues = {
   email: string;
@@ -24,9 +24,9 @@ export const SignupForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <CardContent className="space-y-4">
+    <CardContent>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FormField
             control={form.control}
             name="email"
@@ -53,11 +53,9 @@ export const SignupForm = () => {
               </FormItem>
             )}
           />
-        </CardContent>
-        <CardFooter className="pt-4">
           <Button type="submit" className="w-full">Sign up</Button>
-        </CardFooter>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </CardContent>
   );
 };

@@ -12,7 +12,7 @@ export default function SignupPage() {
       <SignupForm />
       <CardFooter className="justify-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="underline">
+        <Link href="/login" className="underline ml-1">
           Log in
         </Link>
       </CardFooter>
