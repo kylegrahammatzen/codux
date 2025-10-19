@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -8,21 +9,22 @@ import { PreviewModeToggle } from "@/components/preview/mode-toggle";
 import { FileTreePanel } from "@/components/preview/file-tree-panel";
 import { CodeViewerPanel } from "@/components/preview/code-viewer-panel";
 import { PreviewFooter } from "@/components/preview/footer";
+import { cn } from "@/lib/utils";
 
 export const PreviewPanel = () => {
-  const { leftPanel, setLeftPanel, rightPanel, setRightPanel, fullscreen, setFullscreen, previewMode } = useProjectContext();
+  const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode } = useProjectContext();
+  const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
 
-  const toggleChat = () => {
-    setLeftPanel(leftPanel === "chat" ? null : "chat");
+  const togglePanel = () => {
+    setPanelOpen(!panelOpen);
   };
 
   const handleFullscreen = () => {
-    if (!fullscreen) {
-      // Entering fullscreen - close any open panels
-      if (leftPanel) setLeftPanel(null);
-      if (rightPanel) setRightPanel(null);
-    }
     setFullscreen(!fullscreen);
+    // Refocus button after state change
+    setTimeout(() => {
+      fullscreenButtonRef.current?.focus();
+    }, 0);
   };
 
   const content = (
@@ -31,7 +33,7 @@ export const PreviewPanel = () => {
         <div className="flex items-center gap-2">
           {!fullscreen && (
             <>
-              <Button variant="ghost" size="sm" onClick={toggleChat}>
+              <Button variant="ghost" size="sm" onClick={togglePanel}>
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -52,11 +54,10 @@ export const PreviewPanel = () => {
           )}
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 transition-all duration-300" style={{
-            transform: previewMode === "code" ? 'translateX(20rem)' : 'translateX(0)',
-            opacity: previewMode === "code" ? 0 : 1,
-            transitionTimingFunction: "cubic-bezier(.77, 0, .175, 1)"
-          }}>
+          <div className={cn(
+            "flex items-center gap-2 transition-all ease-[cubic-bezier(.77,0,.175,1)] duration-300",
+            previewMode === "code" ? "translate-x-[20rem] opacity-0" : "translate-x-0 opacity-100"
+          )}>
             <Button variant="ghost" size="sm">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -68,7 +69,7 @@ export const PreviewPanel = () => {
               </svg>
               <span>Reload</span>
             </Button>
-            <Button variant="ghost" size="sm" onClick={handleFullscreen}>
+            <Button ref={fullscreenButtonRef} variant="ghost" size="sm" onClick={handleFullscreen}>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
