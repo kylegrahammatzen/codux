@@ -30,7 +30,7 @@ export const CodePanel = () => {
       {/* Code editor */}
       <div className="flex-1 bg-green-500 flex flex-col">
         {/* Code editor header */}
-        <div className="h-12 border-b bg-white flex items-center justify-between px-2">
+        <div className="h-10 border-b bg-white flex items-center justify-between px-2">
           {/* Left side - Breadcrumb */}
           <div className="flex items-center gap-1 text-sm">
             <span className="text-gray-600">app</span>
@@ -40,13 +40,11 @@ export const CodePanel = () => {
 
           {/* Right side - Actions */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="icon-sm">
               <Copy className="size-4" />
-              <span>Copy</span>
             </Button>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="icon-sm">
               <Download className="size-4" />
-              <span>Download</span>
             </Button>
           </div>
         </div>
