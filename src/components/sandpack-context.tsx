@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import type { SandpackError } from "@codesandbox/sandpack-react";
+import type { SandpackError } from "@codesandbox/sandpack-client";
 
 export type SandpackFile = {
   code: string;
@@ -31,7 +31,7 @@ const DEFAULT_FILES: SandpackFiles = {
     code: `export default function App() {
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold">Hello World</h1>
+      <h1 className="text-2xl font-bold mb-2">Hello World</h1>
       <p className="text-gray-600">Edit App.tsx to get started!</p>
     </div>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "@/styles/sandpack.css";
 
 export const metadata: Metadata = {
   title: "Codux",

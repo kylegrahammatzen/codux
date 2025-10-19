@@ -1,0 +1,8 @@
+/* Sandpack code editor customizations */
+
+/* Line numbers - larger and more visible */
+.cm-lineNumbers .cm-gutterElement {
+  font-size: 14px;
+  color: oklch(43.9% 0 0);
+  font-weight: 500;
+}
