@@ -36,8 +36,8 @@ export const CodePanel = () => {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <div className="flex">
-                {/* Vertical separator aligned with chevron */}
-                <div className="flex items-start px-1 py-1">
+                {/* Vertical separator aligned with chevron center */}
+                <div className="flex items-start pl-[0.563rem] pr-1 py-1">
                   <Separator orientation="vertical" className="h-full" />
                 </div>
                 <div className="flex-1 space-y-0.5">
