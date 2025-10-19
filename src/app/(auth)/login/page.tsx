@@ -12,7 +12,7 @@ export default function LoginPage() {
       <LoginForm />
       <CardFooter className="justify-center text-sm text-muted-foreground">
         <div className="flex items-center gap-1">
-          <span>Don't have an account yet?</span>
+          <span>Don&apos;t have an account yet?</span>
           <Link href="/signup" className="underline">
             Sign up
           </Link>
