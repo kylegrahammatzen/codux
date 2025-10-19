@@ -81,6 +81,7 @@ export const PreviewPanel = () => {
               <SandpackPreview
                 showRefreshButton={false}
                 showOpenInCodeSandbox={false}
+                style={{ height: "100%" }}
               />
             </div>
           )}
