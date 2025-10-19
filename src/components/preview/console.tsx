@@ -6,7 +6,6 @@ import {
   Collapsible,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
-import { Slash } from "lucide-react";
 
 type PreviewConsoleProps = {
   isOpen: boolean;
@@ -22,7 +21,7 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
         </div>
         <div className="flex items-center gap-2">
           <div className="size-5 bg-black rounded-sm flex items-center justify-center flex-shrink-0">
-            <Slash className="text-white size-3" />
+            <span className="text-white text-sm font-bold">/</span>
           </div>
           <Input
             placeholder="Enter a command..."
