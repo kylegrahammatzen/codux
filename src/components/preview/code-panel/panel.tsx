@@ -18,17 +18,11 @@ export const CodePanel = () => {
         className="flex-shrink-0 transition-all duration-300"
         style={{
           width: showFileTree ? "16rem" : 0,
-          overflow: showFileTree ? "visible" : "hidden",
+          overflow: "hidden",
           transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
         }}
       >
-        <div
-          className="w-64 bg-accent border-r h-full transition-opacity duration-300"
-          style={{
-            transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)",
-            opacity: showFileTree ? 1 : 0
-          }}
-        >
+        <div className="w-64 bg-accent border-r h-full">
           <p className="p-4">File Tree</p>
         </div>
       </div>
@@ -41,7 +35,9 @@ export const CodePanel = () => {
       {/* Toggle button - absolutely positioned bottom left */}
       <div className="absolute bottom-2 left-2">
         <Button variant="outline" size="icon-sm" className="bg-white" onClick={toggleFileTree}>
-          {showFileTree ? <ArrowLeftToLine className="size-4" /> : <ArrowRightToLine className="size-4" />}
+          <div className="transition-transform duration-200" style={{ transform: showFileTree ? "scaleX(1)" : "scaleX(-1)" }}>
+            <ArrowLeftToLine className="size-4" />
+          </div>
         </Button>
       </div>
     </div>
