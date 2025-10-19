@@ -1,6 +1,6 @@
 "use client";
 
-import { useSandpackContext } from "@/components/sandpack-context";
+import { useProjectContext } from "@/components/project-context";
 import { FileItem } from "./file-item";
 import { FolderItem } from "./folder-item";
 
@@ -12,7 +12,7 @@ type FileTreeNode = {
 };
 
 export const FileTree = () => {
-  const { files, activeFile, setActiveFile } = useSandpackContext();
+  const { files, activeFile, setActiveFile } = useProjectContext();
 
   // Build tree structure from flat file list
   const buildTree = (filePaths: string[]): FileTreeNode[] => {

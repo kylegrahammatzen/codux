@@ -1,6 +1,5 @@
 "use client";
 
-import { usePreviewContext } from "@/components/preview/preview-context";
 import { useProjectContext } from "@/components/project-context";
 import { ViewportControls } from "@/components/preview/viewport-controls";
 import { Button } from "@/components/ui/button";
@@ -8,22 +7,19 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 
 export const PreviewHeader = () => {
-  const { showCode, setShowCode, isFullscreen, setFullscreen } = usePreviewContext();
-  const { showChat, showIntegrations, toggleChat, toggleIntegrations } = useProjectContext();
+  const { previewMode, setPreviewMode, fullscreen, setFullscreen, panelOpen, setPanelOpen } = useProjectContext();
+
+  const showCode = previewMode === "code";
+  const setShowCode = (value: boolean) => setPreviewMode(value ? "code" : "preview");
 
   const handleFullscreenToggle = () => {
-    // Close any open panels when entering fullscreen
-    if (!isFullscreen) {
-      if (showChat) toggleChat();
-      if (showIntegrations) toggleIntegrations();
-    }
-    setFullscreen(!isFullscreen);
+    setFullscreen(!fullscreen);
   };
 
   return (
     <div className="h-12 border-b flex items-center justify-between px-2 gap-2 min-w-0 overflow-hidden">
       {/* Left side - Code switch and label (hide in fullscreen) */}
-      {!isFullscreen && (
+      {!fullscreen && (
         <div className="flex items-center gap-2 shrink-0">
           <Switch
             checked={showCode}
@@ -51,12 +47,12 @@ export const PreviewHeader = () => {
       )}
 
       {/* Show just label in fullscreen */}
-      {isFullscreen && (
+      {fullscreen && (
         <div className="text-sm font-medium shrink-0">Project preview</div>
       )}
 
       {/* Center - Viewport controls - only show on xl+ and not in code mode or fullscreen */}
-      {!showCode && !isFullscreen && (
+      {!showCode && !fullscreen && (
         <div className="hidden xl:flex items-center gap-2">
           <ViewportControls />
         </div>
@@ -94,7 +90,7 @@ export const PreviewHeader = () => {
               d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5M4 16v4m0 0h4m-4 0l5-5"
             />
           </svg>
-          <span>{isFullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
+          <span>{fullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
         </Button>
       </div>
     </div>

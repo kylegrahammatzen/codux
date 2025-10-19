@@ -2,11 +2,11 @@
 
 import { useEffect } from "react";
 import { useSandpack } from "@codesandbox/sandpack-react";
-import { useSandpackContext } from "@/components/sandpack-context";
+import { useProjectContext } from "@/components/project-context";
 
 export const SandpackErrorListener = () => {
   const { listen } = useSandpack();
-  const { setErrors } = useSandpackContext();
+  const { setErrors } = useProjectContext();
 
   useEffect(() => {
     const unsubscribe = listen((message) => {
