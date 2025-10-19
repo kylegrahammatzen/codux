@@ -1,18 +1,23 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 
-type SignupFormValues = {
-  email: string;
-  password: string;
-};
+const schema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters." }),
+});
+
+type SignupFormValues = z.infer<typeof schema>;
 
 export const SignupForm = () => {
   const form = useForm<SignupFormValues>({
+    resolver: zodResolver(schema),
     defaultValues: {
       email: "",
       password: "",
@@ -28,8 +33,8 @@ export const SignupForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FormField
-            control={form.control}
             name="email"
+            control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
@@ -46,8 +51,8 @@ export const SignupForm = () => {
             )}
           />
           <FormField
-            control={form.control}
             name="password"
+            control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
