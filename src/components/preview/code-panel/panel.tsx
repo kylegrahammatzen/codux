@@ -1,9 +1,9 @@
 "use client";
 
-import { usePreviewContext } from "@/components/preview/preview-context";
+import { useProjectContext } from "@/components/project-context";
 
 export const CodePanel = () => {
-  const { showFileTree } = usePreviewContext();
+  const { showFileTree } = useProjectContext();
 
   return (
     <div className="flex flex-1 min-h-0">
