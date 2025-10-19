@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useProjectContext } from "@/components/project-context";
 import { PreviewModeToggle } from "@/components/preview/mode-toggle";
+import { FileTreePanel } from "@/components/preview/file-tree-panel";
+import { CodeViewerPanel } from "@/components/preview/code-viewer-panel";
+import { PreviewFooter } from "@/components/preview/footer";
 
 export const PreviewPanel = () => {
   const { leftPanel, setLeftPanel, rightPanel, setRightPanel, fullscreen, setFullscreen, previewMode } = useProjectContext();
@@ -80,23 +83,22 @@ export const PreviewPanel = () => {
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center bg-gray-200 min-h-0">
-        <p className="text-gray-400 text-sm">Preview panel</p>
+      <div className="flex-1 flex min-h-0">
+        {previewMode === "code" ? (
+          <>
+            <FileTreePanel />
+            <CodeViewerPanel />
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center bg-gray-200">
+            <p className="text-gray-400 text-sm">Preview panel</p>
+          </div>
+        )}
       </div>
 
       {!fullscreen && (
-        <div className="flex items-center justify-center px-4 border-t h-8 bg-white rounded-b-md">
-          <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <span>Console</span>
-          </Button>
+        <div className="bg-white rounded-b-md">
+          <PreviewFooter />
         </div>
       )}
     </>
