@@ -1,23 +1,20 @@
-"use client";
-
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export const AuthTabs = () => {
-  const pathname = usePathname();
-  const router = useRouter();
+type AuthTabsProps = {
+  currentTab: "login" | "signup";
+};
 
-  const currentTab = pathname === "/login" ? "login" : "signup";
-
-  const handleTabChange = (value: string) => {
-    router.push(`/${value}`);
-  };
-
+export const AuthTabs = (props: AuthTabsProps) => {
   return (
-    <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
+    <Tabs value={props.currentTab} className="w-full">
       <TabsList className="w-full">
-        <TabsTrigger value="login" className="flex-1">Login</TabsTrigger>
-        <TabsTrigger value="signup" className="flex-1">Sign up</TabsTrigger>
+        <TabsTrigger value="login" className="flex-1" asChild>
+          <Link href="/login">Login</Link>
+        </TabsTrigger>
+        <TabsTrigger value="signup" className="flex-1" asChild>
+          <Link href="/signup">Sign up</Link>
+        </TabsTrigger>
       </TabsList>
     </Tabs>
   );
