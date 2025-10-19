@@ -5,16 +5,14 @@ import { cn } from "@/lib/utils";
 import { useProjectContext } from "@/components/project-context";
 
 type PanelWrapperProps = {
-  side: "left" | "right";
   isOpen: boolean;
-  width?: string;
   children: React.ReactNode;
 };
 
 export const PanelWrapper = (props: PanelWrapperProps) => {
   const { fullscreen } = useProjectContext();
-  const width = props.width || "30%";
-  const margin = props.side === "left" ? "mr-2" : "ml-2";
+  const width = "30%";
+  const margin = "mr-2";
 
   // Handle fullscreen logic internally
   const isOpen = props.isOpen && !fullscreen;

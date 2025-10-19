@@ -4,12 +4,11 @@ import { useProjectContext } from "@/components/project-context";
 import { AppHeader } from "@/components/app-header";
 import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
-import { IntegrationsPanel } from "@/components/integrations/panel";
 import { PanelWrapper } from "@/components/panel-wrapper";
 import { cn } from "@/lib/utils";
 
 export const EditorLayout = () => {
-  const { leftPanel, rightPanel, fullscreen } = useProjectContext();
+  const { panelOpen, fullscreen } = useProjectContext();
 
   return (
     <div
@@ -30,15 +29,11 @@ export const EditorLayout = () => {
 
       {/* Panel layout */}
       <div className="flex flex-1 overflow-hidden min-h-0">
-        <PanelWrapper side="left" isOpen={leftPanel === "chat"} width="30%">
+        <PanelWrapper isOpen={panelOpen}>
           <ChatPanel />
         </PanelWrapper>
 
         <PreviewPanel />
-
-        <PanelWrapper side="right" isOpen={rightPanel === "integrations"} width="30%">
-          <IntegrationsPanel />
-        </PanelWrapper>
       </div>
     </div>
   );

@@ -12,11 +12,9 @@ type Dimensions = {
 type PreviewMode = "preview" | "code";
 
 type ProjectContextType = {
-  // Layout state - which panels are open
-  leftPanel: "chat" | null;
-  rightPanel: "integrations" | null;
-  setLeftPanel: (panel: "chat" | null) => void;
-  setRightPanel: (panel: "integrations" | null) => void;
+  // Layout state
+  panelOpen: boolean;
+  setPanelOpen: (isOpen: boolean) => void;
 
   // Preview viewport state
   viewportMode: ViewportMode;
@@ -41,10 +39,8 @@ type ProjectProviderProps = {
 
 export const ProjectProvider = (props: ProjectProviderProps) => {
   // Layout state
-  const [leftPanel, setLeftPanel] = useState<"chat" | null>("chat");
-  const [rightPanel, setRightPanel] = useState<"integrations" | null>(null);
-  const [previousLeftPanel, setPreviousLeftPanel] = useState<"chat" | null>(null);
-  const [previousRightPanel, setPreviousRightPanel] = useState<"integrations" | null>(null);
+  const [panelOpen, setPanelOpen] = useState(true);
+  const [previousPanelState, setPreviousPanelState] = useState(false);
 
   // Viewport state
   const [viewportMode, setViewportMode] = useState<ViewportMode>("desktop");
@@ -57,15 +53,12 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
 
   const setFullscreen = (value: boolean) => {
     if (value) {
-      // Entering fullscreen - save current panel state and close panels
-      setPreviousLeftPanel(leftPanel);
-      setPreviousRightPanel(rightPanel);
-      setLeftPanel(null);
-      setRightPanel(null);
+      // Entering fullscreen - save current panel state and close panel
+      setPreviousPanelState(panelOpen);
+      setPanelOpen(false);
     } else {
       // Exiting fullscreen - restore previous panel state
-      setLeftPanel(previousLeftPanel);
-      setRightPanel(previousRightPanel);
+      setPanelOpen(previousPanelState);
     }
     setFullscreenState(value);
   };
@@ -73,10 +66,8 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
   return (
     <ProjectContext.Provider
       value={{
-        leftPanel,
-        rightPanel,
-        setLeftPanel,
-        setRightPanel,
+        panelOpen,
+        setPanelOpen,
         viewportMode,
         setViewportMode,
         customDimensions,
