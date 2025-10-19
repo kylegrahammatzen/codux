@@ -25,8 +25,8 @@ export const CodePanel = () => {
         <p className="text-white p-4">Code Editor</p>
       </div>
 
-      {/* Toggle button - absolutely positioned bottom right */}
-      <div className="absolute bottom-2 right-2">
+      {/* Toggle button - absolutely positioned bottom left */}
+      <div className="absolute bottom-2 left-2">
         <Button variant="outline" size="icon-sm" className="bg-white" onClick={toggleFileTree}>
           {showFileTree ? <ArrowLeftToLine className="size-4" /> : <ArrowRightToLine className="size-4" />}
         </Button>
