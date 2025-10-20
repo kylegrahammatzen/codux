@@ -2,23 +2,12 @@
 
 import { SandpackPreview } from "@codesandbox/sandpack-react";
 
-type PreviewProps = {
-  width: number;
-  height: number;
-};
-
-export const Preview = (props: PreviewProps) => {
-  const containerStyle = {
-    width: props.width,
-    height: props.height,
-  };
-
+export const Preview = () => {
   return (
-    <div className="w-full h-full bg-white">
+    <div className="w-full h-full">
       <SandpackPreview
         showOpenInCodeSandbox={false}
         showRefreshButton={false}
-        style={containerStyle}
       />
     </div>
   );
