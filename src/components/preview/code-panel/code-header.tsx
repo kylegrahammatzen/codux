@@ -1,19 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import { useProjectContext } from "@/components/project-context";
 import { Button } from "@/components/ui/button";
-import { Copy, Download } from "lucide-react";
+import { Copy, Download, CircleCheck } from "lucide-react";
 
 export const CodeHeader = () => {
   const { files, activeFile } = useProjectContext();
+  const [copied, setCopied] = useState(false);
 
   const getFileName = (path: string) => {
     return path.split("/").pop() || path;
   };
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     if (activeFile && files[activeFile]) {
-      navigator.clipboard.writeText(files[activeFile].code);
+      await navigator.clipboard.writeText(files[activeFile].code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -41,7 +45,19 @@ export const CodeHeader = () => {
 
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon-sm" onClick={handleCopy}>
-          <Copy className="size-4" />
+          <div
+            className="transition-all duration-200"
+            style={{
+              transform: copied ? "scale(1.1)" : "scale(1)",
+              transitionTimingFunction: "cubic-bezier(.215, .61, .355, 1)"
+            }}
+          >
+            {copied ? (
+              <CircleCheck className="size-4" />
+            ) : (
+              <Copy className="size-4" />
+            )}
+          </div>
         </Button>
         <Button variant="ghost" size="icon-sm" onClick={handleDownload}>
           <Download className="size-4" />
