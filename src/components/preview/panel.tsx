@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -11,7 +11,6 @@ import { Preview } from "@/components/preview/preview-panel/preview";
 import { PreviewFooter } from "@/components/preview/footer";
 import { FileTree } from "@/components/preview/code-panel/file-tree";
 import { CodeHeader } from "@/components/preview/code-panel/code-header";
-import { useContainerSize } from "@/hooks/use-container-size";
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, ChevronsRight, RefreshCcw, Expand, Shrink, ArrowLeftToLine } from "lucide-react";
 import { SandpackProvider } from "@codesandbox/sandpack-react";
@@ -19,22 +18,18 @@ import { SandpackProvider } from "@codesandbox/sandpack-react";
 export const PreviewPanel = () => {
   const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode, isMobile, files, activeFile, showFileTree, setShowFileTree } = useProjectContext();
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
-  const codeContainerRef = useRef<HTMLDivElement>(null);
-  const previewContainerRef = useRef<HTMLDivElement>(null);
-
-  // Measure the active container based on current mode
-  const activeRef = previewMode === "code" ? codeContainerRef : previewContainerRef;
-  const { width, height } = useContainerSize(activeRef, [previewMode, fullscreen, showFileTree]);
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
   };
 
-  // Convert files to Sandpack format
-  const sandpackFiles = Object.entries(files).reduce((acc, [path, file]) => {
-    acc[path] = file.code;
-    return acc;
-  }, {} as Record<string, string>);
+  // Convert files to Sandpack format - memoized to prevent SandpackProvider re-renders
+  const sandpackFiles = useMemo(() => {
+    return Object.entries(files).reduce((acc, [path, file]) => {
+      acc[path] = file.code;
+      return acc;
+    }, {} as Record<string, string>);
+  }, [files]);
 
   // Panel is only visible if panelOpen is true AND not on mobile
   const isPanelVisible = panelOpen && !isMobile;
@@ -90,7 +85,7 @@ export const PreviewPanel = () => {
             <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
               <CodeHeader />
 
-              <div ref={codeContainerRef} className="flex-1 min-h-0 w-full bg-white">
+              <div className="flex-1 min-h-0 w-full bg-white">
                 <SandpackProvider
                   files={sandpackFiles}
                   options={{
@@ -103,7 +98,7 @@ export const PreviewPanel = () => {
                     },
                   }}
                 >
-                  <CodeEditor width={width} height={height} />
+                  <CodeEditor />
                 </SandpackProvider>
               </div>
             </div>
@@ -117,7 +112,7 @@ export const PreviewPanel = () => {
             </div>
           </div>
         ) : (
-          <div ref={previewContainerRef} className="flex-1 min-h-0 w-full bg-white">
+          <div className="flex-1 min-h-0 w-full bg-white">
             <SandpackProvider
               files={sandpackFiles}
               options={{
@@ -130,7 +125,7 @@ export const PreviewPanel = () => {
                 },
               }}
             >
-              <Preview width={width} height={height} />
+              <Preview />
             </SandpackProvider>
           </div>
         )}
