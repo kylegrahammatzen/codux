@@ -10,7 +10,6 @@ import { CodeEditor } from "@/components/preview/code-panel/code-editor";
 import { PreviewFooter } from "@/components/preview/footer";
 import { FileTree } from "@/components/preview/code-panel/file-tree";
 import { CodeHeader } from "@/components/preview/code-panel/code-header";
-import { useContainerSize } from "@/hooks/use-container-size";
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, ChevronsRight, RefreshCcw, Expand, Shrink, ArrowLeftToLine } from "lucide-react";
 import { SandpackProvider } from "@codesandbox/sandpack-react";
@@ -18,8 +17,6 @@ import { SandpackProvider } from "@codesandbox/sandpack-react";
 export const PreviewPanel = () => {
   const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode, isMobile, files, activeFile, showFileTree, setShowFileTree } = useProjectContext();
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
-  const editorContainerRef = useRef<HTMLDivElement>(null);
-  const { width, height } = useContainerSize(editorContainerRef, [showFileTree]);
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
@@ -82,10 +79,10 @@ export const PreviewPanel = () => {
           <div className="flex w-full h-full relative">
             <FileTree />
 
-            <div className="flex flex-col flex-1 h-full">
+            <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
               <CodeHeader />
 
-              <div ref={editorContainerRef} className="flex-1 min-h-0 w-full">
+              <div className="flex-1 min-h-0 w-full bg-white">
                 <SandpackProvider
                   files={sandpackFiles}
                   options={{
@@ -98,7 +95,7 @@ export const PreviewPanel = () => {
                     },
                   }}
                 >
-                  <CodeEditor width={width} height={height} />
+                  <CodeEditor />
                 </SandpackProvider>
               </div>
             </div>
