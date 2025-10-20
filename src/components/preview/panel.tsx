@@ -7,9 +7,11 @@ import { Separator } from "@/components/ui/separator";
 import { useProjectContext } from "@/components/project-context";
 import { PreviewModeToggle } from "@/components/preview/mode-toggle";
 import { CodeEditor } from "@/components/preview/code-panel/code-editor";
+import { Preview } from "@/components/preview/preview-panel/preview";
 import { PreviewFooter } from "@/components/preview/footer";
 import { FileTree } from "@/components/preview/code-panel/file-tree";
 import { CodeHeader } from "@/components/preview/code-panel/code-header";
+import { useContainerSize } from "@/hooks/use-container-size";
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, ChevronsRight, RefreshCcw, Expand, Shrink, ArrowLeftToLine } from "lucide-react";
 import { SandpackProvider } from "@codesandbox/sandpack-react";
@@ -17,6 +19,12 @@ import { SandpackProvider } from "@codesandbox/sandpack-react";
 export const PreviewPanel = () => {
   const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode, isMobile, files, activeFile, showFileTree, setShowFileTree } = useProjectContext();
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
+  const codeContainerRef = useRef<HTMLDivElement>(null);
+  const previewContainerRef = useRef<HTMLDivElement>(null);
+
+  // Measure the active container based on current mode
+  const activeRef = previewMode === "code" ? codeContainerRef : previewContainerRef;
+  const { width, height } = useContainerSize(activeRef, [previewMode, fullscreen, showFileTree]);
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
@@ -82,7 +90,7 @@ export const PreviewPanel = () => {
             <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
               <CodeHeader />
 
-              <div className="flex-1 min-h-0 w-full bg-white">
+              <div ref={codeContainerRef} className="flex-1 min-h-0 w-full bg-white">
                 <SandpackProvider
                   files={sandpackFiles}
                   options={{
@@ -95,7 +103,7 @@ export const PreviewPanel = () => {
                     },
                   }}
                 >
-                  <CodeEditor />
+                  <CodeEditor width={width} height={height} />
                 </SandpackProvider>
               </div>
             </div>
@@ -109,7 +117,22 @@ export const PreviewPanel = () => {
             </div>
           </div>
         ) : (
-          <p className="text-black p-4">Preview placeholder</p>
+          <div ref={previewContainerRef} className="flex-1 min-h-0 w-full bg-white">
+            <SandpackProvider
+              files={sandpackFiles}
+              options={{
+                activeFile: activeFile || undefined,
+              }}
+              customSetup={{
+                dependencies: {
+                  react: "^18.3.1",
+                  "react-dom": "^18.3.1",
+                },
+              }}
+            >
+              <Preview width={width} height={height} />
+            </SandpackProvider>
+          </div>
         )}
       </div>
 
