@@ -40,7 +40,6 @@ export const DEFAULT_FILES = {
   "/index.tsx": `import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import "./styles.css";
 
 const root = createRoot(document.getElementById("root")!);
 root.render(
@@ -48,19 +47,11 @@ root.render(
     <App />
   </StrictMode>
 );`,
-  "/styles.css": `body {
-  margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
-}
-
-#root {
-  min-height: 100vh;
-}`,
   "/package.json": JSON.stringify(
     {
       dependencies: {
-        react: "^18.3.1",
-        "react-dom": "^18.3.1",
+        react: "^19.2.0",
+        "react-dom": "^19.2.0",
       },
       main: "/index.tsx",
     },

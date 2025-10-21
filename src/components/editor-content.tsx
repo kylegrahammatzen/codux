@@ -11,10 +11,13 @@ export const EditorContent = () => {
     <SandpackProvider
       style={{ display: 'contents' }}
       files={DEFAULT_FILES}
+      options={{
+        externalResources: ["https://cdn.tailwindcss.com"],
+      }}
       customSetup={{
         dependencies: {
-          react: "^18.3.1",
-          "react-dom": "^18.3.1",
+          react: "^19.2.0",
+          "react-dom": "^19.2.0",
         },
       }}
     >
