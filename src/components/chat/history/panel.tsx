@@ -9,7 +9,7 @@ import { useSandpack } from "@codesandbox/sandpack-react";
 import { Clock } from "lucide-react";
 
 export const HistoryPanel = () => {
-  const { snapshots, restoreSnapshot, setDisableTracking } = useHistory();
+  const { snapshots, restoreSnapshot, setDisableTracking, clearSnapshotsAfter } = useHistory();
   const { setEditorReadOnly, setIsPreviewing } = useProjectContext();
   const { sandpack } = useSandpack();
   const [previewingId, setPreviewingId] = useState<string | null>(null);
@@ -61,6 +61,7 @@ export const HistoryPanel = () => {
           sandpack.updateFile(filePath, typeof fileContent === 'string' ? fileContent : fileContent.code);
         }
       });
+      clearSnapshotsAfter(id);
       setEditorReadOnly(false);
       setIsPreviewing(false);
       setPreviewingId(null);
