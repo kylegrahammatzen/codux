@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -23,13 +23,11 @@ export const PreviewPanel = () => {
     setShowFileTree(!showFileTree);
   };
 
-  // Convert files to Sandpack format - memoized to prevent SandpackProvider re-renders
-  const sandpackFiles = useMemo(() => {
-    return Object.entries(files).reduce((acc, [path, file]) => {
-      acc[path] = file.code;
-      return acc;
-    }, {} as Record<string, string>);
-  }, [files]);
+  // Convert files to Sandpack format
+  const sandpackFiles = Object.entries(files).reduce((acc, [path, file]) => {
+    acc[path] = file.code;
+    return acc;
+  }, {} as Record<string, string>);
 
   // Panel is only visible if panelOpen is true AND not on mobile
   const isPanelVisible = panelOpen && !isMobile;
@@ -77,59 +75,47 @@ export const PreviewPanel = () => {
         </div>
       </div>
 
-      <div className="flex-1 flex min-h-0">
-        {previewMode === "code" ? (
-          <div className="flex w-full h-full relative">
-            <FileTree />
+      <SandpackProvider
+        style={{ display: 'contents' }}
+        files={sandpackFiles}
+        options={{
+          activeFile: activeFile || undefined,
+        }}
+        customSetup={{
+          dependencies: {
+            react: "^18.3.1",
+            "react-dom": "^18.3.1",
+          },
+        }}
+      >
+        <div className="flex-1 flex min-h-0">
+          {previewMode === "code" ? (
+            <div className="flex w-full h-full relative">
+              <FileTree />
 
-            <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
-              <CodeHeader />
+              <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
+                <CodeHeader />
 
-              <div className="flex-1 min-h-0 w-full bg-white">
-                <SandpackProvider
-                  files={sandpackFiles}
-                  options={{
-                    activeFile: activeFile || undefined,
-                  }}
-                  customSetup={{
-                    dependencies: {
-                      react: "^18.3.1",
-                      "react-dom": "^18.3.1",
-                    },
-                  }}
-                >
+                <div className="flex-1 min-h-0 w-full bg-white">
                   <CodeEditor />
-                </SandpackProvider>
+                </div>
+              </div>
+
+              <div className="absolute bottom-2 left-2">
+                <Button variant="outline" size="icon-sm" className="bg-white cursor-pointer" onClick={toggleFileTree}>
+                  <div className="transition-transform duration-200" style={{ transform: showFileTree ? "scaleX(1)" : "scaleX(-1)" }}>
+                    <ArrowLeftToLine className="size-4" />
+                  </div>
+                </Button>
               </div>
             </div>
-
-            <div className="absolute bottom-2 left-2">
-              <Button variant="outline" size="icon-sm" className="bg-white cursor-pointer" onClick={toggleFileTree}>
-                <div className="transition-transform duration-200" style={{ transform: showFileTree ? "scaleX(1)" : "scaleX(-1)" }}>
-                  <ArrowLeftToLine className="size-4" />
-                </div>
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="flex-1 min-h-0 w-full bg-white">
-            <SandpackProvider
-              files={sandpackFiles}
-              options={{
-                activeFile: activeFile || undefined,
-              }}
-              customSetup={{
-                dependencies: {
-                  react: "^18.3.1",
-                  "react-dom": "^18.3.1",
-                },
-              }}
-            >
+          ) : (
+            <div className="flex-1 min-h-0 w-full bg-white">
               <Preview />
-            </SandpackProvider>
-          </div>
-        )}
-      </div>
+            </div>
+          )}
+        </div>
+      </SandpackProvider>
 
       {!fullscreen && (
         <div className="bg-white rounded-b-md">
