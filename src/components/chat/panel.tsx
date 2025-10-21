@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/chat/input";
@@ -11,6 +11,14 @@ import { X } from "lucide-react";
 export const ChatPanel = () => {
   const { sandpack } = useSandpack();
   const [showHistory, setShowHistory] = useState(false);
+  const exitPreviewRef = useRef<(() => void) | null>(null);
+
+  const handleCloseHistory = () => {
+    if (exitPreviewRef.current) {
+      exitPreviewRef.current();
+    }
+    setShowHistory(false);
+  };
 
   const handleTestEdit = () => {
     const newCode = `export default function App() {
@@ -34,7 +42,7 @@ export const ChatPanel = () => {
           </div>
           <span className="font-medium text-sm">Stan</span>
         </div>
-        <Button variant="ghost" size="sm" onClick={() => setShowHistory(!showHistory)}>
+        <Button variant="ghost" size="sm" onClick={showHistory ? handleCloseHistory : () => setShowHistory(true)}>
           {showHistory ? (
             <X className="size-4" />
           ) : (
@@ -56,7 +64,7 @@ export const ChatPanel = () => {
       </div>
 
       {showHistory ? (
-        <HistoryPanel />
+        <HistoryPanel onExitPreviewRef={exitPreviewRef} />
       ) : (
         <>
           <CardContent className="flex-1 flex flex-col items-center justify-center gap-4">

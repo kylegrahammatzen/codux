@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, MutableRefObject } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SnapshotItem } from "@/components/chat/history/snapshot-item";
 import { useHistory } from "@/components/history-context";
@@ -8,41 +8,55 @@ import { useProjectContext } from "@/components/project-context";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { Clock } from "lucide-react";
 
-export const HistoryPanel = () => {
+type HistoryPanelProps = {
+  onExitPreviewRef: MutableRefObject<(() => void) | null>;
+};
+
+export const HistoryPanel = (props: HistoryPanelProps) => {
   const { snapshots, restoreSnapshot, setDisableTracking } = useHistory();
   const { setEditorReadOnly } = useProjectContext();
   const { sandpack } = useSandpack();
   const [previewingId, setPreviewingId] = useState<string | null>(null);
+
+  const exitPreview = () => {
+    if (previewingId) {
+      setEditorReadOnly(false);
+      setPreviewingId(null);
+      setDisableTracking(false);
+    }
+  };
+
+  useEffect(() => {
+    props.onExitPreviewRef.current = exitPreview;
+  }, [previewingId]);
 
   const handlePreview = (id: string) => {
     const files = restoreSnapshot(id);
     if (files) {
       setDisableTracking(true);
       Object.keys(files).forEach((filePath) => {
-        const fileContent = files[filePath];
+        const fileContent = files[filePath] as any;
         if (fileContent !== undefined) {
           sandpack.updateFile(filePath, typeof fileContent === 'string' ? fileContent : fileContent.code);
         }
       });
       setEditorReadOnly(true);
       setPreviewingId(id);
-      setTimeout(() => setDisableTracking(false), 100);
     }
   };
 
   const handleRestore = (id: string) => {
     const files = restoreSnapshot(id);
     if (files) {
-      setDisableTracking(true);
       Object.keys(files).forEach((filePath) => {
-        const fileContent = files[filePath];
+        const fileContent = files[filePath] as any;
         if (fileContent !== undefined) {
           sandpack.updateFile(filePath, typeof fileContent === 'string' ? fileContent : fileContent.code);
         }
       });
       setEditorReadOnly(false);
       setPreviewingId(null);
-      setTimeout(() => setDisableTracking(false), 100);
+      setDisableTracking(false);
     }
   };
 
