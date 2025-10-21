@@ -1,6 +1,6 @@
 "use client";
 
-import { File } from "lucide-react";
+import { File, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type FileItemProps = {
@@ -27,7 +27,7 @@ export const FileItem = (props: FileItemProps) => {
       <File className="size-4 text-muted-foreground" />
       <span className="flex-1">{props.name}</span>
       {props.hasError && (
-        <div className="size-2 rounded-full bg-red-500" title="File has errors" />
+        <AlertCircle className="size-3 text-red-500" title="File has errors" />
       )}
     </div>
   );
