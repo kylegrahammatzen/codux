@@ -18,6 +18,7 @@ export const ChatPanel = () => {
 
   const handleCloseHistory = () => {
     if (isPreviewing && snapshots.length > 0) {
+      setDisableTracking(true);
       const files = restoreSnapshot(snapshots[0].id);
       if (files) {
         Object.keys(files).forEach((filePath) => {

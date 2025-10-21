@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SnapshotItem } from "@/components/chat/history/snapshot-item";
 import { useHistory } from "@/components/history-context";
@@ -13,6 +13,14 @@ export const HistoryPanel = () => {
   const { setEditorReadOnly, setIsPreviewing } = useProjectContext();
   const { sandpack } = useSandpack();
   const [previewingId, setPreviewingId] = useState<string | null>(null);
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handlePreview = (id: string) => {
     const files = restoreSnapshot(id);
