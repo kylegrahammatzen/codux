@@ -8,6 +8,8 @@ import type { Snapshot } from "@/components/history-context";
 type SnapshotItemProps = {
   snapshot: Snapshot;
   isLatest: boolean;
+  isPreviewing: boolean;
+  isInPreviewMode: boolean;
   onPreview: () => void;
   onRestore: () => void;
   formatTimestamp: (date: Date) => string;
@@ -16,7 +18,15 @@ type SnapshotItemProps = {
 export const SnapshotItem = (props: SnapshotItemProps) => {
   return (
     <Collapsible>
-      <div className="border rounded-lg overflow-hidden bg-gray-50">
+      <div
+        className={`border rounded-lg overflow-hidden transition-colors ${
+          props.isPreviewing
+            ? "bg-blue-50 border-blue-300"
+            : props.isInPreviewMode
+            ? "bg-gray-100 opacity-60"
+            : "bg-gray-50"
+        }`}
+      >
         <div className="flex items-center justify-between p-3">
           <CollapsibleTrigger className="flex items-center gap-2 flex-1 text-left group">
             <ChevronRight className="size-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
@@ -30,7 +40,7 @@ export const SnapshotItem = (props: SnapshotItemProps) => {
               </div>
             </div>
           </CollapsibleTrigger>
-          {!props.isLatest && (
+          {!props.isLatest && !props.isInPreviewMode && (
             <SnapshotActions
               onPreview={props.onPreview}
               onRestore={props.onRestore}

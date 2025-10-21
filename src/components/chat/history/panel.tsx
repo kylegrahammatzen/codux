@@ -90,6 +90,8 @@ export const HistoryPanel = () => {
                   key={snapshot.id}
                   snapshot={snapshot}
                   isLatest={index === 0}
+                  isPreviewing={previewingId === snapshot.id}
+                  isInPreviewMode={previewingId !== null && previewingId !== snapshot.id}
                   onPreview={() => handlePreview(snapshot.id)}
                   onRestore={() => handleRestore(snapshot.id)}
                   formatTimestamp={formatTimestamp}
