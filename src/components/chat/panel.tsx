@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/chat/input";
+import { HistoryPanel } from "@/components/chat/history-panel";
 import { useSandpack } from "@codesandbox/sandpack-react";
 
 export const ChatPanel = () => {
   const { sandpack } = useSandpack();
+  const [showHistory, setShowHistory] = useState(false);
 
   const handleTestEdit = () => {
     const newCode = `export default function App() {
@@ -22,7 +25,7 @@ export const ChatPanel = () => {
   };
 
   return (
-    <div className="flex flex-col h-full min-w-max">
+    <div className="flex flex-col h-full min-w-max relative">
       <div className="flex items-center justify-between px-2 border-b h-12 bg-white rounded-t-md">
         <div className="flex items-center gap-2">
           <div className="size-6 bg-black rounded-sm flex items-center justify-center">
@@ -30,7 +33,7 @@ export const ChatPanel = () => {
           </div>
           <span className="font-medium text-sm">Stan</span>
         </div>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" onClick={() => setShowHistory(!showHistory)}>
           <svg
             className="size-4"
             fill="none"
@@ -47,14 +50,20 @@ export const ChatPanel = () => {
         </Button>
       </div>
 
-      <CardContent className="flex-1 flex flex-col items-center justify-center gap-4">
-        <p className="text-gray-400 text-sm">Chat panel</p>
-        <Button onClick={handleTestEdit} variant="outline">
-          Test AI Edit (Update App.tsx)
-        </Button>
-      </CardContent>
+      {showHistory ? (
+        <HistoryPanel onClose={() => setShowHistory(false)} />
+      ) : (
+        <>
+          <CardContent className="flex-1 flex flex-col items-center justify-center gap-4">
+            <p className="text-gray-400 text-sm">Chat panel</p>
+            <Button onClick={handleTestEdit} variant="outline">
+              Test AI Edit (Update App.tsx)
+            </Button>
+          </CardContent>
 
-      <ChatInput />
+          <ChatInput />
+        </>
+      )}
     </div>
   );
 };
