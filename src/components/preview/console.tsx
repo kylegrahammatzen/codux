@@ -53,7 +53,7 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
 
   return (
     <Collapsible open={props.isOpen}>
-      <CollapsibleContent>
+      <CollapsibleContent className="transition-all duration-300 ease-in-out">
         <Separator />
 
         {logs.length > 0 && (
