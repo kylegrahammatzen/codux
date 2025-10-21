@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { useSandpackConsole } from "@codesandbox/sandpack-react";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { AlertCircle, AlertTriangle, Info, XCircle } from "lucide-react";
@@ -13,7 +12,7 @@ type PreviewConsoleProps = {
 };
 
 export const PreviewConsole = (props: PreviewConsoleProps) => {
-  const { logs, reset } = useSandpackConsole({ resetOnPreviewRestart: true });
+  const { logs } = useSandpackConsole({ resetOnPreviewRestart: true });
   const consoleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,27 +56,16 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
         <Separator />
 
         <div className={cn(
-          "flex items-center justify-between overflow-hidden transition-all duration-300 ease-in-out",
+          "flex items-center gap-3 text-xs overflow-hidden transition-all duration-300 ease-in-out",
           logs.length > 0 ? "py-1 max-h-10 opacity-100" : "py-0 max-h-0 opacity-0"
         )}>
-          <div className="flex items-center gap-3 text-xs">
-            {errorCount > 0 && (
-              <span className="text-red-600">{errorCount} error{errorCount > 1 ? 's' : ''}</span>
-            )}
-            {warnCount > 0 && (
-              <span className="text-yellow-600">{warnCount} warning{warnCount > 1 ? 's' : ''}</span>
-            )}
-            <span className="text-gray-500">{logs.length} total</span>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={reset}
-            className="h-6 text-xs"
-            title="Clear console (errors will reappear if code still has issues)"
-          >
-            Clear
-          </Button>
+          {errorCount > 0 && (
+            <span className="text-red-600">{errorCount} error{errorCount > 1 ? 's' : ''}</span>
+          )}
+          {warnCount > 0 && (
+            <span className="text-yellow-600">{warnCount} warning{warnCount > 1 ? 's' : ''}</span>
+          )}
+          <span className="text-gray-500">{logs.length} total</span>
         </div>
 
         <div
@@ -91,7 +79,7 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
               <div key={index} className="flex items-start gap-2 py-0.5">
                 {getLogIcon(log.method)}
                 <div className={cn("flex-1", getLogColor(log.method))}>
-                  {log.data.map((data, i) => (
+                  {log.data?.map((data, i) => (
                     <span key={i} className="mr-2">
                       {typeof data === "object" ? JSON.stringify(data, null, 2) : String(data)}
                     </span>
