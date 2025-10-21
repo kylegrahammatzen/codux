@@ -21,6 +21,24 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
     }
   }, [logs, props.isOpen]);
 
+  const cleanErrorMessage = (message: string): string => {
+    // Remove URLs and sandpack internal stuff
+    let cleaned = message
+      .replace(/https?:\/\/[^\s]+/g, '') // Remove URLs
+      .replace(/at [^\n]+sandpack[^\n]+/g, '') // Remove sandpack stack traces
+      .replace(/at [^\n]+codesandbox[^\n]+/g, '') // Remove codesandbox stack traces
+      .replace(/\n\s*\n/g, '\n') // Remove empty lines
+      .trim();
+
+    // For errors with file info, try to extract just the meaningful part
+    const errorMatch = cleaned.match(/^(.*?Error:.*?)(\s+at\s+|$)/s);
+    if (errorMatch) {
+      return errorMatch[1].trim();
+    }
+
+    return cleaned;
+  };
+
   const getLogIcon = (method: string) => {
     switch (method) {
       case "error":
@@ -79,11 +97,18 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
               <div key={index} className="flex items-start gap-2 py-0.5">
                 {getLogIcon(log.method)}
                 <div className={cn("flex-1", getLogColor(log.method))}>
-                  {log.data?.map((data, i) => (
-                    <span key={i} className="mr-2">
-                      {typeof data === "object" ? JSON.stringify(data, null, 2) : String(data)}
-                    </span>
-                  ))}
+                  {log.data?.map((data, i) => {
+                    let content = typeof data === "object" ? JSON.stringify(data, null, 2) : String(data);
+                    // Clean error messages for error and warn logs
+                    if (log.method === "error" || log.method === "warn") {
+                      content = cleanErrorMessage(content);
+                    }
+                    return (
+                      <span key={i} className="mr-2 whitespace-pre-wrap">
+                        {content}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             ))
