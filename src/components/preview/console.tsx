@@ -35,6 +35,15 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
     return message;
   };
 
+  const cleanWarningMessage = (message: string): string => {
+    // For warnings, just remove stack traces but keep the actual message
+    const parts = message.split(/\s+at\s+/);
+    if (parts.length > 0) {
+      return parts[0].trim();
+    }
+    return message;
+  };
+
   const getLogColor = (method: string) => {
     switch (method) {
       case "error":
@@ -80,9 +89,11 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
               <div key={index} className={cn("py-0.5", getLogColor(log.method))}>
                 {log.data?.map((data, i) => {
                   let content = typeof data === "object" ? JSON.stringify(data, null, 2) : String(data);
-                  // Clean error messages for error and warn logs
-                  if (log.method === "error" || log.method === "warn") {
+                  // Clean error and warning messages
+                  if (log.method === "error") {
                     content = cleanErrorMessage(content);
+                  } else if (log.method === "warn") {
+                    content = cleanWarningMessage(content);
                   }
                   return (
                     <span key={i} className="mr-2 whitespace-pre-wrap">

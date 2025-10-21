@@ -7,7 +7,7 @@ import { PreviewConsole } from "@/components/preview/console";
 import { useSandpack, useSandpackConsole } from "@codesandbox/sandpack-react";
 import { useProjectContext } from "@/components/project-context";
 import { cn } from "@/lib/utils";
-import { SquareTerminal, ChevronsDown, AlertCircle } from "lucide-react";
+import { SquareTerminal, ChevronsDown, AlertCircle, TriangleAlert } from "lucide-react";
 
 export const PreviewFooter = () => {
   const { isPreviewing } = useProjectContext();
@@ -18,6 +18,7 @@ export const PreviewFooter = () => {
   const { logs } = useSandpackConsole({ resetOnPreviewRestart: true });
 
   const errorCount = logs?.filter((log) => log.method === "error").length || 0;
+  const warnCount = logs?.filter((log) => log.method === "warn").length || 0;
 
   useEffect(() => {
     if (isPreviewing) {
@@ -73,6 +74,12 @@ export const PreviewFooter = () => {
             <div className="flex items-center gap-1 bg-danger text-danger-foreground px-2 py-0.5 rounded text-xs font-medium">
               <AlertCircle className="size-3" />
               <span>{errorCount}</span>
+            </div>
+          )}
+          {warnCount > 0 && (
+            <div className="flex items-center gap-1 bg-warning text-warning-foreground px-2 py-0.5 rounded text-xs font-medium">
+              <TriangleAlert className="size-3" />
+              <span>{warnCount}</span>
             </div>
           )}
         </div>
