@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PreviewConsole } from "@/components/preview/console";
 import { useSandpack, useSandpackConsole } from "@codesandbox/sandpack-react";
+import { useProjectContext } from "@/components/project-context";
 import { cn } from "@/lib/utils";
 import { SquareTerminal, ChevronsDown, AlertCircle } from "lucide-react";
 
 export const PreviewFooter = () => {
+  const { isPreviewing } = useProjectContext();
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
   const [lastChange, setLastChange] = useState<Date | null>(null);
   const [timeAgo, setTimeAgo] = useState<string>("never");
@@ -16,6 +18,12 @@ export const PreviewFooter = () => {
   const { logs } = useSandpackConsole({ resetOnPreviewRestart: true });
 
   const errorCount = logs?.filter((log) => log.method === "error").length || 0;
+
+  useEffect(() => {
+    if (isPreviewing) {
+      setIsConsoleOpen(false);
+    }
+  }, [isPreviewing]);
 
   useEffect(() => {
     const stopListening = listen((message) => {
@@ -78,7 +86,12 @@ export const PreviewFooter = () => {
 
           <Separator orientation="vertical" className="h-4" />
 
-          <Button variant="ghost" size="icon-sm" onClick={() => setIsConsoleOpen(!isConsoleOpen)}>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => setIsConsoleOpen(!isConsoleOpen)}
+            disabled={isPreviewing}
+          >
             <ChevronsDown
               className={cn(
                 "size-4 transition-transform duration-200",

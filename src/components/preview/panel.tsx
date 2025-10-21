@@ -56,11 +56,7 @@ export const PreviewPanel = () => {
         </div>
       </div>
 
-      {!fullscreen && !isPreviewing && (
-        <div className="bg-white rounded-b-md">
-          <PreviewFooter />
-        </div>
-      )}
+      {!fullscreen && <PreviewFooter />}
     </div>
   );
 
