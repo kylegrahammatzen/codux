@@ -53,29 +53,30 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
 
   return (
     <Collapsible open={props.isOpen}>
-      <CollapsibleContent className="transition-all duration-300 ease-in-out">
+      <CollapsibleContent>
         <Separator />
 
-        {logs.length > 0 && (
-          <div className="flex items-center justify-between py-1">
-            <div className="flex items-center gap-3 text-xs">
-              {errorCount > 0 && (
-                <span className="text-red-600">{errorCount} error{errorCount > 1 ? 's' : ''}</span>
-              )}
-              {warnCount > 0 && (
-                <span className="text-yellow-600">{warnCount} warning{warnCount > 1 ? 's' : ''}</span>
-              )}
-              <span className="text-gray-500">{logs.length} total</span>
-            </div>
-            <Button variant="ghost" size="sm" onClick={reset} className="h-6 text-xs">
-              Clear
-            </Button>
+        <div className={cn(
+          "flex items-center justify-between overflow-hidden transition-all duration-300 ease-in-out",
+          logs.length > 0 ? "py-1 max-h-10 opacity-100" : "py-0 max-h-0 opacity-0"
+        )}>
+          <div className="flex items-center gap-3 text-xs">
+            {errorCount > 0 && (
+              <span className="text-red-600">{errorCount} error{errorCount > 1 ? 's' : ''}</span>
+            )}
+            {warnCount > 0 && (
+              <span className="text-yellow-600">{warnCount} warning{warnCount > 1 ? 's' : ''}</span>
+            )}
+            <span className="text-gray-500">{logs.length} total</span>
           </div>
-        )}
+          <Button variant="ghost" size="sm" onClick={reset} className="h-6 text-xs">
+            Clear
+          </Button>
+        </div>
 
         <div
           ref={consoleRef}
-          className="max-h-48 overflow-y-auto text-xs font-mono py-2 space-y-1"
+          className="max-h-48 overflow-y-auto text-xs font-mono py-2 space-y-1 transition-all duration-200"
         >
           {logs.length === 0 ? (
             <p className="text-gray-400">Console is empty</p>
