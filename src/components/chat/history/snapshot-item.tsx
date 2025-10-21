@@ -14,7 +14,7 @@ type SnapshotItemProps = {
   isLatest: boolean;
   isPreviewing: boolean;
   isInPreviewMode: boolean;
-  onPreview: () => void;
+  onTogglePreview: () => void;
   onRestore: () => void;
   formatTimestamp: (date: Date) => string;
 };
@@ -126,7 +126,7 @@ export const SnapshotItem = (props: SnapshotItemProps) => {
           </CollapsibleTrigger>
           {!props.isLatest && (props.isPreviewing || !props.isInPreviewMode) && (
             <SnapshotActions
-              onPreview={props.onPreview}
+              onTogglePreview={props.onTogglePreview}
               onRestore={props.onRestore}
             />
           )}

@@ -14,10 +14,19 @@ export const ChatPanel = () => {
   const { sandpack } = useSandpack();
   const [showHistory, setShowHistory] = useState(false);
   const { isPreviewing, setIsPreviewing, setEditorReadOnly } = useProjectContext();
-  const { setDisableTracking } = useHistory();
+  const { snapshots, restoreSnapshot, setDisableTracking } = useHistory();
 
   const handleCloseHistory = () => {
-    if (isPreviewing) {
+    if (isPreviewing && snapshots.length > 0) {
+      const files = restoreSnapshot(snapshots[0].id);
+      if (files) {
+        Object.keys(files).forEach((filePath) => {
+          const fileContent = files[filePath] as any;
+          if (fileContent !== undefined) {
+            sandpack.updateFile(filePath, typeof fileContent === 'string' ? fileContent : fileContent.code);
+          }
+        });
+      }
       setEditorReadOnly(false);
       setIsPreviewing(false);
       setDisableTracking(false);

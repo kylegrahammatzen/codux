@@ -21,7 +21,7 @@ import { MoreVertical } from "lucide-react";
 
 type SnapshotActionsProps = {
   onRestore: () => void;
-  onPreview: () => void;
+  onTogglePreview: () => void;
 };
 
 export const SnapshotActions = (props: SnapshotActionsProps) => {
@@ -39,7 +39,7 @@ export const SnapshotActions = (props: SnapshotActionsProps) => {
           <MoreVertical className="size-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={props.onPreview}>
+          <DropdownMenuItem onClick={props.onTogglePreview}>
             Preview
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setShowRestoreDialog(true)}>

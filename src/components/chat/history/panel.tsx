@@ -30,6 +30,28 @@ export const HistoryPanel = () => {
     }
   };
 
+  const handleTogglePreview = (id: string) => {
+    if (previewingId === id) {
+      if (snapshots.length > 0) {
+        const files = restoreSnapshot(snapshots[0].id);
+        if (files) {
+          Object.keys(files).forEach((filePath) => {
+            const fileContent = files[filePath] as any;
+            if (fileContent !== undefined) {
+              sandpack.updateFile(filePath, typeof fileContent === 'string' ? fileContent : fileContent.code);
+            }
+          });
+        }
+        setEditorReadOnly(false);
+        setIsPreviewing(false);
+        setPreviewingId(null);
+        setDisableTracking(false);
+      }
+    } else {
+      handlePreview(id);
+    }
+  };
+
   const handleRestore = (id: string) => {
     const files = restoreSnapshot(id);
     if (files) {
@@ -53,7 +75,7 @@ export const HistoryPanel = () => {
     const diffMin = Math.floor(diffSec / 60);
     const diffHr = Math.floor(diffMin / 60);
 
-    if (diffSec < 60) return "just now";
+    if (diffSec < 60) return `${diffSec}s ago`;
     if (diffMin < 60) return `${diffMin}m ago`;
     if (diffHr < 24) return `${diffHr}h ago`;
     return date.toLocaleDateString();
@@ -81,7 +103,7 @@ export const HistoryPanel = () => {
                   isLatest={index === 0}
                   isPreviewing={previewingId === snapshot.id}
                   isInPreviewMode={previewingId !== null && previewingId !== snapshot.id}
-                  onPreview={() => handlePreview(snapshot.id)}
+                  onTogglePreview={() => handleTogglePreview(snapshot.id)}
                   onRestore={() => handleRestore(snapshot.id)}
                   formatTimestamp={formatTimestamp}
                 />

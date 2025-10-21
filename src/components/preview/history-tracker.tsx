@@ -6,7 +6,7 @@ import { useHistory } from "@/components/history-context";
 
 export const HistoryTracker = () => {
   const { sandpack } = useSandpack();
-  const { addSnapshot, disableTracking } = useHistory();
+  const { addSnapshot, disableTracking, snapshots } = useHistory();
   const previousFilesRef = useRef(sandpack.files);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const initializedRef = useRef(false);
@@ -44,6 +44,24 @@ export const HistoryTracker = () => {
       });
 
       if (changedFiles.length > 0) {
+        const latestSnapshot = snapshots[0];
+        if (latestSnapshot) {
+          let hasActualChanges = false;
+          for (const filePath of changedFiles) {
+            const currentContent = currentFiles[filePath]?.code;
+            const snapshotContent = latestSnapshot.files[filePath] as any;
+            const snapshotCode = typeof snapshotContent === 'string' ? snapshotContent : snapshotContent?.code;
+            if (currentContent !== snapshotCode) {
+              hasActualChanges = true;
+              break;
+            }
+          }
+          if (!hasActualChanges) {
+            previousFilesRef.current = currentFiles;
+            return;
+          }
+        }
+
         const fileNames = changedFiles.map((path) => path.split('/').pop()).join(', ');
         const message = `Updated ${fileNames}`;
 
@@ -57,7 +75,7 @@ export const HistoryTracker = () => {
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [sandpack.files, addSnapshot, disableTracking]);
+  }, [sandpack.files, addSnapshot, disableTracking, snapshots]);
 
   return null;
 };
