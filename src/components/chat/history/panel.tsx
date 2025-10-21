@@ -49,18 +49,13 @@ export const HistoryPanel = () => {
         <>
           <div className="flex items-center justify-between p-3 pb-2">
             <span className="text-xs text-gray-500">{snapshots.length} snapshots</span>
-            {snapshots.length > 0 && (
-              <Button variant="ghost" size="sm" onClick={clearHistory}>
-                Clear All
-              </Button>
-            )}
           </div>
           <ScrollArea className="flex-1">
             <div className="p-3 pt-0 space-y-2">
-              {snapshots.map((snapshot) => (
+              {snapshots.map((snapshot, index) => (
               <Collapsible key={snapshot.id}>
-                <div className="border rounded-lg overflow-hidden">
-                  <div className="flex items-center justify-between p-3 hover:bg-gray-50">
+                <div className="border rounded-lg overflow-hidden bg-gray-50">
+                  <div className="flex items-center justify-between p-3">
                     <CollapsibleTrigger className="flex items-center gap-2 flex-1 text-left">
                       <ChevronRight className="size-4 transition-transform duration-200 data-[state=open]:rotate-90" />
                       <div className="flex-1 min-w-0">
@@ -73,20 +68,20 @@ export const HistoryPanel = () => {
                         </div>
                       </div>
                     </CollapsibleTrigger>
-                    <SnapshotActions onRestore={() => handleRestore(snapshot.id)} />
+                    {index !== 0 && (
+                      <SnapshotActions onRestore={() => handleRestore(snapshot.id)} />
+                    )}
                   </div>
 
                   <CollapsibleContent>
-                    <div className="border-t p-3 bg-gray-50 space-y-1">
+                    <div className="border-t p-3 bg-white space-y-1">
                       <p className="text-xs font-medium text-gray-600 mb-2">
-                        {snapshot.message === "Initial version"
-                          ? `Initial Files (${snapshot.changedFiles.length})`
-                          : `Changed Files (${snapshot.changedFiles.length})`}
+                        Files ({snapshot.changedFiles.length})
                       </p>
                       {snapshot.changedFiles.map((file) => (
                         <div
                           key={file}
-                          className="flex items-center gap-2 text-xs p-2 bg-white rounded"
+                          className="flex items-center gap-2 text-xs p-2 bg-gray-50 rounded"
                         >
                           <FileText className="size-3 text-muted-foreground" />
                           <span className="truncate">{file}</span>
