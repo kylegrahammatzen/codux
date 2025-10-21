@@ -1,15 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useHistory } from "@/components/history-context";
 import { useSandpack } from "@codesandbox/sandpack-react";
-import { Clock, FileText, X } from "lucide-react";
+import { Clock, FileText, MoreVertical, ChevronRight } from "lucide-react";
 
-type HistoryPanelProps = {
-  onClose: () => void;
-};
-
-export const HistoryPanel = (props: HistoryPanelProps) => {
+export const HistoryPanel = () => {
   const { snapshots, restoreSnapshot, clearHistory } = useHistory();
   const { sandpack } = useSandpack();
 
@@ -40,68 +44,80 @@ export const HistoryPanel = (props: HistoryPanelProps) => {
   };
 
   return (
-    <div className="absolute inset-0 bg-white border-l flex flex-col z-10">
-      {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 border-b">
-        <div className="flex items-center gap-2">
-          <Clock className="size-4" />
-          <span className="font-medium text-sm">Version History</span>
+    <div className="flex-1 flex flex-col overflow-hidden">
+      {snapshots.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full text-gray-400">
+          <Clock className="size-12 mb-2" />
+          <p className="text-sm">No version history yet</p>
+          <p className="text-xs">Changes will be saved automatically</p>
         </div>
-        <div className="flex items-center gap-1">
-          {snapshots.length > 0 && (
-            <Button variant="ghost" size="sm" onClick={clearHistory}>
-              Clear All
-            </Button>
-          )}
-          <Button variant="ghost" size="icon-sm" onClick={props.onClose}>
-            <X className="size-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Timeline */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
-        {snapshots.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400">
-            <Clock className="size-12 mb-2" />
-            <p className="text-sm">No version history yet</p>
-            <p className="text-xs">Changes will be saved automatically</p>
+      ) : (
+        <>
+          <div className="flex items-center justify-between p-3 pb-2">
+            <span className="text-xs text-gray-500">{snapshots.length} snapshots</span>
+            {snapshots.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={clearHistory}>
+                Clear All
+              </Button>
+            )}
           </div>
-        ) : (
-          snapshots.map((snapshot) => (
-            <div
-              key={snapshot.id}
-              className="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer transition-colors"
-              onClick={() => handleRestore(snapshot.id)}
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">
-                    {snapshot.message || "Untitled Change"}
-                  </p>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                    <Clock className="size-3" />
-                    <span>{formatTimestamp(snapshot.timestamp)}</span>
+          <ScrollArea className="flex-1">
+            <div className="p-3 pt-0 space-y-2">
+              {snapshots.map((snapshot) => (
+              <Collapsible key={snapshot.id}>
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-between p-3 hover:bg-gray-50">
+                    <CollapsibleTrigger className="flex items-center gap-2 flex-1 text-left">
+                      <ChevronRight className="size-4 transition-transform duration-200 data-[state=open]:rotate-90" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          {snapshot.message || "Untitled Change"}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                          <Clock className="size-3" />
+                          <span>{formatTimestamp(snapshot.timestamp)}</span>
+                        </div>
+                      </div>
+                    </CollapsibleTrigger>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon-sm">
+                          <MoreVertical className="size-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleRestore(snapshot.id)}>
+                          Restore
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  {snapshot.changedFiles.map((file) => (
-                    <div
-                      key={file}
-                      className="flex items-center gap-1 text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded"
-                    >
-                      <FileText className="size-3" />
-                      <span className="truncate max-w-[60px]">
-                        {file.split('/').pop()}
-                      </span>
+
+                  <CollapsibleContent>
+                    <div className="border-t p-3 bg-gray-50 space-y-1">
+                      <p className="text-xs font-medium text-gray-600 mb-2">
+                        {snapshot.message === "Initial version"
+                          ? `Initial Files (${snapshot.changedFiles.length})`
+                          : `Changed Files (${snapshot.changedFiles.length})`}
+                      </p>
+                      {snapshot.changedFiles.map((file) => (
+                        <div
+                          key={file}
+                          className="flex items-center gap-2 text-xs p-2 bg-white rounded"
+                        >
+                          <FileText className="size-3 text-muted-foreground" />
+                          <span className="truncate">{file}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </CollapsibleContent>
                 </div>
-              </div>
+              </Collapsible>
+              ))}
             </div>
-          ))
-        )}
-      </div>
+          </ScrollArea>
+        </>
+      )}
     </div>
   );
 };

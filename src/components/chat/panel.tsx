@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/chat/input";
 import { HistoryPanel } from "@/components/chat/history-panel";
 import { useSandpack } from "@codesandbox/sandpack-react";
+import { X } from "lucide-react";
 
 export const ChatPanel = () => {
   const { sandpack } = useSandpack();
@@ -25,7 +26,7 @@ export const ChatPanel = () => {
   };
 
   return (
-    <div className="flex flex-col h-full min-w-max relative">
+    <div className="flex flex-col h-full min-w-max">
       <div className="flex items-center justify-between px-2 border-b h-12 bg-white rounded-t-md">
         <div className="flex items-center gap-2">
           <div className="size-6 bg-black rounded-sm flex items-center justify-center">
@@ -34,24 +35,28 @@ export const ChatPanel = () => {
           <span className="font-medium text-sm">Stan</span>
         </div>
         <Button variant="ghost" size="sm" onClick={() => setShowHistory(!showHistory)}>
-          <svg
-            className="size-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          {showHistory ? (
+            <X className="size-4" />
+          ) : (
+            <svg
+              className="size-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          )}
         </Button>
       </div>
 
       {showHistory ? (
-        <HistoryPanel onClose={() => setShowHistory(false)} />
+        <HistoryPanel />
       ) : (
         <>
           <CardContent className="flex-1 flex flex-col items-center justify-center gap-4">

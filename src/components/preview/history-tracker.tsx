@@ -9,6 +9,16 @@ export const HistoryTracker = () => {
   const { addSnapshot } = useHistory();
   const previousFilesRef = useRef(sandpack.files);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const initializedRef = useRef(false);
+
+  // Save initial version on mount
+  useEffect(() => {
+    if (!initializedRef.current) {
+      const allFiles = Object.keys(sandpack.files);
+      addSnapshot(sandpack.files, allFiles, "Initial version");
+      initializedRef.current = true;
+    }
+  }, [sandpack.files, addSnapshot]);
 
   useEffect(() => {
     // Clear any existing timer
