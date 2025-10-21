@@ -1,28 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Plus, Image, Mic, SquareDashedMousePointer } from "lucide-react";
+import { Image, Mic, SquareDashedMousePointer } from "lucide-react";
 
 export const ChatInputActions = () => {
   return (
     <div className="flex gap-2 overflow-hidden">
-      <DropdownMenu openOnHover>
-        <DropdownMenuTrigger render={<Button variant="outline" size="icon-sm" />} className="bg-white">
-          <Plus className="size-4" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuItem>
-            <Image className="size-4" />
-            Add photos or files
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button variant="outline" size="icon-sm" className="bg-white">
+        <Image className="size-4" />
+      </Button>
       <Button variant="outline" size="icon-sm" className="bg-white relative z-10">
         <Mic className="size-4" />
       </Button>
