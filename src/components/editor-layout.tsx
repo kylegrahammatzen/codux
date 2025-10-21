@@ -5,11 +5,11 @@ import { AppHeader } from "@/components/app-header";
 import { EditorContent } from "@/components/editor-content";
 import { cn } from "@/lib/utils";
 
-type LayoutContainerProps = {
+type LayoutWrapperProps = {
   children: React.ReactNode;
 };
 
-const LayoutContainer = (props: LayoutContainerProps) => {
+const LayoutWrapper = (props: LayoutWrapperProps) => {
   const { fullscreen } = useProjectContext();
 
   return (
@@ -26,9 +26,9 @@ const LayoutContainer = (props: LayoutContainerProps) => {
 
 export const EditorLayout = () => {
   return (
-    <LayoutContainer>
+    <LayoutWrapper>
       <AppHeader />
       <EditorContent />
-    </LayoutContainer>
+    </LayoutWrapper>
   );
 };
