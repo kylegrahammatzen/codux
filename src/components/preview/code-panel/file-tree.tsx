@@ -1,7 +1,7 @@
 "use client";
 
 import { useProjectContext } from "@/components/project-context";
-import { useSandpack } from "@codesandbox/sandpack-react";
+import { useSandpack, useSandpackConsole } from "@codesandbox/sandpack-react";
 import { FileItem } from "./file-item";
 import { FolderItem } from "./folder-item";
 
@@ -22,6 +22,21 @@ type BuildNode = {
 export const FileTree = () => {
   const { showFileTree } = useProjectContext();
   const { sandpack } = useSandpack();
+  const { logs } = useSandpackConsole({ resetOnPreviewRestart: true });
+
+  // Get files with errors from console logs
+  const filesWithErrors = new Set<string>();
+  logs?.forEach((log) => {
+    if (log.method === "error" && log.data) {
+      // Try to extract file path from error message
+      const errorStr = log.data.join(" ");
+      Object.keys(sandpack.files).forEach((filePath) => {
+        if (errorStr.includes(filePath)) {
+          filesWithErrors.add(filePath);
+        }
+      });
+    }
+  });
 
   // Build tree structure from flat file list
   const buildTree = (filePaths: string[]): FileTreeNode[] => {
@@ -84,6 +99,7 @@ export const FileTree = () => {
           name={node.name}
           path={node.path}
           isActive={sandpack.activeFile === node.path}
+          hasError={filesWithErrors.has(node.path)}
           onClick={sandpack.setActiveFile}
         />
       );

@@ -1,14 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PreviewConsole } from "@/components/preview/console";
+import { useSandpack, useSandpackConsole } from "@codesandbox/sandpack-react";
 import { cn } from "@/lib/utils";
-import { SquareTerminal, Funnel, ChevronsDown } from "lucide-react";
+import { SquareTerminal, ChevronsDown, AlertCircle } from "lucide-react";
 
 export const PreviewFooter = () => {
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
+  const [lastChange, setLastChange] = useState<Date | null>(null);
+  const [timeAgo, setTimeAgo] = useState<string>("never");
+  const { sandpack, listen } = useSandpack();
+  const { logs } = useSandpackConsole({ resetOnPreviewRestart: true });
+
+  const errorCount = logs?.filter((log) => log.method === "error").length || 0;
+
+  useEffect(() => {
+    const stopListening = listen((message) => {
+      if (message.type === "done" || message.type === "action" || message.type === "start") {
+        setLastChange(new Date());
+      }
+    });
+
+    return () => stopListening();
+  }, [listen]);
+
+  useEffect(() => {
+    if (!lastChange) return;
+
+    const updateTimeAgo = () => {
+      const now = new Date();
+      const diffMs = now.getTime() - lastChange.getTime();
+      const diffSec = Math.floor(diffMs / 1000);
+      const diffMin = Math.floor(diffSec / 60);
+      const diffHr = Math.floor(diffMin / 60);
+
+      if (diffSec < 10) {
+        setTimeAgo("just now");
+      } else if (diffSec < 60) {
+        setTimeAgo(`${diffSec}s ago`);
+      } else if (diffMin < 60) {
+        setTimeAgo(`${diffMin}m ago`);
+      } else {
+        setTimeAgo(`${diffHr}h ago`);
+      }
+    };
+
+    updateTimeAgo();
+    const interval = setInterval(updateTimeAgo, 1000);
+
+    return () => clearInterval(interval);
+  }, [lastChange]);
 
   return (
     <div className="border-t flex flex-col">
@@ -17,21 +61,20 @@ export const PreviewFooter = () => {
         <div className="flex items-center gap-2 text-sm">
           <SquareTerminal className="size-4" />
           <span>Console</span>
+          {errorCount > 0 && (
+            <div className="flex items-center gap-1 bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-medium">
+              <AlertCircle className="size-3" />
+              <span>{errorCount}</span>
+            </div>
+          )}
         </div>
 
-        {/* Right side - Last change info, divider, and filter buttons */}
+        {/* Right side - Last change info and toggle */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-sm">
             <span className="text-gray-400">Last change:</span>
-            <span className="text-gray-700">3 hours ago</span>
+            <span className="text-gray-700">{timeAgo}</span>
           </div>
-
-          <Separator orientation="vertical" className="h-4" />
-
-          <Button variant="ghost" size="sm">
-            <Funnel className="size-4" />
-            <span>Filters</span>
-          </Button>
 
           <Separator orientation="vertical" className="h-4" />
 
