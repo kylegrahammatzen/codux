@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/chat/input";
-import { HistoryPanel } from "@/components/chat/history-panel";
+import { HistoryPanel } from "@/components/chat/history/panel";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { X } from "lucide-react";
 

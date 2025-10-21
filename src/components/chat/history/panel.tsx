@@ -20,7 +20,6 @@ export const HistoryPanel = () => {
   const handleRestore = (id: string) => {
     const files = restoreSnapshot(id);
     if (files) {
-      // Restore all files
       Object.keys(files).forEach((filePath) => {
         const fileContent = files[filePath]?.code;
         if (fileContent !== undefined) {
@@ -80,10 +79,8 @@ export const HistoryPanel = () => {
                       </div>
                     </CollapsibleTrigger>
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon-sm">
-                          <MoreVertical className="size-4" />
-                        </Button>
+                      <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" />}>
+                        <MoreVertical className="size-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleRestore(snapshot.id)}>

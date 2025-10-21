@@ -31,16 +31,15 @@ export const HistoryProvider = (props: HistoryProviderProps) => {
 
   const addSnapshot = useCallback((files: ProjectFiles, changedFiles: string[], message?: string) => {
     const snapshot: Snapshot = {
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
       timestamp: new Date(),
-      files: { ...files }, // Deep copy
+      files: { ...files },
       changedFiles,
       message,
     };
 
     setSnapshots((prev) => {
       const newSnapshots = [snapshot, ...prev];
-      // Limit to maxSnapshots
       return newSnapshots.slice(0, maxSnapshots);
     });
   }, [maxSnapshots]);
