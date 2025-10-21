@@ -30,6 +30,8 @@ type ProjectContextType = {
   setShowFileTree: (show: boolean) => void;
   editorReadOnly: boolean;
   setEditorReadOnly: (readOnly: boolean) => void;
+  isPreviewing: boolean;
+  setIsPreviewing: (previewing: boolean) => void;
 
 };
 
@@ -52,6 +54,7 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
   const [fullscreen, setFullscreenState] = useState(false);
   const [showFileTree, setShowFileTree] = useState(true);
   const [editorReadOnly, setEditorReadOnly] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
 
   const setFullscreen = (value: boolean) => {
     if (value) {
@@ -77,6 +80,8 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
         setShowFileTree,
         editorReadOnly,
         setEditorReadOnly,
+        isPreviewing,
+        setIsPreviewing,
       }}
     >
       {props.children}

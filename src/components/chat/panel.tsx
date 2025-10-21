@@ -1,21 +1,26 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/chat/input";
 import { HistoryPanel } from "@/components/chat/history/panel";
+import { useProjectContext } from "@/components/project-context";
+import { useHistory } from "@/components/history-context";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { X } from "lucide-react";
 
 export const ChatPanel = () => {
   const { sandpack } = useSandpack();
   const [showHistory, setShowHistory] = useState(false);
-  const exitPreviewRef = useRef<(() => void) | null>(null);
+  const { isPreviewing, setIsPreviewing, setEditorReadOnly } = useProjectContext();
+  const { setDisableTracking } = useHistory();
 
   const handleCloseHistory = () => {
-    if (exitPreviewRef.current) {
-      exitPreviewRef.current();
+    if (isPreviewing) {
+      setEditorReadOnly(false);
+      setIsPreviewing(false);
+      setDisableTracking(false);
     }
     setShowHistory(false);
   };
@@ -64,7 +69,7 @@ export const ChatPanel = () => {
       </div>
 
       {showHistory ? (
-        <HistoryPanel onExitPreviewRef={exitPreviewRef} />
+        <HistoryPanel />
       ) : (
         <>
           <CardContent className="flex-1 flex flex-col items-center justify-center gap-4">

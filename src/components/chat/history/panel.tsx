@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, MutableRefObject } from "react";
+import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SnapshotItem } from "@/components/chat/history/snapshot-item";
 import { useHistory } from "@/components/history-context";
@@ -8,27 +8,11 @@ import { useProjectContext } from "@/components/project-context";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { Clock } from "lucide-react";
 
-type HistoryPanelProps = {
-  onExitPreviewRef: MutableRefObject<(() => void) | null>;
-};
-
-export const HistoryPanel = (props: HistoryPanelProps) => {
+export const HistoryPanel = () => {
   const { snapshots, restoreSnapshot, setDisableTracking } = useHistory();
-  const { setEditorReadOnly } = useProjectContext();
+  const { setEditorReadOnly, setIsPreviewing } = useProjectContext();
   const { sandpack } = useSandpack();
   const [previewingId, setPreviewingId] = useState<string | null>(null);
-
-  const exitPreview = () => {
-    if (previewingId) {
-      setEditorReadOnly(false);
-      setPreviewingId(null);
-      setDisableTracking(false);
-    }
-  };
-
-  useEffect(() => {
-    props.onExitPreviewRef.current = exitPreview;
-  }, [previewingId]);
 
   const handlePreview = (id: string) => {
     const files = restoreSnapshot(id);
@@ -41,6 +25,7 @@ export const HistoryPanel = (props: HistoryPanelProps) => {
         }
       });
       setEditorReadOnly(true);
+      setIsPreviewing(true);
       setPreviewingId(id);
     }
   };
@@ -55,6 +40,7 @@ export const HistoryPanel = (props: HistoryPanelProps) => {
         }
       });
       setEditorReadOnly(false);
+      setIsPreviewing(false);
       setPreviewingId(null);
       setDisableTracking(false);
     }
