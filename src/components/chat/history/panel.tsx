@@ -69,7 +69,7 @@ export const HistoryPanel = () => {
       ) : (
         <>
           {previewingId && (
-            <div className="flex items-center justify-between p-3 bg-blue-50 border-b border-blue-200">
+            <div className="flex items-center justify-between p-2 bg-blue-50 border-b border-blue-200">
               <div className="flex items-center gap-2">
                 <Clock className="size-4 text-blue-600" />
                 <span className="text-sm text-blue-900">Previewing version</span>
@@ -80,11 +80,11 @@ export const HistoryPanel = () => {
               </Button>
             </div>
           )}
-          <div className="flex items-center justify-between p-3 pb-2">
+          <div className="flex items-center justify-between p-2">
             <span className="text-xs text-gray-500">{snapshots.length} snapshots</span>
           </div>
           <ScrollArea className="flex-1">
-            <div className="p-3 pt-0 space-y-2">
+            <div className="p-2 pt-0 space-y-2">
               {snapshots.map((snapshot, index) => (
                 <SnapshotItem
                   key={snapshot.id}
