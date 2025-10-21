@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut } from "@/actions/account";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -23,7 +24,7 @@ export const UserDropdown = () => {
         <DropdownMenuItem>Billing settings</DropdownMenuItem>
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive">Logout</DropdownMenuItem>
+        <DropdownMenuItem variant="destructive" onClick={async () => await signOut()}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
