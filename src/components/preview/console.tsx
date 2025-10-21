@@ -69,7 +69,13 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
             )}
             <span className="text-gray-500">{logs.length} total</span>
           </div>
-          <Button variant="ghost" size="sm" onClick={reset} className="h-6 text-xs">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={reset}
+            className="h-6 text-xs"
+            title="Clear console (errors will reappear if code still has issues)"
+          >
             Clear
           </Button>
         </div>
