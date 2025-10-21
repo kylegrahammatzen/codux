@@ -1,16 +1,30 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SnapshotActions } from "@/components/chat/history/snapshot-actions";
+import { SnapshotItem } from "@/components/chat/history/snapshot-item";
 import { useHistory } from "@/components/history-context";
 import { useSandpack } from "@codesandbox/sandpack-react";
-import { Clock, FileText, ChevronRight } from "lucide-react";
+import { Clock, X } from "lucide-react";
 
 export const HistoryPanel = () => {
-  const { snapshots, restoreSnapshot, clearHistory } = useHistory();
+  const { snapshots, restoreSnapshot } = useHistory();
   const { sandpack } = useSandpack();
+  const [previewingId, setPreviewingId] = useState<string | null>(null);
+
+  const handlePreview = (id: string) => {
+    const files = restoreSnapshot(id);
+    if (files) {
+      Object.keys(files).forEach((filePath) => {
+        const fileContent = files[filePath];
+        if (fileContent !== undefined) {
+          sandpack.updateFile(filePath, fileContent);
+        }
+      });
+      setPreviewingId(id);
+    }
+  };
 
   const handleRestore = (id: string) => {
     const files = restoreSnapshot(id);
@@ -21,6 +35,13 @@ export const HistoryPanel = () => {
           sandpack.updateFile(filePath, fileContent);
         }
       });
+      setPreviewingId(null);
+    }
+  };
+
+  const exitPreview = () => {
+    if (snapshots.length > 0) {
+      handleRestore(snapshots[0].id);
     }
   };
 
@@ -47,50 +68,32 @@ export const HistoryPanel = () => {
         </div>
       ) : (
         <>
+          {previewingId && (
+            <div className="flex items-center justify-between p-3 bg-blue-50 border-b border-blue-200">
+              <div className="flex items-center gap-2">
+                <Clock className="size-4 text-blue-600" />
+                <span className="text-sm text-blue-900">Previewing version</span>
+              </div>
+              <Button variant="ghost" size="sm" onClick={exitPreview}>
+                <X className="size-4 mr-1" />
+                Exit Preview
+              </Button>
+            </div>
+          )}
           <div className="flex items-center justify-between p-3 pb-2">
             <span className="text-xs text-gray-500">{snapshots.length} snapshots</span>
           </div>
           <ScrollArea className="flex-1">
             <div className="p-3 pt-0 space-y-2">
               {snapshots.map((snapshot, index) => (
-              <Collapsible key={snapshot.id}>
-                <div className="border rounded-lg overflow-hidden bg-gray-50">
-                  <div className="flex items-center justify-between p-3">
-                    <CollapsibleTrigger className="flex items-center gap-2 flex-1 text-left">
-                      <ChevronRight className="size-4 transition-transform duration-200 data-[state=open]:rotate-90" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">
-                          {snapshot.message || "Untitled Change"}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                          <Clock className="size-3" />
-                          <span>{formatTimestamp(snapshot.timestamp)}</span>
-                        </div>
-                      </div>
-                    </CollapsibleTrigger>
-                    {index !== 0 && (
-                      <SnapshotActions onRestore={() => handleRestore(snapshot.id)} />
-                    )}
-                  </div>
-
-                  <CollapsibleContent>
-                    <div className="border-t p-3 bg-white space-y-1">
-                      <p className="text-xs font-medium text-gray-600 mb-2">
-                        Files ({snapshot.changedFiles.length})
-                      </p>
-                      {snapshot.changedFiles.map((file) => (
-                        <div
-                          key={file}
-                          className="flex items-center gap-2 text-xs p-2 bg-gray-50 rounded"
-                        >
-                          <FileText className="size-3 text-muted-foreground" />
-                          <span className="truncate">{file}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CollapsibleContent>
-                </div>
-              </Collapsible>
+                <SnapshotItem
+                  key={snapshot.id}
+                  snapshot={snapshot}
+                  isLatest={index === 0}
+                  onPreview={() => handlePreview(snapshot.id)}
+                  onRestore={() => handleRestore(snapshot.id)}
+                  formatTimestamp={formatTimestamp}
+                />
               ))}
             </div>
           </ScrollArea>
