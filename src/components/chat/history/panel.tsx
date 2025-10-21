@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SnapshotItem } from "@/components/chat/history/snapshot-item";
 import { useHistory } from "@/components/history-context";
 import { useSandpack } from "@codesandbox/sandpack-react";
-import { Clock, X } from "lucide-react";
+import { Clock } from "lucide-react";
 
 export const HistoryPanel = () => {
   const { snapshots, restoreSnapshot } = useHistory();
@@ -39,12 +38,6 @@ export const HistoryPanel = () => {
     }
   };
 
-  const exitPreview = () => {
-    if (snapshots.length > 0) {
-      handleRestore(snapshots[0].id);
-    }
-  };
-
   const formatTimestamp = (date: Date) => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -68,18 +61,6 @@ export const HistoryPanel = () => {
         </div>
       ) : (
         <>
-          {previewingId && (
-            <div className="flex items-center justify-between p-2 bg-blue-50 border-b border-blue-200">
-              <div className="flex items-center gap-2">
-                <Clock className="size-4 text-blue-600" />
-                <span className="text-sm text-blue-900">Previewing version</span>
-              </div>
-              <Button variant="ghost" size="sm" onClick={exitPreview}>
-                <X className="size-4 mr-1" />
-                Exit Preview
-              </Button>
-            </div>
-          )}
           <div className="flex items-center justify-between p-2">
             <span className="text-xs text-gray-500">{snapshots.length} snapshots</span>
           </div>
