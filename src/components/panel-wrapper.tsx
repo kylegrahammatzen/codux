@@ -5,17 +5,16 @@ import { cn } from "@/lib/utils";
 import { useProjectContext } from "@/components/project-context";
 
 type PanelWrapperProps = {
-  isOpen: boolean;
   children: React.ReactNode;
 };
 
 export const PanelWrapper = (props: PanelWrapperProps) => {
-  const { fullscreen } = useProjectContext();
+  const { fullscreen, panelOpen, isMobile } = useProjectContext();
   const width = "30%";
   const margin = "mr-2";
 
-  // Handle fullscreen logic internally
-  const isOpen = props.isOpen && !fullscreen;
+  // Calculate visibility based on context
+  const isOpen = panelOpen && !isMobile && !fullscreen;
 
   return (
     <div

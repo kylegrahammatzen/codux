@@ -4,13 +4,22 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { UserDropdown } from "@/components/user-dropdown";
+import { useProjectContext } from "@/components/project-context";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export const AppHeader = () => {
   const pathname = usePathname();
+  const { fullscreen } = useProjectContext();
 
   return (
-    <header className="flex items-center justify-between">
+    <div
+      className={cn(
+        "transition-all ease-[cubic-bezier(.165,.84,.44,1)] duration-300",
+        fullscreen ? "h-0 opacity-0 overflow-hidden" : "h-auto opacity-100"
+      )}
+    >
+      <header className="flex items-center justify-between">
       {/* Left side */}
       <div className="flex items-center gap-2">
         <Button variant="outline" size="icon-sm" className="bg-white">
@@ -54,5 +63,6 @@ export const AppHeader = () => {
         </div>
       )}
     </header>
+    </div>
   );
 };

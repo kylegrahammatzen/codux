@@ -1,6 +1,6 @@
 "use client";
 
-import { useProjectContext } from "@/components/project-context";
+import { useProjectContext, DEFAULT_FILES } from "@/components/project-context";
 import { AppHeader } from "@/components/app-header";
 import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
@@ -8,14 +8,12 @@ import { PanelWrapper } from "@/components/panel-wrapper";
 import { SandpackProvider } from "@codesandbox/sandpack-react";
 import { cn } from "@/lib/utils";
 
-export const EditorLayout = () => {
-  const { panelOpen, fullscreen, isMobile, files, activeFile } = useProjectContext();
+type LayoutWrapperProps = {
+  children: React.ReactNode;
+};
 
-  // Convert files to Sandpack format
-  const sandpackFiles = Object.entries(files).reduce((acc, [path, file]) => {
-    acc[path] = file.code;
-    return acc;
-  }, {} as Record<string, string>);
+const LayoutWrapper = (props: LayoutWrapperProps) => {
+  const { fullscreen } = useProjectContext();
 
   return (
     <div
@@ -24,23 +22,19 @@ export const EditorLayout = () => {
         fullscreen ? "gap-0 p-0" : "gap-2 p-2"
       )}
     >
-      {/* AppHeader with transition */}
-      <div
-        className={cn(
-          "transition-all ease-[cubic-bezier(.165,.84,.44,1)] duration-300",
-          fullscreen ? "h-0 opacity-0 overflow-hidden" : "h-auto opacity-100"
-        )}
-      >
-        <AppHeader />
-      </div>
+      {props.children}
+    </div>
+  );
+};
 
-      {/* Panel layout */}
+export const EditorLayout = () => {
+  return (
+    <LayoutWrapper>
+      <AppHeader />
+
       <SandpackProvider
         style={{ display: 'contents' }}
-        files={sandpackFiles}
-        options={{
-          activeFile: activeFile || undefined,
-        }}
+        files={DEFAULT_FILES}
         customSetup={{
           dependencies: {
             react: "^18.3.1",
@@ -49,13 +43,13 @@ export const EditorLayout = () => {
         }}
       >
         <div className="flex flex-1 overflow-hidden min-h-0">
-          <PanelWrapper isOpen={panelOpen && !isMobile}>
+          <PanelWrapper>
             <ChatPanel />
           </PanelWrapper>
 
           <PreviewPanel />
         </div>
       </SandpackProvider>
-    </div>
+    </LayoutWrapper>
   );
 };
