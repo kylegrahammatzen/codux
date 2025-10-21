@@ -22,21 +22,18 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
   }, [logs, props.isOpen]);
 
   const cleanErrorMessage = (message: string): string => {
-    // Remove URLs and sandpack internal stuff
-    let cleaned = message
-      .replace(/https?:\/\/[^\s]+/g, '') // Remove URLs
-      .replace(/at [^\n]+sandpack[^\n]+/g, '') // Remove sandpack stack traces
-      .replace(/at [^\n]+codesandbox[^\n]+/g, '') // Remove codesandbox stack traces
-      .replace(/\n\s*\n/g, '\n') // Remove empty lines
-      .trim();
-
-    // For errors with file info, try to extract just the meaningful part
-    const errorMatch = cleaned.match(/^(.*?Error:.*?)(\s+at\s+|$)/s);
-    if (errorMatch) {
-      return errorMatch[1].trim();
+    // Split by "at " to separate error message from stack trace
+    const parts = message.split(/\s+at\s+/);
+    if (parts.length > 0) {
+      // Take only the first part (the actual error message)
+      return parts[0]
+        .split('\n')
+        .filter(line => !line.includes('http')) // Remove lines with URLs
+        .filter(line => line.trim().length > 0) // Remove empty lines
+        .join('\n')
+        .trim();
     }
-
-    return cleaned;
+    return message;
   };
 
   const getLogIcon = (method: string) => {
