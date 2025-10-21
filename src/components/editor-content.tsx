@@ -1,20 +1,21 @@
 "use client";
 
-import { useProjectContext } from "@/components/project-context";
+import { DEFAULT_FILES } from "@/components/project-context";
 import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
 import { PanelWrapper } from "@/components/panel-wrapper";
 import { SandpackProvider } from "@codesandbox/sandpack-react";
 
 export const EditorContent = () => {
-  const { files, dependencies } = useProjectContext();
-
   return (
     <SandpackProvider
       style={{ display: 'contents' }}
-      files={files}
+      files={DEFAULT_FILES}
       customSetup={{
-        dependencies,
+        dependencies: {
+          react: "^18.3.1",
+          "react-dom": "^18.3.1",
+        },
       }}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">
