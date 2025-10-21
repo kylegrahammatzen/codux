@@ -19,15 +19,14 @@ export const SnapshotItem = (props: SnapshotItemProps) => {
   return (
     <Collapsible>
       <div
-        className={`border rounded-lg overflow-hidden transition-colors ${
-          props.isPreviewing
-            ? "bg-blue-50 border-blue-300"
-            : props.isInPreviewMode
+        className={`border rounded-lg overflow-hidden transition-colors ${props.isPreviewing
+          ? "bg-blue-50 border-blue-300"
+          : props.isInPreviewMode
             ? "bg-gray-100 opacity-60"
             : "bg-gray-50"
-        }`}
+          }`}
       >
-        <div className="flex items-center justify-between p-3">
+        <div className="flex items-center justify-between p-2">
           <CollapsibleTrigger className="flex items-center gap-2 flex-1 text-left group">
             <ChevronRight className="size-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
             <div className="flex-1 min-w-0">
@@ -49,7 +48,7 @@ export const SnapshotItem = (props: SnapshotItemProps) => {
         </div>
 
         <CollapsibleContent>
-          <div className="border-t p-3 bg-white space-y-1">
+          <div className="border-t p-2 bg-white">
             <p className="text-xs font-medium text-gray-600 mb-2">
               Files ({props.snapshot.changedFiles.length})
             </p>
