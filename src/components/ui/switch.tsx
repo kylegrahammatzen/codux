@@ -4,7 +4,7 @@ import { tv, type VariantProps } from "tailwind-variants"
 
 const switchVariants = tv({
 	slots: {
-		root: "peer data-[checked]:bg-primary focus-visible:border-ring focus-visible:ring-ring/50 data-[unchecked]:bg-input data-[unchecked]:hover:border-ring/70 data-[checked]:border-primary inline-flex shrink-0 items-center rounded-full border shadow-xs transition-[color,box-shadow,border-color] outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50",
+		root: "peer data-[checked]:bg-primary focus-visible:border-ring focus-visible:ring-ring/50 data-[unchecked]:bg-input data-[unchecked]:hover:border-ring/70 data-[checked]:border-primary inline-flex shrink-0 items-center rounded-full border shadow-xs transition-[color,box-shadow,border-color] outline-none focus-visible:ring-[3px] cursor-pointer disabled:cursor-default disabled:pointer-events-none disabled:opacity-50",
 		thumb: "bg-background data-[checked]:bg-background pointer-events-none flex items-center justify-center rounded-full ring-0 transition-transform duration-200 ease-in-out"
 	},
 	variants: {
