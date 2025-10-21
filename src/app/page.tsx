@@ -1,5 +1,6 @@
 import { EditorLayout } from "@/components/editor-layout";
 import { ProjectProvider } from "@/components/project-context";
+import { HistoryProvider } from "@/components/history-context";
 import type { ProjectFiles, ProjectDependencies, ProjectOptions } from "@/components/project-context";
 
 export default function Home() {
@@ -46,12 +47,14 @@ root.render(
   };
 
   return (
-    <ProjectProvider>
-      <EditorLayout
-        files={files}
-        dependencies={dependencies}
-        options={options}
-      />
-    </ProjectProvider>
+    <HistoryProvider>
+      <ProjectProvider>
+        <EditorLayout
+          files={files}
+          dependencies={dependencies}
+          options={options}
+        />
+      </ProjectProvider>
+    </HistoryProvider>
   );
 }

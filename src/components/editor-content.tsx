@@ -4,6 +4,7 @@ import type { ProjectFiles, ProjectDependencies, ProjectOptions } from "@/compon
 import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
 import { PanelWrapper } from "@/components/panel-wrapper";
+import { HistoryTracker } from "@/components/preview/history-tracker";
 import { SandpackProvider } from "@codesandbox/sandpack-react";
 
 type EditorContentProps = {
@@ -22,6 +23,7 @@ export const EditorContent = (props: EditorContentProps) => {
         dependencies: props.dependencies,
       }}
     >
+      <HistoryTracker />
       <div className="flex flex-1 overflow-hidden min-h-0">
         <PanelWrapper>
           <ChatPanel />
