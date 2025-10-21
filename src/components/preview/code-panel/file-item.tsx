@@ -27,8 +27,8 @@ export const FileItem = (props: FileItemProps) => {
       <File className="size-4 text-muted-foreground" />
       <span className="flex-1">{props.name}</span>
       {props.hasError && (
-        <div className="size-4 rounded-full bg-danger/20 flex items-center justify-center" title="File has errors">
-          <div className="size-2 rounded-full bg-danger" />
+        <div className="size-4 rounded-full bg-red-100 flex items-center justify-center" title="File has errors">
+          <div className="size-2 rounded-full bg-red-500" />
         </div>
       )}
     </div>
