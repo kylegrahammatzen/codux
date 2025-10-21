@@ -55,6 +55,10 @@ export const HistoryPanel = () => {
   const handleRestore = (id: string) => {
     const files = restoreSnapshot(id);
     if (files) {
+      setDisableTracking(true);
+      setEditorReadOnly(false);
+      setIsPreviewing(false);
+      setPreviewingId(null);
       Object.keys(files).forEach((filePath) => {
         const fileContent = files[filePath] as any;
         if (fileContent !== undefined) {
@@ -62,15 +66,12 @@ export const HistoryPanel = () => {
         }
       });
       clearSnapshotsAfter(id);
-      setEditorReadOnly(false);
-      setIsPreviewing(false);
-      setPreviewingId(null);
       setDisableTracking(false);
     }
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex flex-col h-full">
       {snapshots.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full text-gray-400">
           <Clock className="size-12 mb-2" />
@@ -79,11 +80,11 @@ export const HistoryPanel = () => {
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-between p-2">
+          <div className="flex items-center justify-between p-2 flex-shrink-0">
             <span className="text-xs text-gray-500">{snapshots.length} snapshots</span>
           </div>
-          <ScrollArea className="flex-1">
-            <div className="p-2 pt-0 space-y-2">
+          <ScrollArea className="flex-1 min-h-0">
+            <div className="p-2 pt-0 space-y-2 mr-2">
               {snapshots.map((snapshot, index) => (
                 <SnapshotItem
                   key={snapshot.id}

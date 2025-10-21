@@ -79,7 +79,9 @@ export const ChatPanel = () => {
       </div>
 
       {showHistory ? (
-        <HistoryPanel />
+        <div className="flex-1 overflow-hidden">
+          <HistoryPanel />
+        </div>
       ) : (
         <>
           <CardContent className="flex-1 flex flex-col items-center justify-center gap-4">
