@@ -71,7 +71,7 @@ export const PreviewFooter = () => {
 
         {/* Right side - Last change info and toggle */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-sm">
+          <div className="flex items-center gap-1.5 text-sm select-none">
             <span className="text-gray-400">Last change:</span>
             <span className="text-gray-700">{timeAgo}</span>
           </div>
