@@ -4,37 +4,45 @@ import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SnapshotItem } from "@/components/chat/history/snapshot-item";
 import { useHistory } from "@/components/history-context";
+import { useProjectContext } from "@/components/project-context";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { Clock } from "lucide-react";
 
 export const HistoryPanel = () => {
-  const { snapshots, restoreSnapshot } = useHistory();
+  const { snapshots, restoreSnapshot, setDisableTracking } = useHistory();
+  const { setEditorReadOnly } = useProjectContext();
   const { sandpack } = useSandpack();
   const [previewingId, setPreviewingId] = useState<string | null>(null);
 
   const handlePreview = (id: string) => {
     const files = restoreSnapshot(id);
     if (files) {
+      setDisableTracking(true);
       Object.keys(files).forEach((filePath) => {
         const fileContent = files[filePath];
         if (fileContent !== undefined) {
-          sandpack.updateFile(filePath, fileContent);
+          sandpack.updateFile(filePath, typeof fileContent === 'string' ? fileContent : fileContent.code);
         }
       });
+      setEditorReadOnly(true);
       setPreviewingId(id);
+      setTimeout(() => setDisableTracking(false), 100);
     }
   };
 
   const handleRestore = (id: string) => {
     const files = restoreSnapshot(id);
     if (files) {
+      setDisableTracking(true);
       Object.keys(files).forEach((filePath) => {
         const fileContent = files[filePath];
         if (fileContent !== undefined) {
-          sandpack.updateFile(filePath, fileContent);
+          sandpack.updateFile(filePath, typeof fileContent === 'string' ? fileContent : fileContent.code);
         }
       });
+      setEditorReadOnly(false);
       setPreviewingId(null);
+      setTimeout(() => setDisableTracking(false), 100);
     }
   };
 

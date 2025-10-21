@@ -28,6 +28,8 @@ type ProjectContextType = {
   setFullscreen: (fullscreen: boolean) => void;
   showFileTree: boolean;
   setShowFileTree: (show: boolean) => void;
+  editorReadOnly: boolean;
+  setEditorReadOnly: (readOnly: boolean) => void;
 
 };
 
@@ -49,14 +51,13 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
   const [previewMode, setPreviewMode] = useState<PreviewMode>("preview");
   const [fullscreen, setFullscreenState] = useState(false);
   const [showFileTree, setShowFileTree] = useState(true);
+  const [editorReadOnly, setEditorReadOnly] = useState(false);
 
   const setFullscreen = (value: boolean) => {
     if (value) {
-      // Entering fullscreen - save current panel state and close panel
       setPreviousPanelState(panelOpen);
       setPanelOpen(false);
     } else {
-      // Exiting fullscreen - restore previous panel state
       setPanelOpen(previousPanelState);
     }
     setFullscreenState(value);
@@ -74,6 +75,8 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
         setFullscreen,
         showFileTree,
         setShowFileTree,
+        editorReadOnly,
+        setEditorReadOnly,
       }}
     >
       {props.children}

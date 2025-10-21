@@ -53,7 +53,7 @@ export const SnapshotActions = (props: SnapshotActionsProps) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Restore this version?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will restore all files to this version. Any unsaved changes will be lost.
+              This will restore all files to this version and any unsaved changes will be lost.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -124,7 +124,7 @@ export const SnapshotItem = (props: SnapshotItemProps) => {
               </div>
             </div>
           </CollapsibleTrigger>
-          {!props.isLatest && !props.isInPreviewMode && (
+          {!props.isLatest && (props.isPreviewing || !props.isInPreviewMode) && (
             <SnapshotActions
               onPreview={props.onPreview}
               onRestore={props.onRestore}

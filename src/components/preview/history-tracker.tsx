@@ -6,12 +6,11 @@ import { useHistory } from "@/components/history-context";
 
 export const HistoryTracker = () => {
   const { sandpack } = useSandpack();
-  const { addSnapshot } = useHistory();
+  const { addSnapshot, disableTracking } = useHistory();
   const previousFilesRef = useRef(sandpack.files);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const initializedRef = useRef(false);
 
-  // Save initial version on mount
   useEffect(() => {
     if (!initializedRef.current) {
       const allFiles = Object.keys(sandpack.files);
@@ -21,17 +20,18 @@ export const HistoryTracker = () => {
   }, [sandpack.files, addSnapshot]);
 
   useEffect(() => {
-    // Clear any existing timer
+    if (disableTracking) {
+      return;
+    }
+
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
 
-    // Debounce snapshot creation by 2 seconds
     debounceTimerRef.current = setTimeout(() => {
       const currentFiles = sandpack.files;
       const previousFiles = previousFilesRef.current;
 
-      // Check if files actually changed
       const changedFiles: string[] = [];
 
       Object.keys(currentFiles).forEach((filePath) => {
@@ -43,9 +43,7 @@ export const HistoryTracker = () => {
         }
       });
 
-      // Only create snapshot if there are actual changes
       if (changedFiles.length > 0) {
-        // Generate a simple message
         const fileNames = changedFiles.map((path) => path.split('/').pop()).join(', ');
         const message = `Updated ${fileNames}`;
 
@@ -59,7 +57,7 @@ export const HistoryTracker = () => {
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [sandpack.files, addSnapshot]);
+  }, [sandpack.files, addSnapshot, disableTracking]);
 
   return null;
 };

@@ -16,6 +16,8 @@ type HistoryContextType = {
   addSnapshot: (files: ProjectFiles, changedFiles: string[], message?: string) => void;
   restoreSnapshot: (id: string) => ProjectFiles | null;
   clearHistory: () => void;
+  disableTracking: boolean;
+  setDisableTracking: (disabled: boolean) => void;
 };
 
 const HistoryContext = createContext<HistoryContextType | undefined>(undefined);
@@ -28,6 +30,7 @@ type HistoryProviderProps = {
 export const HistoryProvider = (props: HistoryProviderProps) => {
   const maxSnapshots = props.maxSnapshots || 50;
   const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
+  const [disableTracking, setDisableTracking] = useState(false);
 
   const addSnapshot = useCallback((files: ProjectFiles, changedFiles: string[], message?: string) => {
     const snapshot: Snapshot = {
@@ -60,6 +63,8 @@ export const HistoryProvider = (props: HistoryProviderProps) => {
         addSnapshot,
         restoreSnapshot,
         clearHistory,
+        disableTracking,
+        setDisableTracking,
       }}
     >
       {props.children}
