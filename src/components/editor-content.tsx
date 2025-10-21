@@ -1,19 +1,25 @@
 "use client";
 
-import { DEFAULT_FILES, DEFAULT_DEPENDENCIES, DEFAULT_OPTIONS } from "@/components/project-context";
+import type { ProjectFiles, ProjectDependencies, ProjectOptions } from "@/components/project-context";
 import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
 import { PanelWrapper } from "@/components/panel-wrapper";
 import { SandpackProvider } from "@codesandbox/sandpack-react";
 
-export const EditorContent = () => {
+type EditorContentProps = {
+  files: ProjectFiles;
+  dependencies: ProjectDependencies;
+  options?: ProjectOptions;
+};
+
+export const EditorContent = (props: EditorContentProps) => {
   return (
     <SandpackProvider
       style={{ display: 'contents' }}
-      files={DEFAULT_FILES}
-      options={DEFAULT_OPTIONS}
+      files={props.files}
+      options={props.options}
       customSetup={{
-        dependencies: DEFAULT_DEPENDENCIES,
+        dependencies: props.dependencies,
       }}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">

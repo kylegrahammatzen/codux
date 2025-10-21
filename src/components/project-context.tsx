@@ -37,47 +37,6 @@ type ProjectProviderProps = {
   children: ReactNode;
 };
 
-export const DEFAULT_FILES = {
-  "/App.tsx": `export default function App() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-2">Hello World</h1>
-      <p className="text-gray-600">Edit App.tsx to get started!</p>
-    </div>
-  );
-}`,
-  "/index.tsx": `import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App";
-
-const root = createRoot(document.getElementById("root")!);
-root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);`,
-  "/package.json": JSON.stringify(
-    {
-      dependencies: {
-        react: "^19.2.0",
-        "react-dom": "^19.2.0",
-      },
-      main: "/index.tsx",
-    },
-    null,
-    2
-  ),
-};
-
-export const DEFAULT_DEPENDENCIES = {
-  react: "^19.2.0",
-  "react-dom": "^19.2.0",
-};
-
-export const DEFAULT_OPTIONS = {
-  externalResources: ["https://cdn.tailwindcss.com"],
-};
-
 export const ProjectProvider = (props: ProjectProviderProps) => {
   // Layout state
   const [panelOpen, setPanelOpen] = useState(true);

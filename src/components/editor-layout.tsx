@@ -1,6 +1,7 @@
 "use client";
 
 import { useProjectContext } from "@/components/project-context";
+import type { ProjectFiles, ProjectDependencies, ProjectOptions } from "@/components/project-context";
 import { AppHeader } from "@/components/app-header";
 import { EditorContent } from "@/components/editor-content";
 import { cn } from "@/lib/utils";
@@ -24,11 +25,21 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
   );
 };
 
-export const EditorLayout = () => {
+type EditorLayoutProps = {
+  files: ProjectFiles;
+  dependencies: ProjectDependencies;
+  options?: ProjectOptions;
+};
+
+export const EditorLayout = (props: EditorLayoutProps) => {
   return (
     <LayoutWrapper>
       <AppHeader />
-      <EditorContent />
+      <EditorContent
+        files={props.files}
+        dependencies={props.dependencies}
+        options={props.options}
+      />
     </LayoutWrapper>
   );
 };
