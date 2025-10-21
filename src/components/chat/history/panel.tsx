@@ -1,17 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { SnapshotActions } from "@/components/chat/history/snapshot-actions";
 import { useHistory } from "@/components/history-context";
 import { useSandpack } from "@codesandbox/sandpack-react";
-import { Clock, FileText, MoreVertical, ChevronRight } from "lucide-react";
+import { Clock, FileText, ChevronRight } from "lucide-react";
 
 export const HistoryPanel = () => {
   const { snapshots, restoreSnapshot, clearHistory } = useHistory();
@@ -21,7 +16,7 @@ export const HistoryPanel = () => {
     const files = restoreSnapshot(id);
     if (files) {
       Object.keys(files).forEach((filePath) => {
-        const fileContent = files[filePath]?.code;
+        const fileContent = files[filePath];
         if (fileContent !== undefined) {
           sandpack.updateFile(filePath, fileContent);
         }
@@ -78,16 +73,7 @@ export const HistoryPanel = () => {
                         </div>
                       </div>
                     </CollapsibleTrigger>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" />}>
-                        <MoreVertical className="size-4" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleRestore(snapshot.id)}>
-                          Restore
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <SnapshotActions onRestore={() => handleRestore(snapshot.id)} />
                   </div>
 
                   <CollapsibleContent>
