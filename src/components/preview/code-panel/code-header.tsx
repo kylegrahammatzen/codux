@@ -1,25 +1,27 @@
 "use client";
 
 import { useProjectContext } from "@/components/project-context";
+import { useSandpack } from "@codesandbox/sandpack-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { Copy, Download, CircleCheck } from "lucide-react";
 
 export const CodeHeader = () => {
-  const { files, activeFile } = useProjectContext();
+  const { sandpack } = useSandpack();
+  const activeFile = sandpack.activeFile;
 
   const getFileName = (path: string) => {
     return path.split("/").pop() || path;
   };
 
   const handleCopy = async () => {
-    if (activeFile && files[activeFile]) {
-      await navigator.clipboard.writeText(files[activeFile].code);
+    if (activeFile && sandpack.files[activeFile]) {
+      await navigator.clipboard.writeText(sandpack.files[activeFile].code);
     }
   };
 
   const handleDownload = () => {
-    if (activeFile && files[activeFile]) {
-      const blob = new Blob([files[activeFile].code], { type: "text/plain" });
+    if (activeFile && sandpack.files[activeFile]) {
+      const blob = new Blob([sandpack.files[activeFile].code], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

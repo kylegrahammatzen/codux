@@ -1,6 +1,7 @@
 "use client";
 
 import { useProjectContext } from "@/components/project-context";
+import { useSandpack } from "@codesandbox/sandpack-react";
 import { FileItem } from "./file-item";
 import { FolderItem } from "./folder-item";
 
@@ -19,7 +20,8 @@ type BuildNode = {
 };
 
 export const FileTree = () => {
-  const { files, activeFile, setActiveFile, showFileTree } = useProjectContext();
+  const { showFileTree } = useProjectContext();
+  const { sandpack } = useSandpack();
 
   // Build tree structure from flat file list
   const buildTree = (filePaths: string[]): FileTreeNode[] => {
@@ -81,14 +83,14 @@ export const FileTree = () => {
           key={node.path}
           name={node.name}
           path={node.path}
-          isActive={activeFile === node.path}
-          onClick={setActiveFile}
+          isActive={sandpack.activeFile === node.path}
+          onClick={sandpack.setActiveFile}
         />
       );
     });
   };
 
-  const tree = buildTree(Object.keys(files));
+  const tree = buildTree(Object.keys(sandpack.files));
 
   return (
     <div

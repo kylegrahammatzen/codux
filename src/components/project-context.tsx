@@ -6,12 +6,6 @@ import type { SandpackError } from "@codesandbox/sandpack-client";
 
 type PreviewMode = "preview" | "code";
 
-export type SandpackFile = {
-  code: string;
-};
-
-export type SandpackFiles = Record<string, SandpackFile>;
-
 type ProjectContextType = {
   // Layout state
   panelOpen: boolean;
@@ -27,16 +21,6 @@ type ProjectContextType = {
   setFullscreen: (fullscreen: boolean) => void;
   showFileTree: boolean;
   setShowFileTree: (show: boolean) => void;
-
-  // File state
-  files: SandpackFiles;
-  activeFile: string | null;
-  errors: SandpackError[];
-  updateFile: (path: string, code: string) => void;
-  addFile: (path: string, code: string) => void;
-  deleteFile: (path: string) => void;
-  setActiveFile: (path: string | null) => void;
-  setErrors: (errors: SandpackError[]) => void;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -45,9 +29,9 @@ type ProjectProviderProps = {
   children: ReactNode;
 };
 
-const DEFAULT_FILES: SandpackFiles = {
-  "/App.tsx": {
-    code: `export default function App() {
+// Default files for Sandpack - exported for use in EditorLayout
+export const DEFAULT_FILES = {
+  "/App.tsx": `export default function App() {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-2">Hello World</h1>
@@ -55,9 +39,7 @@ const DEFAULT_FILES: SandpackFiles = {
     </div>
   );
 }`,
-  },
-  "/index.tsx": {
-    code: `import { StrictMode } from "react";
+  "/index.tsx": `import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./styles.css";
@@ -68,9 +50,7 @@ root.render(
     <App />
   </StrictMode>
 );`,
-  },
-  "/styles.css": {
-    code: `body {
+  "/styles.css": `body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
 }
@@ -78,20 +58,17 @@ root.render(
 #root {
   min-height: 100vh;
 }`,
-  },
-  "/package.json": {
-    code: JSON.stringify(
-      {
-        dependencies: {
-          react: "^18.3.1",
-          "react-dom": "^18.3.1",
-        },
-        main: "/index.tsx",
+  "/package.json": JSON.stringify(
+    {
+      dependencies: {
+        react: "^18.3.1",
+        "react-dom": "^18.3.1",
       },
-      null,
-      2
-    ),
-  },
+      main: "/index.tsx",
+    },
+    null,
+    2
+  ),
 };
 
 export const ProjectProvider = (props: ProjectProviderProps) => {
@@ -107,11 +84,6 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
   const [fullscreen, setFullscreenState] = useState(false);
   const [showFileTree, setShowFileTree] = useState(true);
 
-  // File state
-  const [files, setFiles] = useState<SandpackFiles>(DEFAULT_FILES);
-  const [activeFile, setActiveFile] = useState<string | null>("/App.tsx");
-  const [errors, setErrors] = useState<SandpackError[]>([]);
-
   const setFullscreen = (value: boolean) => {
     if (value) {
       // Entering fullscreen - save current panel state and close panel
@@ -122,33 +94,6 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
       setPanelOpen(previousPanelState);
     }
     setFullscreenState(value);
-  };
-
-  const updateFile = (path: string, code: string) => {
-    setFiles((prev) => ({
-      ...prev,
-      [path]: { code },
-    }));
-  };
-
-  const addFile = (path: string, code: string) => {
-    setFiles((prev) => ({
-      ...prev,
-      [path]: { code },
-    }));
-  };
-
-  const deleteFile = (path: string) => {
-    setFiles((prev) => {
-      const newFiles = { ...prev };
-      delete newFiles[path];
-      return newFiles;
-    });
-
-    // Clear active file if it was deleted
-    if (activeFile === path) {
-      setActiveFile(null);
-    }
   };
 
   return (
@@ -163,14 +108,6 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
         setFullscreen,
         showFileTree,
         setShowFileTree,
-        files,
-        activeFile,
-        errors,
-        updateFile,
-        addFile,
-        deleteFile,
-        setActiveFile,
-        setErrors,
       }}
     >
       {props.children}
