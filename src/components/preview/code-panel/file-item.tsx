@@ -24,10 +24,10 @@ export const FileItem = (props: FileItemProps) => {
       )}
       onClick={handleClick}
     >
-      <File className="size-4 text-gray-500" />
+      <File className="size-4 text-muted-foreground" />
       <span className="flex-1">{props.name}</span>
       {props.hasError && (
-        <AlertCircle className="size-3 text-red-500" title="File has errors" />
+        <AlertCircle className="size-3 text-danger" title="File has errors" />
       )}
     </div>
   );

@@ -24,26 +24,26 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
   const getLogIcon = (method: string) => {
     switch (method) {
       case "error":
-        return <XCircle className="size-4 text-red-500" />;
+        return <XCircle className="size-4 text-danger" />;
       case "warn":
-        return <AlertTriangle className="size-4 text-yellow-500" />;
+        return <AlertTriangle className="size-4 text-warning" />;
       case "info":
-        return <Info className="size-4 text-blue-500" />;
+        return <Info className="size-4 text-info" />;
       default:
-        return <AlertCircle className="size-4 text-gray-400" />;
+        return <AlertCircle className="size-4 text-muted-foreground" />;
     }
   };
 
   const getLogColor = (method: string) => {
     switch (method) {
       case "error":
-        return "text-red-600";
+        return "text-danger-foreground";
       case "warn":
-        return "text-yellow-600";
+        return "text-warning-foreground";
       case "info":
-        return "text-blue-600";
+        return "text-info-foreground";
       default:
-        return "text-gray-700";
+        return "text-foreground";
     }
   };
 
@@ -60,12 +60,12 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
           logs.length > 0 ? "py-1 max-h-10 opacity-100" : "py-0 max-h-0 opacity-0"
         )}>
           {errorCount > 0 && (
-            <span className="text-red-600">{errorCount} error{errorCount > 1 ? 's' : ''}</span>
+            <span className="text-danger-foreground">{errorCount} error{errorCount > 1 ? 's' : ''}</span>
           )}
           {warnCount > 0 && (
-            <span className="text-yellow-600">{warnCount} warning{warnCount > 1 ? 's' : ''}</span>
+            <span className="text-warning-foreground">{warnCount} warning{warnCount > 1 ? 's' : ''}</span>
           )}
-          <span className="text-gray-500">{logs.length} total</span>
+          <span className="text-muted-foreground">{logs.length} total</span>
         </div>
 
         <div
@@ -73,7 +73,7 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
           className="max-h-48 overflow-y-auto text-xs font-mono py-2 space-y-1 transition-all duration-200"
         >
           {logs.length === 0 ? (
-            <p className="text-gray-400">Console is empty</p>
+            <p className="text-muted-foreground">Console is empty</p>
           ) : (
             logs.map((log, index) => (
               <div key={index} className="flex items-start gap-2 py-0.5">

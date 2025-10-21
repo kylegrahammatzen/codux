@@ -62,7 +62,7 @@ export const PreviewFooter = () => {
           <SquareTerminal className="size-4" />
           <span>Console</span>
           {errorCount > 0 && (
-            <div className="flex items-center gap-1 bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-medium">
+            <div className="flex items-center gap-1 bg-danger text-danger-foreground px-2 py-0.5 rounded text-xs font-medium">
               <AlertCircle className="size-3" />
               <span>{errorCount}</span>
             </div>
