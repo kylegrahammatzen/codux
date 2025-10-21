@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SnapshotItem } from "@/components/chat/history/snapshot-item";
 import { useHistory } from "@/components/history-context";
@@ -13,14 +13,6 @@ export const HistoryPanel = () => {
   const { setEditorReadOnly, setIsPreviewing } = useProjectContext();
   const { sandpack } = useSandpack();
   const [previewingId, setPreviewingId] = useState<string | null>(null);
-  const [, setTick] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTick((t) => t + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handlePreview = (id: string) => {
     const files = restoreSnapshot(id);
@@ -77,19 +69,6 @@ export const HistoryPanel = () => {
     }
   };
 
-  const formatTimestamp = (date: Date) => {
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffSec = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSec / 60);
-    const diffHr = Math.floor(diffMin / 60);
-
-    if (diffSec < 60) return `${diffSec}s ago`;
-    if (diffMin < 60) return `${diffMin}m ago`;
-    if (diffHr < 24) return `${diffHr}h ago`;
-    return date.toLocaleDateString();
-  };
-
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {snapshots.length === 0 ? (
@@ -114,7 +93,6 @@ export const HistoryPanel = () => {
                   isInPreviewMode={previewingId !== null && previewingId !== snapshot.id}
                   onTogglePreview={() => handleTogglePreview(snapshot.id)}
                   onRestore={() => handleRestore(snapshot.id)}
-                  formatTimestamp={formatTimestamp}
                 />
               ))}
             </div>

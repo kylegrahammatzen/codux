@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { ArrowLeftToLine } from "lucide-react";
 
 export const PreviewPanel = () => {
-  const { fullscreen, previewMode, showFileTree, setShowFileTree } = useProjectContext();
+  const { fullscreen, previewMode, showFileTree, setShowFileTree, isPreviewing } = useProjectContext();
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
@@ -56,7 +56,7 @@ export const PreviewPanel = () => {
         </div>
       </div>
 
-      {!fullscreen && (
+      {!fullscreen && !isPreviewing && (
         <div className="bg-white rounded-b-md">
           <PreviewFooter />
         </div>

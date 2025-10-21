@@ -5,6 +5,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 import { SnapshotActions } from "@/components/chat/history/snapshot-actions";
 import { FileItem } from "@/components/preview/code-panel/file-item";
 import { FolderItem } from "@/components/preview/code-panel/folder-item";
+import { useRelativeTime } from "@/hooks/use-relative-time";
 import { Clock, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Snapshot } from "@/components/history-context";
@@ -16,7 +17,6 @@ type SnapshotItemProps = {
   isInPreviewMode: boolean;
   onTogglePreview: () => void;
   onRestore: () => void;
-  formatTimestamp: (date: Date) => string;
 };
 
 type FileTreeNode = {
@@ -35,6 +35,7 @@ type BuildNode = {
 
 export const SnapshotItem = (props: SnapshotItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const relativeTime = useRelativeTime(props.snapshot.timestamp);
 
   const buildTree = (filePaths: string[]): FileTreeNode[] => {
     const root: Record<string, BuildNode> = {};
@@ -118,10 +119,12 @@ export const SnapshotItem = (props: SnapshotItemProps) => {
               <p className="text-sm font-medium truncate">
                 {props.snapshot.message || "Untitled Change"}
               </p>
-              <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                <Clock className="size-3" />
-                <span>{props.formatTimestamp(props.snapshot.timestamp)}</span>
-              </div>
+              {!props.isInPreviewMode && (
+                <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                  <Clock className="size-3" />
+                  <span>{relativeTime}</span>
+                </div>
+              )}
             </div>
           </CollapsibleTrigger>
           {!props.isLatest && (props.isPreviewing || !props.isInPreviewMode) && (
