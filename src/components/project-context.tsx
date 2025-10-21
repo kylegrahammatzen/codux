@@ -2,9 +2,11 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import { useMobile } from "@/hooks/use-mobile";
-import type { SandpackError } from "@codesandbox/sandpack-client";
 
 type PreviewMode = "preview" | "code";
+
+type SandpackFiles = Record<string, string>;
+type SandpackDependencies = Record<string, string>;
 
 type ProjectContextType = {
   // Layout state
@@ -21,6 +23,11 @@ type ProjectContextType = {
   setFullscreen: (fullscreen: boolean) => void;
   showFileTree: boolean;
   setShowFileTree: (show: boolean) => void;
+
+  // Sandpack state
+  files: SandpackFiles;
+  dependencies: SandpackDependencies;
+  updateFile: (path: string, code: string) => void;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -29,8 +36,7 @@ type ProjectProviderProps = {
   children: ReactNode;
 };
 
-// Default files for Sandpack - exported for use in EditorLayout
-export const DEFAULT_FILES = {
+const DEFAULT_FILES: SandpackFiles = {
   "/App.tsx": `export default function App() {
   return (
     <div className="p-8">
@@ -71,6 +77,11 @@ root.render(
   ),
 };
 
+const DEFAULT_DEPENDENCIES: SandpackDependencies = {
+  react: "^18.3.1",
+  "react-dom": "^18.3.1",
+};
+
 export const ProjectProvider = (props: ProjectProviderProps) => {
   // Layout state
   const [panelOpen, setPanelOpen] = useState(true);
@@ -84,6 +95,10 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
   const [fullscreen, setFullscreenState] = useState(false);
   const [showFileTree, setShowFileTree] = useState(true);
 
+  // Sandpack state
+  const [files, setFiles] = useState<SandpackFiles>(DEFAULT_FILES);
+  const [dependencies, setDependencies] = useState<SandpackDependencies>(DEFAULT_DEPENDENCIES);
+
   const setFullscreen = (value: boolean) => {
     if (value) {
       // Entering fullscreen - save current panel state and close panel
@@ -94,6 +109,13 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
       setPanelOpen(previousPanelState);
     }
     setFullscreenState(value);
+  };
+
+  const updateFile = (path: string, code: string) => {
+    setFiles((prev) => ({
+      ...prev,
+      [path]: code,
+    }));
   };
 
   return (
@@ -108,6 +130,9 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
         setFullscreen,
         showFileTree,
         setShowFileTree,
+        files,
+        dependencies,
+        updateFile,
       }}
     >
       {props.children}
