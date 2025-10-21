@@ -14,7 +14,7 @@ export const HistoryTracker = () => {
   useEffect(() => {
     if (!initializedRef.current) {
       const allFiles = Object.keys(sandpack.files);
-      addSnapshot(sandpack.files, allFiles, "Initial version");
+      addSnapshot(sandpack.files, allFiles, "Version 0");
       initializedRef.current = true;
     }
   }, [sandpack.files, addSnapshot]);
@@ -62,8 +62,7 @@ export const HistoryTracker = () => {
           }
         }
 
-        const fileNames = changedFiles.map((path) => path.split('/').pop()).join(', ');
-        const message = `Updated ${fileNames}`;
+        const message = `Version ${snapshots.length}`;
 
         addSnapshot(currentFiles, changedFiles, message);
         previousFilesRef.current = currentFiles;
