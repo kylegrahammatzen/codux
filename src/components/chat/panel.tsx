@@ -3,8 +3,24 @@
 import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/chat/input";
+import { useSandpack } from "@codesandbox/sandpack-react";
 
 export const ChatPanel = () => {
+  const { sandpack } = useSandpack();
+
+  const handleTestEdit = () => {
+    const newCode = `export default function App() {
+  return (
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-2">AI Edited This!</h1>
+      <p className="text-gray-600">This file was edited programmatically using Sandpack API</p>
+      <p className="text-sm text-gray-500 mt-4">Timestamp: ${new Date().toLocaleTimeString()}</p>
+    </div>
+  );
+}`;
+    sandpack.updateFile('/App.tsx', newCode);
+  };
+
   return (
     <div className="flex flex-col h-full min-w-max">
       <div className="flex items-center justify-between px-2 border-b h-12 bg-white rounded-t-md">
@@ -31,8 +47,11 @@ export const ChatPanel = () => {
         </Button>
       </div>
 
-      <CardContent className="flex-1 flex items-center justify-center">
+      <CardContent className="flex-1 flex flex-col items-center justify-center gap-4">
         <p className="text-gray-400 text-sm">Chat panel</p>
+        <Button onClick={handleTestEdit} variant="outline">
+          Test AI Edit (Update App.tsx)
+        </Button>
       </CardContent>
 
       <ChatInput />
