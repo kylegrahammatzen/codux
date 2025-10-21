@@ -3,7 +3,15 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { useMobile } from "@/hooks/use-mobile";
 
-type PreviewMode = "preview" | "code";
+export type PreviewMode = "preview" | "code";
+
+export type ProjectFiles = Record<string, string>;
+
+export type ProjectDependencies = Record<string, string>;
+
+export type ProjectOptions = {
+  externalResources?: string[];
+};
 
 type ProjectContextType = {
   // Layout state
@@ -20,6 +28,7 @@ type ProjectContextType = {
   setFullscreen: (fullscreen: boolean) => void;
   showFileTree: boolean;
   setShowFileTree: (show: boolean) => void;
+
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -58,6 +67,15 @@ root.render(
     null,
     2
   ),
+};
+
+export const DEFAULT_DEPENDENCIES = {
+  react: "^19.2.0",
+  "react-dom": "^19.2.0",
+};
+
+export const DEFAULT_OPTIONS = {
+  externalResources: ["https://cdn.tailwindcss.com"],
 };
 
 export const ProjectProvider = (props: ProjectProviderProps) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { DEFAULT_FILES } from "@/components/project-context";
+import { DEFAULT_FILES, DEFAULT_DEPENDENCIES, DEFAULT_OPTIONS } from "@/components/project-context";
 import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
 import { PanelWrapper } from "@/components/panel-wrapper";
@@ -11,14 +11,9 @@ export const EditorContent = () => {
     <SandpackProvider
       style={{ display: 'contents' }}
       files={DEFAULT_FILES}
-      options={{
-        externalResources: ["https://cdn.tailwindcss.com"],
-      }}
+      options={DEFAULT_OPTIONS}
       customSetup={{
-        dependencies: {
-          react: "^19.2.0",
-          "react-dom": "^19.2.0",
-        },
+        dependencies: DEFAULT_DEPENDENCIES,
       }}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">
