@@ -27,8 +27,8 @@ export const SnapshotItem = (props: SnapshotItemProps) => {
           }`}
       >
         <div className="flex items-center justify-between p-2">
-          <CollapsibleTrigger className="flex items-center gap-2 flex-1 text-left group">
-            <ChevronRight className="size-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
+          <CollapsibleTrigger className="flex items-center gap-2 flex-1 text-left [&[data-state=open]>svg]:rotate-90">
+            <ChevronRight className="size-4 transition-transform duration-200" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">
                 {props.snapshot.message || "Untitled Change"}
