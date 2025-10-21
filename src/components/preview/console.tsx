@@ -24,11 +24,11 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
   const getLogIcon = (method: string) => {
     switch (method) {
       case "error":
-        return <XCircle className="size-4 text-danger" />;
+        return <XCircle className="size-4 text-danger fill-danger/10" />;
       case "warn":
-        return <AlertTriangle className="size-4 text-warning" />;
+        return <AlertTriangle className="size-4 text-warning fill-warning/10" />;
       case "info":
-        return <Info className="size-4 text-info" />;
+        return <Info className="size-4 text-info fill-info/10" />;
       default:
         return <AlertCircle className="size-4 text-muted-foreground" />;
     }
