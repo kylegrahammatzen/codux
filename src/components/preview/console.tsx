@@ -5,7 +5,6 @@ import { useSandpackConsole } from "@codesandbox/sandpack-react";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import { AlertCircle, AlertTriangle, Info, XCircle } from "lucide-react";
 
 type PreviewConsoleProps = {
   isOpen: boolean;
@@ -34,19 +33,6 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
         .trim();
     }
     return message;
-  };
-
-  const getLogIcon = (method: string) => {
-    switch (method) {
-      case "error":
-        return <XCircle className="size-4 text-danger fill-danger/10" />;
-      case "warn":
-        return <AlertTriangle className="size-4 text-warning fill-warning/10" />;
-      case "info":
-        return <Info className="size-4 text-info fill-info/10" />;
-      default:
-        return <AlertCircle className="size-4 text-muted-foreground" />;
-    }
   };
 
   const getLogColor = (method: string) => {
@@ -91,22 +77,19 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
             <p className="text-muted-foreground">Console is empty</p>
           ) : (
             logs.map((log, index) => (
-              <div key={index} className="flex items-start gap-2 py-0.5">
-                {getLogIcon(log.method)}
-                <div className={cn("flex-1", getLogColor(log.method))}>
-                  {log.data?.map((data, i) => {
-                    let content = typeof data === "object" ? JSON.stringify(data, null, 2) : String(data);
-                    // Clean error messages for error and warn logs
-                    if (log.method === "error" || log.method === "warn") {
-                      content = cleanErrorMessage(content);
-                    }
-                    return (
-                      <span key={i} className="mr-2 whitespace-pre-wrap">
-                        {content}
-                      </span>
-                    );
-                  })}
-                </div>
+              <div key={index} className={cn("py-0.5", getLogColor(log.method))}>
+                {log.data?.map((data, i) => {
+                  let content = typeof data === "object" ? JSON.stringify(data, null, 2) : String(data);
+                  // Clean error messages for error and warn logs
+                  if (log.method === "error" || log.method === "warn") {
+                    content = cleanErrorMessage(content);
+                  }
+                  return (
+                    <span key={i} className="mr-2 whitespace-pre-wrap">
+                      {content}
+                    </span>
+                  );
+                })}
               </div>
             ))
           )}
