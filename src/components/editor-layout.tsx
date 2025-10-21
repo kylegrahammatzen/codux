@@ -5,10 +5,17 @@ import { AppHeader } from "@/components/app-header";
 import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
 import { PanelWrapper } from "@/components/panel-wrapper";
+import { SandpackProvider } from "@codesandbox/sandpack-react";
 import { cn } from "@/lib/utils";
 
 export const EditorLayout = () => {
-  const { panelOpen, fullscreen, isMobile } = useProjectContext();
+  const { panelOpen, fullscreen, isMobile, files, activeFile } = useProjectContext();
+
+  // Convert files to Sandpack format
+  const sandpackFiles = Object.entries(files).reduce((acc, [path, file]) => {
+    acc[path] = file.code;
+    return acc;
+  }, {} as Record<string, string>);
 
   return (
     <div
@@ -28,13 +35,27 @@ export const EditorLayout = () => {
       </div>
 
       {/* Panel layout */}
-      <div className="flex flex-1 overflow-hidden min-h-0">
-        <PanelWrapper isOpen={panelOpen && !isMobile}>
-          <ChatPanel />
-        </PanelWrapper>
+      <SandpackProvider
+        style={{ display: 'contents' }}
+        files={sandpackFiles}
+        options={{
+          activeFile: activeFile || undefined,
+        }}
+        customSetup={{
+          dependencies: {
+            react: "^18.3.1",
+            "react-dom": "^18.3.1",
+          },
+        }}
+      >
+        <div className="flex flex-1 overflow-hidden min-h-0">
+          <PanelWrapper isOpen={panelOpen && !isMobile}>
+            <ChatPanel />
+          </PanelWrapper>
 
-        <PreviewPanel />
-      </div>
+          <PreviewPanel />
+        </div>
+      </SandpackProvider>
     </div>
   );
 };

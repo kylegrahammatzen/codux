@@ -13,21 +13,16 @@ import { FileTree } from "@/components/preview/code-panel/file-tree";
 import { CodeHeader } from "@/components/preview/code-panel/code-header";
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, ChevronsRight, RefreshCcw, Expand, Shrink, ArrowLeftToLine } from "lucide-react";
-import { SandpackProvider } from "@codesandbox/sandpack-react";
+import { useSandpackNavigation } from "@codesandbox/sandpack-react";
 
 export const PreviewPanel = () => {
-  const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode, isMobile, files, activeFile, showFileTree, setShowFileTree } = useProjectContext();
+  const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode, isMobile, showFileTree, setShowFileTree } = useProjectContext();
+  const { refresh } = useSandpackNavigation();
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
 
   const toggleFileTree = () => {
     setShowFileTree(!showFileTree);
   };
-
-  // Convert files to Sandpack format
-  const sandpackFiles = Object.entries(files).reduce((acc, [path, file]) => {
-    acc[path] = file.code;
-    return acc;
-  }, {} as Record<string, string>);
 
   // Panel is only visible if panelOpen is true AND not on mobile
   const isPanelVisible = panelOpen && !isMobile;
@@ -42,6 +37,10 @@ export const PreviewPanel = () => {
     setTimeout(() => {
       fullscreenButtonRef.current?.focus();
     }, 0);
+  };
+
+  const handleReload = () => {
+    refresh();
   };
 
   const content = (
@@ -63,7 +62,7 @@ export const PreviewPanel = () => {
             "flex items-center gap-2 transition-all ease-[cubic-bezier(.77,0,.175,1)] duration-300",
             previewMode === "code" ? "translate-x-[20rem] opacity-0" : "translate-x-0 opacity-100"
           )}>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={handleReload}>
               <RefreshCcw className="size-4" />
               <span>Reload</span>
             </Button>
@@ -75,47 +74,39 @@ export const PreviewPanel = () => {
         </div>
       </div>
 
-      <SandpackProvider
-        style={{ display: 'contents' }}
-        files={sandpackFiles}
-        options={{
-          activeFile: activeFile || undefined,
-        }}
-        customSetup={{
-          dependencies: {
-            react: "^18.3.1",
-            "react-dom": "^18.3.1",
-          },
-        }}
-      >
-        <div className="flex-1 flex min-h-0">
-          {previewMode === "code" ? (
-            <div className="flex w-full h-full relative">
-              <FileTree />
+      <div className="flex-1 flex min-h-0 relative">
+        <div className={cn(
+          "flex w-full h-full absolute inset-0",
+          previewMode === "code" ? "block" : "hidden"
+        )}>
+          <div className="flex w-full h-full relative">
+            <FileTree />
 
-              <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
-                <CodeHeader />
+            <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
+              <CodeHeader />
 
-                <div className="flex-1 min-h-0 w-full bg-white">
-                  <CodeEditor />
+              <div className="flex-1 min-h-0 w-full bg-white">
+                <CodeEditor />
+              </div>
+            </div>
+
+            <div className="absolute bottom-2 left-2">
+              <Button variant="outline" size="icon-sm" className="bg-white cursor-pointer" onClick={toggleFileTree}>
+                <div className="transition-transform duration-200" style={{ transform: showFileTree ? "scaleX(1)" : "scaleX(-1)" }}>
+                  <ArrowLeftToLine className="size-4" />
                 </div>
-              </div>
-
-              <div className="absolute bottom-2 left-2">
-                <Button variant="outline" size="icon-sm" className="bg-white cursor-pointer" onClick={toggleFileTree}>
-                  <div className="transition-transform duration-200" style={{ transform: showFileTree ? "scaleX(1)" : "scaleX(-1)" }}>
-                    <ArrowLeftToLine className="size-4" />
-                  </div>
-                </Button>
-              </div>
+              </Button>
             </div>
-          ) : (
-            <div className="flex-1 min-h-0 w-full bg-white">
-              <Preview />
-            </div>
-          )}
+          </div>
         </div>
-      </SandpackProvider>
+
+        <div className={cn(
+          "flex-1 min-h-0 w-full bg-white absolute inset-0",
+          previewMode === "preview" ? "block" : "hidden"
+        )}>
+          <Preview />
+        </div>
+      </div>
 
       {!fullscreen && (
         <div className="bg-white rounded-b-md">
@@ -125,17 +116,12 @@ export const PreviewPanel = () => {
     </div>
   );
 
-  if (fullscreen) {
-    return (
-      <div className="flex-1 h-full flex flex-col min-h-0">
-        {content}
-      </div>
-    );
-  }
-
   return (
-    <Card className="flex-1 h-full gap-0 py-0 min-h-0 overflow-hidden">
+    <div className={cn(
+      "flex-1 h-full gap-0 min-h-0 overflow-hidden flex flex-col",
+      !fullscreen && "rounded-lg border bg-card text-card-foreground shadow-sm"
+    )}>
       {content}
-    </Card>
+    </div>
   );
 };
