@@ -119,18 +119,20 @@ export const SnapshotItem = (props: SnapshotItemProps) => {
               <p className="text-sm font-medium truncate">
                 {props.snapshot.message || "Untitled Change"}
               </p>
-              {!props.isInPreviewMode && (
-                <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                  <Clock className="size-3" />
-                  <span>{relativeTime}</span>
-                </div>
-              )}
+              <div className={cn(
+                "flex items-center gap-2 mt-1 text-xs",
+                props.isInPreviewMode ? "text-gray-400" : "text-gray-500"
+              )}>
+                <Clock className="size-3" />
+                <span>{relativeTime}</span>
+              </div>
             </div>
           </CollapsibleTrigger>
           {!props.isLatest && (props.isPreviewing || !props.isInPreviewMode) && (
             <SnapshotActions
               onTogglePreview={props.onTogglePreview}
               onRestore={props.onRestore}
+              isPreviewing={props.isPreviewing}
             />
           )}
         </div>
