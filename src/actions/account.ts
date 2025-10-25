@@ -1,10 +1,11 @@
 "use server";
 
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { loginSchema, signupSchema } from "@/lib/zod-schemas";
+import { authClient } from "@/lib/auth-client";
+import { headers } from "next/headers";
 
 export async function login(data: z.infer<typeof loginSchema>) {
   const validated = loginSchema.safeParse(data);
@@ -15,14 +16,24 @@ export async function login(data: z.infer<typeof loginSchema>) {
       errors: validated.error.flatten().fieldErrors,
     };
   }
+
   console.log("Login:", validated.data);
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signInWithPassword(data)
-  if (error) {
-    redirect('/error')
+
+  try {
+    await authClient.signIn.email({
+      email: validated.data.email,
+      password: validated.data.password,
+      fetchOptions: {
+        headers: await headers(),
+      },
+    });
+
+    revalidatePath("/", "layout");
+    redirect("/");
+  } catch (error) {
+    console.error("Login error:", error);
+    redirect("/error");
   }
-  revalidatePath('/', 'layout')
-  redirect('/')
 }
 
 export async function signup(data: z.infer<typeof signupSchema>) {
@@ -34,18 +45,39 @@ export async function signup(data: z.infer<typeof signupSchema>) {
       errors: validated.error.flatten().fieldErrors,
     };
   }
+
   console.log("Signup:", validated.data);
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signUp(data)
-  if (error) {
-    redirect('/error')
+
+  try {
+    await authClient.signUp.email({
+      email: validated.data.email,
+      password: validated.data.password,
+      name: validated.data.email.split("@")[0], // Use email prefix as default name
+      fetchOptions: {
+        headers: await headers(),
+      },
+    });
+
+    // User will receive email verification
+    revalidatePath("/", "layout");
+    redirect("/");
+  } catch (error) {
+    console.error("Signup error:", error);
+    redirect("/error");
   }
-  revalidatePath('/', 'layout')
-  redirect('/')
 }
 
 export async function signOut() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-  redirect("/login");
+  try {
+    await authClient.signOut({
+      fetchOptions: {
+        headers: await headers(),
+      },
+    });
+    revalidatePath("/", "layout");
+    redirect("/login");
+  } catch (error) {
+    console.error("Sign out error:", error);
+    redirect("/error");
+  }
 }
