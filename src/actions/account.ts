@@ -13,7 +13,7 @@ export async function login(data: z.infer<typeof loginSchema>) {
   if (!validated.success) {
     return {
       success: false,
-      errors: z.issuesMap(validated.error.issues),
+      errors: validated.error.issues,
     };
   }
 
@@ -39,7 +39,7 @@ export async function signup(data: z.infer<typeof signupSchema>) {
   if (!validated.success) {
     return {
       success: false,
-      errors: z.issuesMap(validated.error.issues),
+      errors: validated.error.issues,
     };
   }
 
