@@ -17,23 +17,23 @@ export async function login(data: z.infer<typeof loginSchema>) {
     };
   }
 
-  const result = await auth.api.signInEmail({
-    body: {
-      email: validated.data.email,
-      password: validated.data.password,
-    },
-    headers: await headers(),
-  });
+  try {
+    await auth.api.signInEmail({
+      body: {
+        email: validated.data.email,
+        password: validated.data.password,
+      },
+      headers: await headers(),
+    });
 
-  if (result.error) {
+    revalidatePath("/", "layout");
+    redirect("/");
+  } catch (error: any) {
     return {
       success: false,
-      message: result.error.message,
+      message: error?.message || "Failed to sign in",
     };
   }
-
-  revalidatePath("/", "layout");
-  redirect("/");
 }
 
 export async function signup(data: z.infer<typeof signupSchema>) {
@@ -46,24 +46,24 @@ export async function signup(data: z.infer<typeof signupSchema>) {
     };
   }
 
-  const result = await auth.api.signUpEmail({
-    body: {
-      email: validated.data.email,
-      password: validated.data.password,
-      name: `${validated.data.firstName} ${validated.data.lastName}`,
-    },
-    headers: await headers(),
-  });
+  try {
+    await auth.api.signUpEmail({
+      body: {
+        email: validated.data.email,
+        password: validated.data.password,
+        name: `${validated.data.firstName} ${validated.data.lastName}`,
+      },
+      headers: await headers(),
+    });
 
-  if (result.error) {
+    revalidatePath("/", "layout");
+    redirect("/");
+  } catch (error: any) {
     return {
       success: false,
-      message: result.error.message,
+      message: error?.message || "Failed to sign up",
     };
   }
-
-  revalidatePath("/", "layout");
-  redirect("/");
 }
 
 export async function signOut() {
