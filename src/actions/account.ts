@@ -13,7 +13,7 @@ export async function login(data: z.infer<typeof loginSchema>) {
   if (!validated.success) {
     return {
       success: false,
-      errors: validated.error.format(),
+      errors: z.issuesMap(validated.error.issues),
     };
   }
 
@@ -39,7 +39,7 @@ export async function signup(data: z.infer<typeof signupSchema>) {
   if (!validated.success) {
     return {
       success: false,
-      errors: validated.error.format(),
+      errors: z.issuesMap(validated.error.issues),
     };
   }
 
@@ -47,7 +47,7 @@ export async function signup(data: z.infer<typeof signupSchema>) {
     await authClient.signUp.email({
       email: validated.data.email,
       password: validated.data.password,
-      name: validated.data.email.split("@")[0],
+      name: `${validated.data.firstName} ${validated.data.lastName}`,
       fetchOptions: {
         headers: await headers(),
       },
