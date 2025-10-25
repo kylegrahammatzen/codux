@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/lib/db";
 import { env } from "@/env";
-import { resend } from "./resend";
+import { resend } from "@/lib/resend";
 
 const buildSocialProviders = () => {
   const providers: Record<string, any> = {};
