@@ -4,7 +4,7 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { loginSchema, signupSchema } from "@/lib/zod-schemas";
-import { authClient } from "@/lib/auth/client";
+import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 export async function login(data: z.infer<typeof loginSchema>) {
@@ -17,20 +17,23 @@ export async function login(data: z.infer<typeof loginSchema>) {
     };
   }
 
-  try {
-    await authClient.signIn.email({
+  const result = await auth.api.signInEmail({
+    body: {
       email: validated.data.email,
       password: validated.data.password,
-      fetchOptions: {
-        headers: await headers(),
-      },
-    });
+    },
+    headers: await headers(),
+  });
 
-    revalidatePath("/", "layout");
-    redirect("/");
-  } catch (error) {
-    redirect("/error");
+  if (result.error) {
+    return {
+      success: false,
+      message: result.error.message,
+    };
   }
+
+  revalidatePath("/", "layout");
+  redirect("/");
 }
 
 export async function signup(data: z.infer<typeof signupSchema>) {
@@ -43,33 +46,31 @@ export async function signup(data: z.infer<typeof signupSchema>) {
     };
   }
 
-  try {
-    await authClient.signUp.email({
+  const result = await auth.api.signUpEmail({
+    body: {
       email: validated.data.email,
       password: validated.data.password,
       name: `${validated.data.firstName} ${validated.data.lastName}`,
-      fetchOptions: {
-        headers: await headers(),
-      },
-    });
+    },
+    headers: await headers(),
+  });
 
-    revalidatePath("/", "layout");
-    redirect("/");
-  } catch (error) {
-    redirect("/error");
+  if (result.error) {
+    return {
+      success: false,
+      message: result.error.message,
+    };
   }
+
+  revalidatePath("/", "layout");
+  redirect("/");
 }
 
 export async function signOut() {
-  try {
-    await authClient.signOut({
-      fetchOptions: {
-        headers: await headers(),
-      },
-    });
-    revalidatePath("/", "layout");
-    redirect("/login");
-  } catch (error) {
-    redirect("/error");
-  }
+  await auth.api.signOut({
+    headers: await headers(),
+  });
+
+  revalidatePath("/", "layout");
+  redirect("/login");
 }
