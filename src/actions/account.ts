@@ -4,7 +4,7 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { loginSchema, signupSchema } from "@/lib/zod-schemas";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 import { headers } from "next/headers";
 
 export async function login(data: z.infer<typeof loginSchema>) {
