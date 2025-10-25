@@ -1,7 +1,8 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { env } from "@/env";
+import { resend } from "./resend";
 
 const buildSocialProviders = () => {
   const providers: Record<string, any> = {};
@@ -38,7 +39,12 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      console.log(`Verification email for ${user.email}: ${url}`);
+      await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: user.email,
+        subject: "Verify your email",
+        html: `<a href="${url}">Click here to verify your email</a>`,
+      });
     },
   },
 });
