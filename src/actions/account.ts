@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { loginSchema, signupSchema } from "@/lib/zod-schemas";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { APIError } from "better-auth/api";
 
 export async function login(data: z.infer<typeof loginSchema>) {
   const validated = loginSchema.safeParse(data);
@@ -28,11 +29,14 @@ export async function login(data: z.infer<typeof loginSchema>) {
 
     revalidatePath("/", "layout");
     redirect("/");
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error?.message || "Failed to sign in",
-    };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+    throw error;
   }
 }
 
@@ -58,11 +62,14 @@ export async function signup(data: z.infer<typeof signupSchema>) {
 
     revalidatePath("/", "layout");
     redirect("/");
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error?.message || "Failed to sign up",
-    };
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+    throw error;
   }
 }
 
