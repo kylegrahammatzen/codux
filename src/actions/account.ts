@@ -13,11 +13,9 @@ export async function login(data: z.infer<typeof loginSchema>) {
   if (!validated.success) {
     return {
       success: false,
-      errors: validated.error.flatten().fieldErrors,
+      errors: validated.error.format(),
     };
   }
-
-  console.log("Login:", validated.data);
 
   try {
     await authClient.signIn.email({
@@ -31,7 +29,6 @@ export async function login(data: z.infer<typeof loginSchema>) {
     revalidatePath("/", "layout");
     redirect("/");
   } catch (error) {
-    console.error("Login error:", error);
     redirect("/error");
   }
 }
@@ -42,27 +39,23 @@ export async function signup(data: z.infer<typeof signupSchema>) {
   if (!validated.success) {
     return {
       success: false,
-      errors: validated.error.flatten().fieldErrors,
+      errors: validated.error.format(),
     };
   }
-
-  console.log("Signup:", validated.data);
 
   try {
     await authClient.signUp.email({
       email: validated.data.email,
       password: validated.data.password,
-      name: validated.data.email.split("@")[0], // Use email prefix as default name
+      name: validated.data.email.split("@")[0],
       fetchOptions: {
         headers: await headers(),
       },
     });
 
-    // User will receive email verification
     revalidatePath("/", "layout");
     redirect("/");
   } catch (error) {
-    console.error("Signup error:", error);
     redirect("/error");
   }
 }
@@ -77,7 +70,6 @@ export async function signOut() {
     revalidatePath("/", "layout");
     redirect("/login");
   } catch (error) {
-    console.error("Sign out error:", error);
     redirect("/error");
   }
 }
