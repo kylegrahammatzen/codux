@@ -29,7 +29,7 @@ export async function login(data: z.infer<typeof loginSchema>) {
 
     revalidatePath("/", "layout");
     redirect("/");
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof APIError) {
       return {
         success: false,
@@ -62,7 +62,7 @@ export async function signup(data: z.infer<typeof signupSchema>) {
 
     revalidatePath("/", "layout");
     redirect("/");
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof APIError) {
       return {
         success: false,
