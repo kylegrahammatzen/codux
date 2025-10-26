@@ -16,25 +16,60 @@ export const SignupForm = () => {
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     },
   });
 
   const onSubmit = async (data: SignupFormValues) => {
-    const result = await signup(data);
-
-    if (result.success) {
-      console.log("Signup successful");
-    } else {
-      console.log("Signup failed:", result.errors);
-    }
+    await signup(data);
   };
 
   return (
     <CardContent>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <div>
+            <FormLabel>Name</FormLabel>
+            <div className="flex gap-2 mt-2">
+              <FormField
+                name="firstName"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="First name"
+                        aria-invalid={!!form.formState.errors.firstName}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="lastName"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Last name"
+                        aria-invalid={!!form.formState.errors.lastName}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
           <FormField
             name="email"
             control={form.control}

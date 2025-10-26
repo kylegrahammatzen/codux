@@ -1,15 +1,18 @@
 import { Card } from "@/components/ui/card";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 type AuthLayoutProps = {
   children: React.ReactNode;
 };
 
 export default async function AuthLayout(props: AuthLayoutProps) {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
-  if (data.user) redirect("/");
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session) redirect("/");
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[linear-gradient(var(--border)_1px,transparent_1px),linear-gradient(90deg,var(--border)_1px,transparent_1px)] bg-[size:32px_32px]">
