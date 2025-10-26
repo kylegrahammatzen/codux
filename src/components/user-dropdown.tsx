@@ -44,7 +44,7 @@ export const UserDropdown = (props: UserDropdownProps) => {
           </div>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push("/profile")}>Profile</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push(`/@${user?.username}`)}>Profile</DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={async () => await signOut()}>
