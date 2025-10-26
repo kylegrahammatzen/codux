@@ -1,13 +1,16 @@
 "use client";
 
 import { useProjectContext } from "@/components/project-context";
-import { AppHeader } from "@/components/app-header";
 import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
 import { PanelWrapper } from "@/components/panel-wrapper";
 import { cn } from "@/lib/utils";
 
-export const EditorLayout = () => {
+type EditorLayoutProps = {
+  children: React.ReactNode;
+};
+
+export const EditorLayout = (props: EditorLayoutProps) => {
   const { panelOpen, fullscreen, isMobile } = useProjectContext();
 
   return (
@@ -24,7 +27,7 @@ export const EditorLayout = () => {
           fullscreen ? "h-0 opacity-0 overflow-hidden" : "h-auto opacity-100"
         )}
       >
-        <AppHeader />
+        {props.children}
       </div>
 
       {/* Panel layout */}

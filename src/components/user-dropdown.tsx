@@ -5,17 +5,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSession } from "@/lib/auth/client";
+import { useRouter } from "next/navigation";
+import type { User } from "@/lib/auth";
 
-export const UserDropdown = () => {
-  const { data: session } = useSession();
+type UserDropdownProps = {
+  user: User | null;
+};
 
-  const user = session?.user;
+export const UserDropdown = (props: UserDropdownProps) => {
+  const router = useRouter();
+  const user = props.user;
   const nameParts = user?.name?.split(" ") || [];
   const initials = nameParts.length > 1
     ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase()
@@ -41,10 +44,12 @@ export const UserDropdown = () => {
           </div>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/profile")}>Profile</DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={async () => await signOut()}>Logout</DropdownMenuItem>
+        <DropdownMenuItem variant="destructive" onClick={async () => await signOut()}>
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
