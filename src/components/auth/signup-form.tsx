@@ -18,6 +18,7 @@ export const SignupForm = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
+      username: "",
       email: "",
       password: "",
     },
@@ -70,6 +71,24 @@ export const SignupForm = () => {
               />
             </div>
           </div>
+          <FormField
+            name="username"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Username"
+                    aria-invalid={!!form.formState.errors.username}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             name="email"
             control={form.control}
