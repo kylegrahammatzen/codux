@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { DashboardLayout } from "@/components/dashboard-layout";
 
 type UserProfilePageProps = {
   params: Promise<{
@@ -37,10 +38,12 @@ export default async function UserProfilePage(props: UserProfilePageProps) {
   const isOwnProfile = session.user.id === profileUser.id;
 
   return (
-    <div>
-      <h1>@{profileUser.displayUsername}</h1>
-      <p>{profileUser.name}</p>
-      <p>{isOwnProfile ? "This is your profile" : "Viewing another user's profile"}</p>
-    </div>
+    <DashboardLayout user={session.user}>
+      <div>
+        <h1>@{profileUser.displayUsername}</h1>
+        <p>{profileUser.name}</p>
+        <p>{isOwnProfile ? "This is your profile" : "Viewing another user's profile"}</p>
+      </div>
+    </DashboardLayout>
   );
 }
