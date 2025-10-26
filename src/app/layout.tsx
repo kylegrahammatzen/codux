@@ -13,7 +13,7 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout(props: RootLayoutProps) {
   return (
     <html lang="en" className="h-full">
-      <body className="antialiased bg-gray-100 h-full flex flex-col overflow-hidden">
+      <body className="antialiased h-full">
         {props.children}
       </body>
     </html>
