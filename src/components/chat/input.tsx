@@ -73,7 +73,7 @@ export const ChatInput = (props: ChatInputProps) => {
       <div className={cn("rounded-md relative px-2 py-2 flex flex-col gap-2 border border-border bg-accent/20 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] ease-[cubic-bezier(.25,.46,.45,.94)] duration-200 outline-none", props.className)}>
         {images.length > 0 && (
           images.length >= 3 ? (
-            <ScrollArea orientation="horizontal" className="pb-2">
+            <ScrollArea orientation="horizontal" className="pb-2 pt-1">
               <div className="flex items-center gap-2">
                 {images.map((image) => (
                   <div key={image.id} className="relative group flex-shrink-0">
@@ -94,7 +94,7 @@ export const ChatInput = (props: ChatInputProps) => {
                       type="button"
                       variant="outline"
                       onClick={() => removeImage(image.id)}
-                      className="absolute -top-1 -right-1 size-5 shadow-sm bg-card p-0"
+                      className="absolute -top-1 -right-1 size-5 shadow-sm bg-card hover:bg-card p-0"
                       aria-label={`Remove ${image.name}`}
                     >
                       <X className="size-3" />
@@ -104,7 +104,7 @@ export const ChatInput = (props: ChatInputProps) => {
               </div>
             </ScrollArea>
           ) : (
-            <div className="flex flex-wrap items-center gap-2 pb-2">
+            <div className="flex flex-wrap items-center gap-2 pb-2 pt-1">
               {images.map((image) => (
                 <div key={image.id} className="relative group flex-shrink-0">
                   <div className="relative flex items-center rounded-lg border border-border bg-background hover:bg-muted w-32 h-20 overflow-hidden">
@@ -124,7 +124,7 @@ export const ChatInput = (props: ChatInputProps) => {
                     type="button"
                     variant="outline"
                     onClick={() => removeImage(image.id)}
-                    className="absolute -top-1 -right-1 size-5 shadow-sm bg-card p-0"
+                    className="absolute -top-1 -right-1 size-5 shadow-sm bg-card hover:bg-card p-0"
                     aria-label={`Remove ${image.name}`}
                   >
                     <X className="size-3" />
