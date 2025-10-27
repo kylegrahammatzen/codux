@@ -6,7 +6,6 @@ import { ChatPanel } from "@/components/chat/panel";
 import { PreviewPanel } from "@/components/preview/panel";
 import { PanelWrapper } from "@/components/panel-wrapper";
 import { SandpackProvider } from "@codesandbox/sandpack-react";
-import { useTheme } from "next-themes";
 
 type EditorContentProps = {
   files: ProjectFiles;
@@ -16,7 +15,6 @@ type EditorContentProps = {
 
 export const EditorContent = (props: EditorContentProps) => {
   const { panelOpen, isMobile } = useProjectContext();
-  const { theme } = useTheme();
 
   return (
     <SandpackProvider
@@ -26,7 +24,6 @@ export const EditorContent = (props: EditorContentProps) => {
       customSetup={{
         dependencies: props.dependencies,
       }}
-      theme={theme === "dark" ? "dark" : "light"}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">
         <PanelWrapper isOpen={panelOpen && !isMobile}>
