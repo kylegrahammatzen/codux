@@ -16,7 +16,7 @@ export const MainLayout = (props: MainLayoutProps) => {
 
   return (
     <div className="flex flex-col h-full gap-2 p-2">
-      {/* Header */}w
+      {/* Header */}
       <div>{props.header}</div>
 
       {/* Panel layout */}
