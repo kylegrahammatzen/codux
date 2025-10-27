@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { SendHorizontal, X, Mic, File, SquareDashedMousePointer } from "lucide-react";
 import { useTamboThreadInput, useTamboThread } from "@tambo-ai/react";
@@ -71,35 +72,67 @@ export const ChatInput = (props: ChatInputProps) => {
     <form onSubmit={handleSubmit}>
       <div className={cn("rounded-md relative px-2 py-2 flex flex-col gap-2 border border-border bg-accent/20 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] ease-[cubic-bezier(.25,.46,.45,.94)] duration-200 outline-none", props.className)}>
         {images.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 pb-2">
-            {images.map((image) => (
-              <div key={image.id} className="relative group flex-shrink-0">
-                <div className="relative flex items-center rounded-lg border border-border bg-background hover:bg-muted w-32 h-20 overflow-hidden">
-                  <Image
-                    src={image.dataUrl}
-                    alt={image.name}
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-1 left-2 right-2 text-white text-xs font-medium truncate">
-                    {image.name}
+          images.length >= 3 ? (
+            <ScrollArea orientation="horizontal" className="pb-2">
+              <div className="flex items-center gap-2">
+                {images.map((image) => (
+                  <div key={image.id} className="relative group flex-shrink-0">
+                    <div className="relative flex items-center rounded-lg border border-border bg-background hover:bg-muted w-32 h-20 overflow-hidden">
+                      <Image
+                        src={image.dataUrl}
+                        alt={image.name}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <div className="absolute bottom-1 left-2 right-2 text-white text-xs font-medium truncate">
+                        {image.name}
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => removeImage(image.id)}
+                      className="absolute -top-1 -right-1 size-5 shadow-sm bg-card p-0"
+                      aria-label={`Remove ${image.name}`}
+                    >
+                      <X className="size-3" />
+                    </Button>
                   </div>
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon-sm"
-                  onClick={() => removeImage(image.id)}
-                  className="absolute -top-1 -right-1 rounded-full shadow-sm bg-card"
-                  aria-label={`Remove ${image.name}`}
-                >
-                  <X className="size-3" />
-                </Button>
+                ))}
               </div>
-            ))}
-          </div>
+            </ScrollArea>
+          ) : (
+            <div className="flex flex-wrap items-center gap-2 pb-2">
+              {images.map((image) => (
+                <div key={image.id} className="relative group flex-shrink-0">
+                  <div className="relative flex items-center rounded-lg border border-border bg-background hover:bg-muted w-32 h-20 overflow-hidden">
+                    <Image
+                      src={image.dataUrl}
+                      alt={image.name}
+                      fill
+                      unoptimized
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-1 left-2 right-2 text-white text-xs font-medium truncate">
+                      {image.name}
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => removeImage(image.id)}
+                    className="absolute -top-1 -right-1 size-5 shadow-sm bg-card p-0"
+                    aria-label={`Remove ${image.name}`}
+                  >
+                    <X className="size-3" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )
         )}
 
         <Textarea
