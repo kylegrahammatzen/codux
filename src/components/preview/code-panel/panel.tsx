@@ -2,10 +2,10 @@
 
 import { useProjectContext } from "@/components/project-context";
 import { Button } from "@/components/ui/button";
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumbs";
-import { ArrowLeftToLine, Copy, Download } from "lucide-react";
-import { FolderItem } from "./folder-item";
-import { FileItem } from "./file-item";
+import { ArrowLeftToLine } from "lucide-react";
+import { FileTree } from "./file-tree";
+import { CodeEditor } from "./code-editor";
+import { Header } from "./header";
 
 export const CodePanel = () => {
   const { showFileTree, setShowFileTree } = useProjectContext();
@@ -15,51 +15,14 @@ export const CodePanel = () => {
   };
 
   return (
-    <div className="flex flex-1 min-h-0 relative">
-      <div
-        className="flex-shrink-0 transition-all duration-300"
-        style={{
-          width: showFileTree ? "16rem" : 0,
-          overflow: "hidden",
-          transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
-        }}
-      >
-        <div className="w-64 bg-accent/20 border-r h-full p-2">
-          <FolderItem name="app" defaultOpen={true}>
-            <FileItem name="globals.css" />
-            <FileItem name="page.tsx" />
-          </FolderItem>
+    <div className="flex w-full h-full relative">
+      <FileTree />
 
-          <FileItem name="package.json" />
-        </div>
-      </div>
+      <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
+        <Header />
 
-      <div className="flex-1 flex flex-col">
-        <div className="h-10 border-b bg-card flex items-center justify-between px-2 select-none">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink>app</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator variant="slash" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>page.tsx</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon-sm">
-              <Copy className="size-4" />
-            </Button>
-            <Button variant="ghost" size="icon-sm">
-              <Download className="size-4" />
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex-1">
-          <p className="text-white p-2">Code Editor</p>
+        <div className="flex-1 min-h-0 w-full">
+          <CodeEditor />
         </div>
       </div>
 
