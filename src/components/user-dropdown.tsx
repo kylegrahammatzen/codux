@@ -42,7 +42,7 @@ export const UserDropdown = (props: UserDropdownProps) => {
 
   return (
     <DropdownMenu openOnHover>
-      <DropdownMenuTrigger className="size-8 data-[popup-open]:ring-2 data-[popup-open]:ring-ring hover:ring-2 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200 rounded-full">
+      <DropdownMenuTrigger className="size-8 data-[popup-open]:ring-2 data-[popup-open]:ring-ring hover:ring-2 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200 rounded-full cursor-pointer">
         <Avatar className="size-8">
           <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
           <AvatarFallback>{initials}</AvatarFallback>
