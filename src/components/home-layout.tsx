@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils";
 
 type HomeLayoutProps = {
   children: React.ReactNode;
+  header: React.ReactNode;
   pathname: string;
-  greeting?: React.ReactNode;
+  firstName?: string;
 };
 
 export const HomeLayout = (props: HomeLayoutProps) => {
@@ -18,7 +19,7 @@ export const HomeLayout = (props: HomeLayoutProps) => {
   return (
     <div className="flex flex-col h-full gap-2 p-2">
       {/* Header */}
-      <div>{props.children}</div>
+      <div>{props.header}</div>
 
       {/* Panel layout */}
       <div className="flex flex-1 overflow-hidden min-h-0">
@@ -44,7 +45,7 @@ export const HomeLayout = (props: HomeLayoutProps) => {
           </div>
         </div>
 
-        <HomePanel>{props.greeting}</HomePanel>
+        <HomePanel firstName={props.firstName}>{props.children}</HomePanel>
       </div>
     </div>
   );
