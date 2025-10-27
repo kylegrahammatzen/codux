@@ -3,7 +3,7 @@ import { ProjectProvider } from "@/components/project-context";
 import { AppHeader } from "@/components/app-header";
 import { UserDropdown } from "@/components/user-dropdown";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumbs";
 import { hasSession } from "@/lib/auth";
 import Link from "next/link";
 import Image from "next/image";
@@ -31,13 +31,19 @@ export default async function ProjectPage(props: ProjectPageProps) {
     <ProjectProvider>
       <EditorLayout>
         <AppHeader>
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Logo</span>
-
-            <Separator orientation="vertical" className="h-4 rotate-12" />
-
-            <span className="text-sm">Untitled Project</span>
-          </div>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/">Logo</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator variant="slash" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Untitled Project</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
 
           <div className="flex items-center gap-2">
             <Button

@@ -34,14 +34,14 @@ export const CodePanel = () => {
         </div>
       </div>
 
-      <div className="flex-1 bg-green-500 flex flex-col">
+      <div className="flex-1 flex flex-col">
         <div className="h-10 border-b bg-card flex items-center justify-between px-2 select-none">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink>app</BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator variant="slash" />
               <BreadcrumbItem>
                 <BreadcrumbPage>page.tsx</BreadcrumbPage>
               </BreadcrumbItem>
