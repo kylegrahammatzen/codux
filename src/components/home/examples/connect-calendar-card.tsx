@@ -19,7 +19,7 @@ export const ConnectCalendarCard = () => {
         <div className="grid md:hidden lg:grid grid-cols-4 lg:grid-cols-6 gap-y-1.5 gap-x-1.5 lg:gap-y-1 lg:gap-x-1">
           {Array.from({ length: 12 }).map((_, i) => (
             filledDays.includes(i) ? (
-              <div key={i} className="aspect-square bg-card border border-border rounded-[2px]" />
+              <div key={i} className="aspect-square bg-primary border border-border rounded-[2px]" />
             ) : (
               <Skeleton key={i} className="aspect-square rounded-[2px]" />
             )
@@ -30,7 +30,7 @@ export const ConnectCalendarCard = () => {
             return (
               <div key={`extra-${i}`} className="hidden lg:block">
                 {filledDays.includes(index) ? (
-                  <div className="aspect-square bg-card border border-border rounded-[2px]" />
+                  <div className="aspect-square bg-primary border border-border rounded-[2px]" />
                 ) : (
                   <Skeleton className="aspect-square rounded-[2px]" />
                 )}
@@ -42,7 +42,7 @@ export const ConnectCalendarCard = () => {
         <div className="hidden md:grid lg:hidden grid-cols-6 gap-y-1 gap-x-1">
           {Array.from({ length: 18 }).map((_, i) => (
             filledDays.includes(i) ? (
-              <div key={i} className="aspect-square bg-card border border-border rounded-[2px]" />
+              <div key={i} className="aspect-square bg-primary border border-border rounded-[2px]" />
             ) : (
               <Skeleton key={i} className="aspect-square rounded-[2px]" />
             )
