@@ -32,7 +32,7 @@ export const PreviewPanel = () => {
 
   const content = (
     <>
-      <div className="flex items-center justify-between px-2 border-b h-12 bg-white rounded-t-md overflow-hidden">
+      <div className="flex items-center justify-between px-2 border-b h-12 bg-card rounded-t-md">
         <div className="flex items-center gap-2">
           {!fullscreen && (
             <>
@@ -65,14 +65,14 @@ export const PreviewPanel = () => {
         {previewMode === "code" ? (
           <CodePanel />
         ) : (
-          <div className="flex-1 flex items-center justify-center bg-gray-200">
-            <p className="text-gray-400 text-sm">Preview panel</p>
+          <div className="flex-1 flex items-center justify-center bg-accent/20">
+            <p className="text-muted-foreground text-sm">Preview panel</p>
           </div>
         )}
       </div>
 
       {!fullscreen && (
-        <div className="bg-white rounded-b-md">
+        <div className="bg-card rounded-b-md">
           <PreviewFooter />
         </div>
       )}
@@ -88,7 +88,7 @@ export const PreviewPanel = () => {
   }
 
   return (
-    <Card className="flex-1 h-full gap-0 py-0 min-h-0 overflow-hidden">
+    <Card className="flex-1 h-full gap-0 py-0 min-h-0">
       {content}
     </Card>
   );

@@ -3,14 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ChatInputActions } from "@/components/chat/input-actions";
-import { MoveUp } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { SendHorizontal } from "lucide-react";
 
-export const ChatInput = () => {
+type ChatInputProps = {
+  className?: string;
+};
+
+export const ChatInput = (props: ChatInputProps) => {
   return (
-    <div className="bg-gray-50 rounded-md relative p-2 m-1.5 flex flex-col gap-2 border border-border shadow-sm focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] ease-[cubic-bezier(.25,.46,.45,.94)] duration-200 outline-none">
+    <div className={cn("rounded-md relative px-2 py-2 flex flex-col gap-2 border border-border bg-accent/20 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] ease-[cubic-bezier(.25,.46,.45,.94)] duration-200 outline-none", props.className)}>
       <Textarea
         placeholder="Type a message..."
-        className="bg-transparent border-none shadow-none min-h-12 resize-none focus-visible:ring-0 px-0"
+        className="bg-transparent border-none shadow-none min-h-20 resize-none focus-visible:ring-0 px-0"
       />
 
       {/* Buttons positioned at bottom */}
@@ -18,7 +23,7 @@ export const ChatInput = () => {
         <ChatInputActions />
 
         <Button variant="default" size="icon-sm">
-          <MoveUp className="size-4" />
+          <SendHorizontal />
         </Button>
       </div>
     </div>

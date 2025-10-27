@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import { ThemeProvider } from "@/providers/theme-provider";
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "Codux",
@@ -12,9 +13,16 @@ type RootLayoutProps = Readonly<{
 
 export default function RootLayout(props: RootLayoutProps) {
   return (
-    <html lang="en" className="h-full">
-      <body className="antialiased bg-gray-100 h-full flex flex-col overflow-hidden">
-        {props.children}
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <body className="antialiased h-full">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {props.children}
+        </ThemeProvider>
       </body>
     </html>
   );

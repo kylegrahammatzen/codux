@@ -22,8 +22,8 @@ export const PreviewFooter = () => {
         {/* Right side - Last change info, divider, and filter buttons */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-sm">
-            <span className="text-gray-400">Last change:</span>
-            <span className="text-gray-700">3 hours ago</span>
+            <span className="text-muted-foreground">Last change:</span>
+            <span>3 hours ago</span>
           </div>
 
           <Separator orientation="vertical" className="h-4" />

@@ -56,6 +56,8 @@ export async function signup(data: z.infer<typeof signupSchema>) {
         email: validated.data.email,
         password: validated.data.password,
         name: `${validated.data.firstName} ${validated.data.lastName}`,
+        username: validated.data.username,
+        displayUsername: validated.data.username,
       },
       headers: await headers(),
     });

@@ -15,8 +15,8 @@ export default async function AuthLayout(props: AuthLayoutProps) {
   if (session) redirect("/");
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[linear-gradient(var(--border)_1px,transparent_1px),linear-gradient(90deg,var(--border)_1px,transparent_1px)] bg-[size:32px_32px]">
-      <Card className="w-full max-w-96 shadow-sm">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background bg-[linear-gradient(var(--border)_1px,transparent_1px),linear-gradient(90deg,var(--border)_1px,transparent_1px)] bg-[size:2rem_2rem]">
+      <Card className="w-full max-w-96">
         {props.children}
       </Card>
     </div>

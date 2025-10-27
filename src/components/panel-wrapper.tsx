@@ -7,6 +7,7 @@ import { useProjectContext } from "@/components/project-context";
 type PanelWrapperProps = {
   isOpen: boolean;
   children: React.ReactNode;
+  className?: string;
 };
 
 export const PanelWrapper = (props: PanelWrapperProps) => {
@@ -30,8 +31,9 @@ export const PanelWrapper = (props: PanelWrapperProps) => {
       }}
     >
       <Card className={cn(
-        "h-full gap-0 py-0 transition-opacity duration-300",
-        isOpen ? "opacity-100" : "opacity-0"
+        "h-full gap-0 py-0 transition-opacity duration-300 overflow-hidden",
+        isOpen ? "opacity-100" : "opacity-0",
+        props.className
       )} style={{
         transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
       }}>

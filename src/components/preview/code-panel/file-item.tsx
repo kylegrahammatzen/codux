@@ -8,8 +8,8 @@ type FileItemProps = {
 
 export const FileItem = (props: FileItemProps) => {
   return (
-    <div className="flex items-center gap-1 hover:bg-gray-100 rounded px-1 py-1 text-sm cursor-pointer">
-      <File className="size-4 text-gray-500" />
+    <div className="flex items-center gap-1 hover:bg-accent rounded px-1 py-1 text-sm cursor-pointer">
+      <File className="size-4 text-muted-foreground" />
       <span>{props.name}</span>
     </div>
   );
