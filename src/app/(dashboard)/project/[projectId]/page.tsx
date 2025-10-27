@@ -71,7 +71,7 @@ root.render(
 
   return (
     <ProjectProvider>
-      <EditorLayout>
+      <EditorLayout files={files} dependencies={dependencies} options={options}>
         <AppHeader>
           <Breadcrumb>
             <BreadcrumbList>
