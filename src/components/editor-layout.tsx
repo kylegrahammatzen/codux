@@ -1,17 +1,16 @@
 "use client";
 
 import { useProjectContext } from "@/components/project-context";
-import { ChatPanel } from "@/components/chat/panel";
-import { PreviewPanel } from "@/components/preview/panel";
-import { PanelWrapper } from "@/components/panel-wrapper";
+import type { ProjectFiles, ProjectDependencies, ProjectOptions } from "@/components/project-context";
+import { EditorContent } from "@/components/editor-content";
 import { cn } from "@/lib/utils";
 
-type EditorLayoutProps = {
+type LayoutWrapperProps = {
   children: React.ReactNode;
 };
 
-export const EditorLayout = (props: EditorLayoutProps) => {
-  const { panelOpen, fullscreen, isMobile } = useProjectContext();
+const LayoutWrapper = (props: LayoutWrapperProps) => {
+  const { fullscreen } = useProjectContext();
 
   return (
     <div
@@ -20,6 +19,23 @@ export const EditorLayout = (props: EditorLayoutProps) => {
         fullscreen ? "gap-0 p-0" : "gap-2 p-2"
       )}
     >
+      {props.children}
+    </div>
+  );
+};
+
+type EditorLayoutProps = {
+  children: React.ReactNode;
+  files: ProjectFiles;
+  dependencies: ProjectDependencies;
+  options?: ProjectOptions;
+};
+
+export const EditorLayout = (props: EditorLayoutProps) => {
+  const { fullscreen } = useProjectContext();
+
+  return (
+    <LayoutWrapper>
       {/* AppHeader with transition */}
       <div
         className={cn(
@@ -30,14 +46,11 @@ export const EditorLayout = (props: EditorLayoutProps) => {
         {props.children}
       </div>
 
-      {/* Panel layout */}
-      <div className="flex flex-1 overflow-hidden min-h-0">
-        <PanelWrapper isOpen={panelOpen && !isMobile}>
-          <ChatPanel />
-        </PanelWrapper>
-
-        <PreviewPanel />
-      </div>
-    </div>
+      <EditorContent
+        files={props.files}
+        dependencies={props.dependencies}
+        options={props.options}
+      />
+    </LayoutWrapper>
   );
 };
