@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ChatInput } from "@/components/chat/input";
+import { MessageThread } from "@/components/tambo/message-thread";
 
 export const ChatPanel = () => {
   return (
@@ -20,11 +20,7 @@ export const ChatPanel = () => {
         </Button>
       </div>
 
-      <div className="flex-1 bg-card grid place-items-center">
-        <p className="text-muted-foreground text-sm">Chat panel</p>
-      </div>
-
-      <ChatInput className="m-1.5" />
+      <MessageThread />
     </div>
   );
 };
