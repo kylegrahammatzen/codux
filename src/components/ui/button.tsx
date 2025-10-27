@@ -13,16 +13,16 @@ const buttonVariants = cva(
 		variants: {
 			variant: {
 				default:
-					"bg-primary text-primary-foreground hover:bg-primary/80 shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_2px_2px_rgba(111,111,111,1),inset_0_0_0_1px_rgba(0,0,0,1),inset_0_-2px_2px_rgba(173,160,160,0.25)]",
+					"bg-primary text-primary-foreground hover:bg-primary/80 shadow-xs",
 				secondary:
-					"bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_2px_2px_rgba(111,111,111,1),inset_0_0_0_1px_rgba(0,0,0,1),inset_0_-2px_2px_rgba(173,160,160,0.25)]",
+					"bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-xs",
 				ghost:
 					"text-foreground hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground",
 				outline:
-					"border border-border/50 dark:border-border/30 bg-transparent text-foreground hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_2px_2px_rgba(111,111,111,1),inset_0_0_0_1px_rgba(0,0,0,1),inset_0_-2px_2px_rgba(173,160,160,0.25)]",
+					"border bg-transparent text-foreground hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground shadow-xs",
 				link: "text-foreground hover:underline",
 				destructive:
-					"bg-destructive hover:bg-destructive/80 dark:bg-destructive/80 text-destructive-foreground dark:hover:bg-destructive/60 dark:focus-visible:ring-destructive/40 focus-visible:ring-destructive/50 shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_2px_2px_rgba(111,111,111,1),inset_0_0_0_1px_rgba(0,0,0,1),inset_0_-2px_2px_rgba(173,160,160,0.25)]",
+					"bg-destructive hover:bg-destructive/80 dark:bg-destructive/80 text-destructive-foreground dark:hover:bg-destructive/60 dark:focus-visible:ring-destructive/40 focus-visible:ring-destructive/50 shadow-xs",
 			},
 			size: {
 				sm: "h-8 px-3 gap-1",
