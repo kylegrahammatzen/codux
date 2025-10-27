@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Breadcrumb, BreadcrumbList } from "@/components/ui/breadcrumbs";
 import { useMainContext } from "@/components/main-context";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 type PanelHeaderProps = {
-  title?: string;
   children?: React.ReactNode;
 };
 
@@ -24,13 +24,16 @@ export const PanelHeader = (props: PanelHeaderProps) => {
         <Button variant="ghost" size="sm" onClick={toggleSidebar}>
           {isSidebarVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
         </Button>
-        {props.title && (
+        {props.children && (
           <>
             <Separator orientation="vertical" className="h-6" />
-            <span className="text-sm font-medium">{props.title}</span>
+            <Breadcrumb>
+              <BreadcrumbList>
+                {props.children}
+              </BreadcrumbList>
+            </Breadcrumb>
           </>
         )}
-        {props.children}
       </div>
     </div>
   );
