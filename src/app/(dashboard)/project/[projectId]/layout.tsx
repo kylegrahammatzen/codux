@@ -12,7 +12,7 @@ export default async function ProjectLayout(props: ProjectLayoutProps) {
   });
 
   return (
-    <ProjectClientLayout userToken={session?.token}>
+    <ProjectClientLayout userToken={session?.session.token}>
       {props.children}
     </ProjectClientLayout>
   );
