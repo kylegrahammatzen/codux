@@ -2,15 +2,12 @@
 
 import { useHomeContext } from "@/components/home-context";
 import { HomeSidebar } from "@/components/home/sidebar";
-import { HomePanel } from "@/components/home/panel";
 import { cn } from "@/lib/utils";
 
 type HomeLayoutProps = {
   children: React.ReactNode;
   header: React.ReactNode;
   pathname: string;
-  panelHeader?: React.ReactNode;
-  showChatInput?: boolean;
 };
 
 export const HomeLayout = (props: HomeLayoutProps) => {
@@ -46,9 +43,7 @@ export const HomeLayout = (props: HomeLayoutProps) => {
           </div>
         </div>
 
-        <HomePanel header={props.panelHeader} showChatInput={props.showChatInput}>
-          {props.children}
-        </HomePanel>
+        {props.children}
       </div>
     </div>
   );
