@@ -8,7 +8,7 @@ type ExampleCardProps = {
 
 export const ExampleCard = (props: ExampleCardProps) => {
   return (
-    <Card className="h-40 bg-accent/20 border-border/30 flex flex-col p-4">
+    <Card className="h-48 bg-accent/20 border-border/30 flex flex-col p-4">
       <div className="flex-1 flex items-center justify-center">
         {props.children}
       </div>

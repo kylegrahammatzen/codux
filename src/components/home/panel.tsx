@@ -40,14 +40,14 @@ export const HomePanel = (props: HomePanelProps) => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col items-center justify-center p-8 overflow-y-auto">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 overflow-y-auto">
           <div className="w-full max-w-2xl flex flex-col">
             <div className="flex flex-col mb-6">
               <h1 className="text-2xl font-semibold text-foreground">{greeting}</h1>
               <p className="text-xl font-semibold text-muted-foreground/70">Ready to assign your task?</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <ExampleCards />
             </div>
           </div>
