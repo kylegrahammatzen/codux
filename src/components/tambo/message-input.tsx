@@ -3,7 +3,9 @@
 import {
   Tooltip,
   TooltipProvider,
-} from "@/components/tambo/suggestions-tooltip";
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
   useIsTamboTokenUpdating,
