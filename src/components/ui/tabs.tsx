@@ -53,7 +53,7 @@ function TabsList({
 			data-slot="tabs-list"
 			className={cn(
 				"text-muted-foreground relative z-0 inline-flex h-9 w-fit items-center justify-center gap-x-1 p-1",
-				variant === "capsule" ? "bg-muted rounded-lg" : "",
+				variant === "capsule" ? "bg-card border rounded-lg shadow-xs" : "",
 				className
 			)}
 			{...props}
@@ -72,7 +72,7 @@ function TabsTrigger({
 		<BaseTabs.Tab
 			data-slot="tabs-trigger"
 			className={cn(
-				"text-muted-foreground data-selected:text-foreground focus-visible:ring-ring/50 [&_svg:not([class*='size-'])] z-[1] flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1 text-sm text-nowrap whitespace-nowrap outline-none focus-visible:ring-[3px] data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+				"text-muted-foreground data-selected:text-foreground focus-visible:ring-ring/50 z-[1] inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1 text-sm text-nowrap whitespace-nowrap outline-none focus-visible:ring-[3px] cursor-pointer select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 				className
 			)}
 			{...props}
@@ -90,10 +90,10 @@ function TabIndicator({
 		<BaseTabs.Indicator
 			data-slot="tab-indicator"
 			className={cn(
-				"absolute left-0 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] -translate-y-1/2 transition-[transform,width,height] duration-300 ease-[cubic-bezier(.77,0,.175,1)]",
+				"absolute left-0 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] -translate-y-1/2 transition-all duration-300 ease-[cubic-bezier(.645,.045,.355,1)]",
 				variant === "underline"
 					? "bg-primary top-full z-10 h-px"
-					: "bg-accent border-ring/70 top-1/2 -z-[1] h-[var(--active-tab-height)] rounded-md border shadow-sm",
+					: "bg-accent/50 top-1/2 -z-[1] h-[var(--active-tab-height)] rounded-md",
 				className
 			)}
 			{...props}
