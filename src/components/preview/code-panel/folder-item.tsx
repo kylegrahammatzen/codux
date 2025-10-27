@@ -17,7 +17,7 @@ export const FolderItem = (props: FolderItemProps) => {
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <CollapsibleTrigger className="flex items-center gap-1 w-full hover:bg-gray-100 rounded px-1 py-1 text-sm cursor-pointer">
+      <CollapsibleTrigger className="flex items-center gap-1 w-full hover:bg-accent rounded px-1 py-1 text-sm cursor-pointer">
         <ChevronDown className={cn("size-4 transition-transform duration-200", !isOpen && "-rotate-90")} />
         <span>{props.name}</span>
       </CollapsibleTrigger>

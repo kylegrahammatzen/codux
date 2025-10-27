@@ -16,16 +16,16 @@ export const PreviewConsole = (props: PreviewConsoleProps) => {
     <Collapsible open={props.isOpen}>
       <CollapsibleContent>
         <Separator />
-        <div className="text-sm text-gray-600 font-mono py-2">
+        <div className="text-sm text-muted-foreground font-mono py-2">
           <p>Console output will appear here...</p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="size-5 bg-black rounded-sm flex items-center justify-center flex-shrink-0">
-            <span className="text-white text-sm font-bold">/</span>
+          <div className="size-5 bg-primary rounded-sm flex items-center justify-center flex-shrink-0">
+            <span className="text-primary-foreground text-sm font-bold">/</span>
           </div>
           <Input
             placeholder="Enter a command..."
-            className="bg-transparent border-0 shadow-none p-0 text-xs font-mono placeholder:text-gray-500 focus-visible:ring-0"
+            className="bg-transparent border-0 shadow-none p-0 text-xs font-mono placeholder:text-muted-foreground focus-visible:ring-0"
             inputContainerClassName="w-auto flex-1"
           />
         </div>

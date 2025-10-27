@@ -2,6 +2,7 @@
 
 import { useProjectContext } from "@/components/project-context";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumbs";
 import { ArrowLeftToLine, Copy, Download } from "lucide-react";
 import { FolderItem } from "./folder-item";
 import { FileItem } from "./file-item";
@@ -23,7 +24,7 @@ export const CodePanel = () => {
           transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
         }}
       >
-        <div className="w-64 bg-gray-50 border-r h-full p-2">
+        <div className="w-64 bg-accent/20 border-r h-full p-2">
           <FolderItem name="app" defaultOpen={true}>
             <FileItem name="globals.css" />
             <FileItem name="page.tsx" />
@@ -34,12 +35,18 @@ export const CodePanel = () => {
       </div>
 
       <div className="flex-1 bg-green-500 flex flex-col">
-        <div className="h-10 border-b bg-white flex items-center justify-between px-2">
-          <div className="flex items-center gap-1 text-sm">
-            <span className="text-gray-600">app</span>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900 font-medium">page.tsx</span>
-          </div>
+        <div className="h-10 border-b bg-card flex items-center justify-between px-2 select-none">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink>app</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>page.tsx</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
 
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon-sm">
@@ -52,12 +59,12 @@ export const CodePanel = () => {
         </div>
 
         <div className="flex-1">
-          <p className="text-white p-4">Code Editor</p>
+          <p className="text-white p-2">Code Editor</p>
         </div>
       </div>
 
       <div className="absolute bottom-2 left-2">
-        <Button variant="outline" size="icon-sm" className="bg-white cursor-pointer" onClick={toggleFileTree}>
+        <Button variant="outline" size="icon-sm" className="!bg-card cursor-pointer" onClick={toggleFileTree}>
           <div className="transition-transform duration-200" style={{ transform: showFileTree ? "scaleX(1)" : "scaleX(-1)" }}>
             <ArrowLeftToLine className="size-4" />
           </div>
