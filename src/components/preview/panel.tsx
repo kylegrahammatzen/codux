@@ -7,13 +7,18 @@ import { Separator } from "@/components/ui/separator";
 import { useProjectContext } from "@/components/project-context";
 import { PreviewModeToggle } from "@/components/preview/mode-toggle";
 import { CodePanel } from "@/components/preview/code-panel/panel";
+import { Preview } from "@/components/preview/preview";
 import { PreviewFooter } from "@/components/preview/footer";
+import { useSandpackNavigation, useSandpack } from "@codesandbox/sandpack-react";
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, ChevronsRight, RefreshCcw, Expand, Shrink } from "lucide-react";
 
 export const PreviewPanel = () => {
   const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode, isMobile } = useProjectContext();
+  const { refresh } = useSandpackNavigation();
+  const { sandpack } = useSandpack();
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
+  const hasError = sandpack.error !== null && sandpack.error !== undefined;
 
   // Panel is only visible if panelOpen is true AND not on mobile
   const isPanelVisible = panelOpen && !isMobile;
@@ -28,6 +33,10 @@ export const PreviewPanel = () => {
     setTimeout(() => {
       fullscreenButtonRef.current?.focus();
     }, 0);
+  };
+
+  const handleReload = () => {
+    refresh();
   };
 
   const content = (
@@ -49,7 +58,7 @@ export const PreviewPanel = () => {
             "flex items-center gap-2 transition-all ease-[cubic-bezier(.77,0,.175,1)] duration-300",
             previewMode === "code" ? "translate-x-[20rem] opacity-0" : "translate-x-0 opacity-100"
           )}>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={handleReload} disabled={hasError}>
               <RefreshCcw className="size-4" />
               <span>Reload</span>
             </Button>
@@ -61,14 +70,20 @@ export const PreviewPanel = () => {
         </div>
       </div>
 
-      <div className="flex-1 flex min-h-0">
-        {previewMode === "code" ? (
+      <div className="flex-1 flex min-h-0 relative">
+        <div className={cn(
+          "flex w-full h-full absolute inset-0",
+          previewMode === "code" ? "block" : "hidden"
+        )}>
           <CodePanel />
-        ) : (
-          <div className="flex-1 flex items-center justify-center bg-accent/20">
-            <p className="text-muted-foreground text-sm">Preview panel</p>
-          </div>
-        )}
+        </div>
+
+        <div className={cn(
+          "flex-1 min-h-0 w-full absolute inset-0",
+          previewMode === "preview" ? "block" : "hidden"
+        )}>
+          <Preview />
+        </div>
       </div>
 
       {!fullscreen && (
