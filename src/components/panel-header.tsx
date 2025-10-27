@@ -28,7 +28,7 @@ export const PanelHeader = (props: PanelHeaderProps) => {
           </BreadcrumbItem>
           {props.children && (
             <>
-              <BreadcrumbSeparator variant="slash" />
+              <BreadcrumbSeparator />
               {props.children}
             </>
           )}
