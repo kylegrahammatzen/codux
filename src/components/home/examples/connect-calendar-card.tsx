@@ -15,9 +15,9 @@ export const ConnectCalendarCard = () => {
           <span className="text-xs font-medium text-foreground">{currentMonth}</span>
           <span className="text-xs font-medium text-muted-foreground/70">{currentYear}</span>
         </div>
-        {/* Mobile: 15 squares (3 rows x 5 cols) */}
-        <div className="grid md:hidden lg:grid grid-cols-5 lg:grid-cols-6 gap-y-1 gap-x-1">
-          {Array.from({ length: 15 }).map((_, i) => (
+        {/* Mobile: 12 squares (3 rows x 4 cols) */}
+        <div className="grid md:hidden lg:grid grid-cols-4 lg:grid-cols-6 gap-y-1.5 gap-x-1.5 lg:gap-y-1 lg:gap-x-1">
+          {Array.from({ length: 12 }).map((_, i) => (
             filledDays.includes(i) ? (
               <div key={i} className="aspect-square bg-card border border-border rounded-[2px]" />
             ) : (
