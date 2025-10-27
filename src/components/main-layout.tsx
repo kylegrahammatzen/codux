@@ -21,7 +21,7 @@ export const MainLayout = (props: MainLayoutProps) => {
 
       {/* Panel layout */}
       <div className="flex flex-1 overflow-hidden min-h-0">
-        <CollapsiblePanel width="12rem" isOpen={isSidebarVisible}>
+        <CollapsiblePanel width="12rem" isOpen={isSidebarVisible} className={isSidebarVisible ? "mr-6" : ""}>
           <HomeSidebar pathname={props.pathname} />
         </CollapsiblePanel>
 
