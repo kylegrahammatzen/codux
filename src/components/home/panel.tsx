@@ -55,7 +55,7 @@ export const HomePanel = (props: HomePanelProps) => {
           </div>
         </div>
 
-        <div className="w-full max-w-2xl mx-auto px-4 pb-4">
+        <div className="w-full max-w-2xl mx-auto px-4 sm:px-0 pb-4">
           <ChatInput />
         </div>
       </div>
