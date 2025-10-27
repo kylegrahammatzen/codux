@@ -8,8 +8,14 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import { ToggleGroup } from "@/components/ui/toggle-group";
+import { Toggle } from "@/components/ui/toggle";
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 import type { User } from "@/lib/auth";
 
 type UserDropdownProps = {
@@ -18,6 +24,7 @@ type UserDropdownProps = {
 
 export const UserDropdown = (props: UserDropdownProps) => {
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
   const user = props.user;
   const nameParts = user?.name?.split(" ") || [];
   const initials = nameParts.length > 1
@@ -46,6 +53,24 @@ export const UserDropdown = (props: UserDropdownProps) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => router.push(`/@${user?.username}`)}>Profile</DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Preferences</DropdownMenuLabel>
+          <div className="flex items-center justify-between px-2 py-1.5 select-none">
+            <span className="text-sm">Theme</span>
+            <ToggleGroup value={theme ? [theme] : []} onValueChange={(value) => value[0] && setTheme(value[0])}>
+              <Toggle value="system" variant="outline" size="sm" className="h-7 min-w-7 px-1">
+                <MonitorIcon className="size-3.5" />
+              </Toggle>
+              <Toggle value="light" variant="outline" size="sm" className="h-7 min-w-7 px-1">
+                <SunIcon className="size-3.5" />
+              </Toggle>
+              <Toggle value="dark" variant="outline" size="sm" className="h-7 min-w-7 px-1">
+                <MoonIcon className="size-3.5" />
+              </Toggle>
+            </ToggleGroup>
+          </div>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={async () => await signOut()}>
           Logout
