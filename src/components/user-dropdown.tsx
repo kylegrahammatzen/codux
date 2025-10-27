@@ -10,11 +10,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
   DropdownMenuLabel,
+  DropdownMenuCustomItem,
 } from "@/components/ui/dropdown-menu";
 import { ToggleGroup } from "@/components/ui/toggle-group";
 import { Toggle } from "@/components/ui/toggle";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 import type { User } from "@/lib/auth";
 
@@ -24,12 +25,20 @@ type UserDropdownProps = {
 
 export const UserDropdown = (props: UserDropdownProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const user = props.user;
   const nameParts = user?.name?.split(" ") || [];
   const initials = nameParts.length > 1
     ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase()
     : nameParts[0]?.[0]?.toUpperCase() || "U";
+
+  const handleProfileClick = () => {
+    const profilePath = `/@${user?.username}`;
+    if (pathname !== profilePath) {
+      router.push(profilePath);
+    }
+  };
 
   return (
     <DropdownMenu openOnHover>
@@ -51,12 +60,12 @@ export const UserDropdown = (props: UserDropdownProps) => {
           </div>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push(`/@${user?.username}`)}>Profile</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleProfileClick}>Profile</DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuLabel>Preferences</DropdownMenuLabel>
-          <div className="flex items-center justify-between px-2 py-1.5 select-none">
+          <DropdownMenuCustomItem>
             <span className="text-sm">Theme</span>
             <ToggleGroup value={theme ? [theme] : []} onValueChange={(value) => value[0] && setTheme(value[0])}>
               <Toggle value="system" variant="outline" size="sm" className="h-7 min-w-7 px-1">
@@ -69,7 +78,7 @@ export const UserDropdown = (props: UserDropdownProps) => {
                 <MoonIcon className="size-3.5" />
               </Toggle>
             </ToggleGroup>
-          </div>
+          </DropdownMenuCustomItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={async () => await signOut()}>

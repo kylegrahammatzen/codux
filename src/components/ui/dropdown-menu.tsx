@@ -137,6 +137,22 @@ function DropdownMenuLabel({
 	)
 }
 
+function DropdownMenuCustomItem({
+	className,
+	...props
+}: React.ComponentProps<"div">) {
+	return (
+		<div
+			data-slot="dropdown-menu-custom-item"
+			className={cn(
+				"flex items-center justify-between px-2 py-1.5 select-none",
+				className
+			)}
+			{...props}
+		/>
+	)
+}
+
 function DropdownMenuCheckboxItem({
 	className,
 	children,
@@ -271,6 +287,7 @@ export {
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuLabel,
+	DropdownMenuCustomItem,
 	DropdownMenuItem,
 	DropdownMenuCheckboxItem,
 	DropdownMenuRadioGroup,
