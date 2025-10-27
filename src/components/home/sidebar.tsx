@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 
 type HomeSidebarProps = {
   pathname: string;
-  userFirstName?: string;
 };
 
 export const HomeSidebar = (props: HomeSidebarProps) => {

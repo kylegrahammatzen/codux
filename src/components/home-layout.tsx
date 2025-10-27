@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 type HomeLayoutProps = {
   children: React.ReactNode;
   pathname: string;
-  userFirstName?: string;
+  greeting?: React.ReactNode;
 };
 
 export const HomeLayout = (props: HomeLayoutProps) => {
@@ -40,11 +40,11 @@ export const HomeLayout = (props: HomeLayoutProps) => {
           )} style={{
             transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
           }}>
-            <HomeSidebar pathname={props.pathname} userFirstName={props.userFirstName} />
+            <HomeSidebar pathname={props.pathname} />
           </div>
         </div>
 
-        <HomePanel userFirstName={props.userFirstName} />
+        <HomePanel>{props.greeting}</HomePanel>
       </div>
     </div>
   );

@@ -5,24 +5,14 @@ import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/chat/input";
 import { ExampleCards } from "@/components/home/examples";
 import { useHomeContext } from "@/components/home-context";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 type HomePanelProps = {
-  userFirstName?: string;
+  children?: React.ReactNode;
 };
 
 export const HomePanel = (props: HomePanelProps) => {
   const { sidebarOpen, setSidebarOpen, isMobile } = useHomeContext();
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
-  };
-
-  const greeting = props.userFirstName ? `${getGreeting()}, ${props.userFirstName}!` : `${getGreeting()}!`;
 
   const isSidebarVisible = sidebarOpen && !isMobile;
 
@@ -44,13 +34,17 @@ export const HomePanel = (props: HomePanelProps) => {
         <div className="flex-1 flex flex-col min-h-0 md:overflow-y-auto md:items-center md:justify-center">
           <div className="flex flex-col h-full md:h-auto w-full max-w-2xl mx-auto px-4 md:px-0 min-h-0">
             <div className="pt-8 pb-6 shrink-0">
-              <h1 className="text-2xl font-semibold text-foreground">{greeting}</h1>
-              <p className="text-xl font-semibold text-muted-foreground/70">Ready to assign your task?</p>
+              {props.children}
             </div>
 
             <div className="flex-1 min-h-0 overflow-y-auto md:overflow-visible mb-8 md:mb-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <ExampleCards />
+                <CreateTaskCard />
+                <ConnectCalendarCard />
+                <BrowseAgentsCard />
+                <UploadFileCard />
+                <ExploreUseCasesCard />
+                <CustomizeProjectsCard />
               </div>
             </div>
           </div>
