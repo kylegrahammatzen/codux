@@ -8,7 +8,7 @@ type ExampleCardProps = {
 
 export const ExampleCard = (props: ExampleCardProps) => {
   return (
-    <Card className="group h-52 bg-accent/20 border-border/30 hover:border-border flex flex-col p-4 overflow-hidden relative cursor-pointer transition-colors">
+    <Card className="group h-52 bg-accent/20 !border-border/30 hover:!border-border flex flex-col p-4 overflow-hidden relative cursor-pointer transition-[border-color] duration-200 ease-[ease]">
       {props.children && (
         <div className="flex-1 flex items-start min-h-0 select-none">
           {props.children}
