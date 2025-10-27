@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Breadcrumb, BreadcrumbList } from "@/components/ui/breadcrumbs";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumbs";
 import { useMainContext } from "@/components/main-context";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
@@ -20,21 +19,21 @@ export const PanelHeader = (props: PanelHeaderProps) => {
 
   return (
     <div className="flex items-center justify-between px-2 border-b h-12 bg-card rounded-t-md shrink-0">
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="sm" onClick={toggleSidebar}>
-          {isSidebarVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
-        </Button>
-        {props.children && (
-          <>
-            <Separator orientation="vertical" className="h-6" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                {props.children}
-              </BreadcrumbList>
-            </Breadcrumb>
-          </>
-        )}
-      </div>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <Button variant="ghost" size="sm" onClick={toggleSidebar}>
+              {isSidebarVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
+            </Button>
+          </BreadcrumbItem>
+          {props.children && (
+            <>
+              <BreadcrumbSeparator variant="slash" />
+              {props.children}
+            </>
+          )}
+        </BreadcrumbList>
+      </Breadcrumb>
     </div>
   );
 };
