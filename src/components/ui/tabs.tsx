@@ -93,7 +93,7 @@ function TabIndicator({
 				"absolute left-0 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] -translate-y-1/2 transition-all duration-300 ease-[cubic-bezier(.645,.045,.355,1)]",
 				variant === "underline"
 					? "bg-primary top-full z-10 h-px"
-					: "bg-accent/50 top-1/2 -z-[1] h-[var(--active-tab-height)] rounded-md",
+					: "bg-accent dark:bg-accent/50 top-1/2 -z-[1] h-[var(--active-tab-height)] rounded-md",
 				className
 			)}
 			{...props}
