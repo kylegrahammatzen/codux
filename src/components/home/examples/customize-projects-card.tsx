@@ -15,7 +15,7 @@ export const CustomizeProjectsCard = () => {
       <div className="w-full grid grid-cols-2 gap-1">
         {items.map(({ Icon, hasBg }, i) => (
           <div key={i} className="h-14.5 bg-card rounded-sm flex items-center justify-center p-2">
-            <div className={cn("w-full h-full border-2 border-dashed border-border rounded-sm flex items-center justify-center transition-[background-color] duration-200 ease-[ease]", hasBg && "group-hover:bg-foreground/10 dark:group-hover:bg-foreground/20")}>
+            <div className={cn("w-full h-full border-2 border-dashed border-border rounded-sm flex items-center justify-center transition-[background-color] duration-200", hasBg && "bg-transparent group-hover:bg-foreground/10 dark:group-hover:bg-foreground/20")}>
               <Icon className="size-4 text-muted-foreground" strokeWidth={2} />
             </div>
           </div>
