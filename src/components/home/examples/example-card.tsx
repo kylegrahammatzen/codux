@@ -8,9 +8,9 @@ type ExampleCardProps = {
 
 export const ExampleCard = (props: ExampleCardProps) => {
   return (
-    <Card className="h-52 bg-accent/20 border-border/30 flex flex-col p-4 overflow-hidden relative select-none">
+    <Card className="h-52 bg-accent/20 border-border/30 flex flex-col p-4 overflow-hidden relative">
       {props.children && (
-        <div className="flex-1 flex items-start min-h-0">
+        <div className="flex-1 flex items-start min-h-0 select-none">
           {props.children}
         </div>
       )}
