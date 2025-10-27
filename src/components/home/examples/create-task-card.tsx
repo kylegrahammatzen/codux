@@ -11,7 +11,7 @@ export const CreateTaskCard = () => {
             <div className="size-4 rounded-sm bg-accent shrink-0 flex items-center justify-center">
               <Check className="size-3 text-accent-foreground" />
             </div>
-            <Skeleton className="h-2.5 flex-1" />
+            <Skeleton className="h-2.5 flex-1 animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
           </div>
         ))}
       </div>

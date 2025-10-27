@@ -21,7 +21,7 @@ export const ConnectCalendarCard = () => {
             filledDays.includes(i) ? (
               <div key={i} className="aspect-square bg-foreground/20 dark:bg-foreground/30 border border-border rounded-[2px]" />
             ) : (
-              <Skeleton key={i} className="aspect-square rounded-[2px]" />
+              <Skeleton key={i} className="aspect-square rounded-[2px] animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
             )
           ))}
           {/* Show extra 3 squares on lg (desktop) */}
@@ -32,7 +32,7 @@ export const ConnectCalendarCard = () => {
                 {filledDays.includes(index) ? (
                   <div className="aspect-square bg-foreground/20 dark:bg-foreground/30 border border-border rounded-[2px]" />
                 ) : (
-                  <Skeleton className="aspect-square rounded-[2px]" />
+                  <Skeleton className="aspect-square rounded-[2px] animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
                 )}
               </div>
             );
@@ -44,7 +44,7 @@ export const ConnectCalendarCard = () => {
             filledDays.includes(i) ? (
               <div key={i} className="aspect-square bg-foreground/20 dark:bg-foreground/30 border border-border rounded-[2px]" />
             ) : (
-              <Skeleton key={i} className="aspect-square rounded-[2px]" />
+              <Skeleton key={i} className="aspect-square rounded-[2px] animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
             )
           ))}
         </div>

@@ -34,18 +34,18 @@ export const ExploreUseCasesCard = () => {
               <card.Icon className={cn("size-3 text-muted-foreground", !card.showIcon && "invisible")} />
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-1">
-                  <Skeleton className="h-1 w-6 bg-foreground/30 dark:bg-foreground/50" />
-                  <Skeleton className="h-1 w-4" />
+                  <Skeleton className="h-1 w-6 bg-foreground/30 dark:bg-foreground/50 animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
+                  <Skeleton className="h-1 w-4 animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
                 </div>
-                <Skeleton className="h-1 w-3 bg-muted-foreground/40 dark:bg-muted-foreground/60" />
+                <Skeleton className="h-1 w-3 bg-muted-foreground/40 dark:bg-muted-foreground/60 animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
               </div>
             </div>
             <div className="flex-1 flex items-center justify-center">
-              <Skeleton className="h-8 w-full rounded-sm bg-foreground/20 dark:bg-foreground/40" />
+              <Skeleton className="h-8 w-full rounded-sm bg-foreground/20 dark:bg-foreground/40 animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
             </div>
             <div className="flex items-center justify-between">
-              <Skeleton className="h-1 w-4 bg-muted-foreground/30 dark:bg-muted-foreground/50" />
-              <Skeleton className="h-1 w-8 bg-muted-foreground/30 dark:bg-muted-foreground/50" />
+              <Skeleton className="h-1 w-4 bg-muted-foreground/30 dark:bg-muted-foreground/50 animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
+              <Skeleton className="h-1 w-8 bg-muted-foreground/30 dark:bg-muted-foreground/50 animate-pulse [animation-play-state:paused] group-hover:[animation-play-state:running]" />
             </div>
           </div>
         ))}
