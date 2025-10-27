@@ -2,29 +2,23 @@
 
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumbs";
+import { BreadcrumbItem } from "@/components/ui/breadcrumbs";
 import { useProjectContext } from "@/components/project-context";
 import { PreviewModeToggle } from "@/components/preview/mode-toggle";
+import { PreviewPanelHeader } from "@/components/preview/panel-header";
 import { CodePanel } from "@/components/preview/code-panel/panel";
 import { Preview } from "@/components/preview/preview";
 import { PreviewFooter } from "@/components/preview/footer";
 import { useSandpackNavigation, useSandpack } from "@codesandbox/sandpack-react";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, ChevronsRight, RefreshCcw, Expand, Shrink } from "lucide-react";
+import { RefreshCcw, Expand, Shrink } from "lucide-react";
 
 export const PreviewPanel = () => {
-  const { panelOpen, setPanelOpen, fullscreen, setFullscreen, previewMode, isMobile } = useProjectContext();
+  const { fullscreen, setFullscreen, previewMode } = useProjectContext();
   const { refresh } = useSandpackNavigation();
   const { sandpack } = useSandpack();
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
   const hasError = sandpack.error !== null && sandpack.error !== undefined;
-
-  // Panel is only visible if panelOpen is true AND not on mobile
-  const isPanelVisible = panelOpen && !isMobile;
-
-  const togglePanel = () => {
-    setPanelOpen(!panelOpen);
-  };
 
   const handleFullscreen = () => {
     setFullscreen(!fullscreen);
@@ -43,23 +37,8 @@ export const PreviewPanel = () => {
       "flex-1 h-full gap-0 min-h-0 overflow-hidden flex flex-col",
       !fullscreen && "rounded-lg border bg-card text-card-foreground shadow-sm"
     )}>
-      <div className="flex items-center justify-between px-2 border-b h-12 bg-card rounded-t-md">
-        {!fullscreen && (
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <Button variant="ghost" size="sm" onClick={togglePanel}>
-                  {isPanelVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
-                </Button>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator variant="slash" />
-              <BreadcrumbItem>
-                <PreviewModeToggle />
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        )}
-        <div className="flex items-center gap-2">
+      <PreviewPanelHeader
+        actions={
           <div className={cn(
             "flex items-center gap-2 transition-all ease-[cubic-bezier(.77,0,.175,1)] duration-300",
             previewMode === "code" ? "translate-x-[20rem] opacity-0" : "translate-x-0 opacity-100"
@@ -73,8 +52,12 @@ export const PreviewPanel = () => {
               <span>{fullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
             </Button>
           </div>
-        </div>
-      </div>
+        }
+      >
+        <BreadcrumbItem>
+          <PreviewModeToggle />
+        </BreadcrumbItem>
+      </PreviewPanelHeader>
 
       <div className="flex-1 flex min-h-0 relative">
         <div className={cn(

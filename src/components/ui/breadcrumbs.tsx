@@ -74,7 +74,7 @@ function BreadcrumbSeparator({
 			data-slot="breadcrumb-separator"
 			role="presentation"
 			aria-hidden="true"
-			className={cn("[&>svg]:size-3.5", className)}
+			className={cn("[&>svg]:size-3.5", variant === "slash" && "text-xl", className)}
 			{...props}
 		>
 			{children ?? (variant === "slash" ? "/" : <ChevronRight />)}
