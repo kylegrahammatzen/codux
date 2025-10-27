@@ -8,7 +8,7 @@ export const ExploreUseCasesCard = () => {
     {
       Icon: FileText,
       showIcon: true,
-      className: "absolute -rotate-5 -translate-x-10 translate-y-0.25 z-0 rounded-r-3xl",
+      className: "absolute -rotate-5 -translate-x-10 translate-y-0.25 z-0 rounded-r-4xl",
     },
     {
       Icon: ChartPie,
@@ -18,7 +18,7 @@ export const ExploreUseCasesCard = () => {
     {
       Icon: FileText,
       showIcon: false,
-      className: "absolute rotate-5 translate-x-10 translate-y-0.25 z-0 rounded-l-3xl",
+      className: "absolute rotate-5 translate-x-10 translate-y-0.25 z-0 rounded-l-4xl",
     },
   ];
 
@@ -28,7 +28,7 @@ export const ExploreUseCasesCard = () => {
         {cards.map((card, i) => (
           <div
             key={i}
-            className={cn("w-20 h-28 bg-card border border-border/50 rounded-sm p-2 flex flex-col", card.className)}
+            className={cn("w-24 h-30 bg-card border border-border/50 rounded-sm p-2 flex flex-col", card.className)}
           >
             <div className="flex flex-col gap-2">
               <card.Icon className={cn("size-3 text-muted-foreground", !card.showIcon && "invisible")} />
