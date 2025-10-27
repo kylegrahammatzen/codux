@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Image, Mic, SquareDashedMousePointer } from "lucide-react";
+import { File, Mic, SquareDashedMousePointer } from "lucide-react";
 
 export const ChatInputActions = () => {
   return (
@@ -10,8 +10,8 @@ export const ChatInputActions = () => {
         <Mic className="size-4" />
       </Button>
       <Button variant="outline" size="sm" className="bg-card">
-        <Image className="size-4" />
-        Add photos
+        <File className="size-4" />
+        Add file
       </Button>
       {/* Edit button - disabled for now */}
       <div className="overflow-hidden -ml-2 pl-2">
