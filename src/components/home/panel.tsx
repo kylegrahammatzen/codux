@@ -8,21 +8,12 @@ import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 type HomePanelProps = {
   children?: React.ReactNode;
-  firstName?: string;
+  showChatInput?: boolean;
+  header?: React.ReactNode;
 };
 
 export const HomePanel = (props: HomePanelProps) => {
   const { sidebarOpen, setSidebarOpen, isMobile } = useHomeContext();
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
-  };
-
-  const greeting = props.firstName ? `${getGreeting()}, ${props.firstName}!` : `${getGreeting()}!`;
-
   const isSidebarVisible = sidebarOpen && !isMobile;
 
   const toggleSidebar = () => {
@@ -33,31 +24,26 @@ export const HomePanel = (props: HomePanelProps) => {
     <Card className="flex-1 h-full gap-0 py-0 min-h-0 min-w-max">
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-between px-2 border-b h-12 bg-card rounded-t-md">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={toggleSidebar}>
-              {isSidebarVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex-1 flex flex-col min-h-0 md:overflow-y-auto md:items-center md:justify-center">
-          <div className="flex flex-col h-full md:h-auto w-full max-w-2xl mx-auto px-4 md:px-0 min-h-0">
-            <div className="pt-8 pb-6 shrink-0">
-              <h1 className="text-2xl font-semibold text-foreground">{greeting}</h1>
-              <p className="text-xl font-semibold text-muted-foreground/70">Ready to assign your task?</p>
+          {props.header ? (
+            props.header
+          ) : (
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={toggleSidebar}>
+                {isSidebarVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
+              </Button>
             </div>
+          )}
+        </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto md:overflow-visible mb-8 md:mb-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {props.children}
-              </div>
-            </div>
+        <div className="flex-1 flex flex-col min-h-0 overflow-y-auto items-center justify-center">
+          {props.children}
+        </div>
+
+        {props.showChatInput !== false && (
+          <div className="w-full max-w-2xl mx-auto px-4 sm:px-0 pb-4">
+            <ChatInput />
           </div>
-        </div>
-
-        <div className="w-full max-w-2xl mx-auto px-4 sm:px-0 pb-4">
-          <ChatInput />
-        </div>
+        )}
       </div>
     </Card>
   );

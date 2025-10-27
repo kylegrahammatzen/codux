@@ -9,7 +9,8 @@ type HomeLayoutProps = {
   children: React.ReactNode;
   header: React.ReactNode;
   pathname: string;
-  firstName?: string;
+  panelHeader?: React.ReactNode;
+  showChatInput?: boolean;
 };
 
 export const HomeLayout = (props: HomeLayoutProps) => {
@@ -45,7 +46,9 @@ export const HomeLayout = (props: HomeLayoutProps) => {
           </div>
         </div>
 
-        <HomePanel firstName={props.firstName}>{props.children}</HomePanel>
+        <HomePanel header={props.panelHeader} showChatInput={props.showChatInput}>
+          {props.children}
+        </HomePanel>
       </div>
     </div>
   );
