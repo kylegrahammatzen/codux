@@ -98,7 +98,7 @@ export const StagedFiles = (props: StagedFilesProps) => {
         transitionProperty: "opacity, height",
       }}
     >
-      <ScrollArea key={props.files.length} orientation="horizontal" className="pb-3">
+      <ScrollArea key={props.files.length} orientation="horizontal">
         <div className="flex items-center gap-2.5 mt-2">
           {props.files.map((file) => filePreview(file))}
         </div>
