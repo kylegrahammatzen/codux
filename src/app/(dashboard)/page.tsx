@@ -2,6 +2,7 @@ import { hasSession } from "@/lib/auth";
 import { HomeProvider } from "@/components/home-context";
 import { HomeLayout } from "@/components/home-layout";
 import { DashboardHeader } from "@/components/dashboard-header";
+import { UserDropdown } from "@/components/user-dropdown";
 import { headers } from "next/headers";
 import { CreateTaskCard } from "@/components/home/examples/create-task-card";
 import { ConnectCalendarCard } from "@/components/home/examples/connect-calendar-card";
@@ -22,7 +23,11 @@ export default async function Home() {
       <HomeLayout
         pathname={pathname}
         firstName={firstName}
-        header={<DashboardHeader user={session.user} />}
+        header={
+          <DashboardHeader>
+            <UserDropdown user={session.user} />
+          </DashboardHeader>
+        }
       >
         <CreateTaskCard />
         <ConnectCalendarCard />

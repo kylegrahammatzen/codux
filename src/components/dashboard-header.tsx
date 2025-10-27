@@ -1,19 +1,23 @@
+"use client";
+
 import { AppHeader } from "@/components/app-header";
-import { UserDropdown } from "@/components/user-dropdown";
-import type { User } from "@/lib/auth";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type DashboardHeaderProps = {
-  user: User;
+  children?: React.ReactNode;
 };
 
 export const DashboardHeader = (props: DashboardHeaderProps) => {
+  const router = useRouter();
+
+  const handleLogoClick = () => {
+    router.push("/");
+  };
+
   return (
     <AppHeader>
-      <Link href="/">
-        <span className="text-sm font-medium">Logo</span>
-      </Link>
-      <UserDropdown user={props.user} />
+      <span className="text-sm font-medium cursor-pointer" onClick={handleLogoClick}>Logo</span>
+      {props.children}
     </AppHeader>
   );
 };
