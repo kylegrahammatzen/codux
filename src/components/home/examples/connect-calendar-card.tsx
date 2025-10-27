@@ -1,0 +1,54 @@
+import { ExampleCard } from "./example-card";
+import { Skeleton } from "@/components/ui/skeleton";
+
+export const ConnectCalendarCard = () => {
+  const currentMonth = new Date().toLocaleString('en', { month: 'short' });
+  const currentYear = new Date().getFullYear();
+
+  // Define which days are filled (indices 0,1 for first two, and 15,16,17 for last three on desktop)
+  const filledDays = [0, 1, 15, 16, 17];
+
+  return (
+    <ExampleCard title="Connect calendar" description="Sync your schedule.">
+      <div className="w-full bg-card p-2 rounded-sm">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs font-medium text-foreground">{currentMonth}</span>
+          <span className="text-xs font-medium text-muted-foreground/70">{currentYear}</span>
+        </div>
+        {/* Mobile: 15 squares (3 rows x 5 cols) */}
+        <div className="grid md:hidden lg:grid grid-cols-5 lg:grid-cols-6 gap-y-1 gap-x-1">
+          {Array.from({ length: 15 }).map((_, i) => (
+            filledDays.includes(i) ? (
+              <div key={i} className="aspect-square bg-card border border-border rounded-[2px]" />
+            ) : (
+              <Skeleton key={i} className="aspect-square rounded-[2px]" />
+            )
+          ))}
+          {/* Show extra 3 squares on lg (desktop) */}
+          {Array.from({ length: 3 }).map((_, i) => {
+            const index = 15 + i;
+            return (
+              <div key={`extra-${i}`} className="hidden lg:block">
+                {filledDays.includes(index) ? (
+                  <div className="aspect-square bg-card border border-border rounded-[2px]" />
+                ) : (
+                  <Skeleton className="aspect-square rounded-[2px]" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+        {/* Tablet (md): 18 squares (3 rows x 6 cols) */}
+        <div className="hidden md:grid lg:hidden grid-cols-6 gap-y-1 gap-x-1">
+          {Array.from({ length: 18 }).map((_, i) => (
+            filledDays.includes(i) ? (
+              <div key={i} className="aspect-square bg-card border border-border rounded-[2px]" />
+            ) : (
+              <Skeleton key={i} className="aspect-square rounded-[2px]" />
+            )
+          ))}
+        </div>
+      </div>
+    </ExampleCard>
+  );
+};
