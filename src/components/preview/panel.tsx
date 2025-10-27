@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumbs";
 import { useProjectContext } from "@/components/project-context";
 import { PreviewModeToggle } from "@/components/preview/mode-toggle";
 import { CodePanel } from "@/components/preview/code-panel/panel";
@@ -44,17 +44,21 @@ export const PreviewPanel = () => {
       !fullscreen && "rounded-lg border bg-card text-card-foreground shadow-sm"
     )}>
       <div className="flex items-center justify-between px-2 border-b h-12 bg-card rounded-t-md">
-        <div className="flex items-center gap-2">
-          {!fullscreen && (
-            <>
-              <Button variant="ghost" size="sm" onClick={togglePanel}>
-                {isPanelVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
-              </Button>
-              <Separator orientation="vertical" className="h-6" />
-              <PreviewModeToggle />
-            </>
-          )}
-        </div>
+        {!fullscreen && (
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Button variant="ghost" size="sm" onClick={togglePanel}>
+                  {isPanelVisible ? <ChevronsLeft className="size-4" /> : <ChevronsRight className="size-4" />}
+                </Button>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator variant="slash" />
+              <BreadcrumbItem>
+                <PreviewModeToggle />
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        )}
         <div className="flex items-center gap-2">
           <div className={cn(
             "flex items-center gap-2 transition-all ease-[cubic-bezier(.77,0,.175,1)] duration-300",
