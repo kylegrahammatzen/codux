@@ -3,10 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ChatInputActions } from "@/components/chat/input-actions";
+import { cn } from "@/lib/utils";
 
-export const ChatInput = () => {
+type ChatInputProps = {
+  className?: string;
+};
+
+export const ChatInput = (props: ChatInputProps) => {
   return (
-    <div className="rounded-md relative px-2 py-2 flex flex-col gap-2 border border-border focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] ease-[cubic-bezier(.25,.46,.45,.94)] duration-200 outline-none">
+    <div className={cn("rounded-md relative px-2 py-2 flex flex-col gap-2 border border-border focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 transition-[color,box-shadow,border-color] ease-[cubic-bezier(.25,.46,.45,.94)] duration-200 outline-none", props.className)}>
       <Textarea
         placeholder="Type a message..."
         className="bg-transparent border-none shadow-none min-h-20 resize-none focus-visible:ring-0 px-0"

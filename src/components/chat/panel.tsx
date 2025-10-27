@@ -24,7 +24,7 @@ export const ChatPanel = () => {
         <p className="text-muted-foreground text-sm">Chat panel</p>
       </div>
 
-      <ChatInput />
+      <ChatInput className="m-1.5" />
     </div>
   );
 };
