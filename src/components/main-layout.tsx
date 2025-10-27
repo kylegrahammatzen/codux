@@ -1,17 +1,18 @@
 "use client";
 
-import { useHomeContext } from "@/components/home-context";
+import { useMainContext } from "@/components/main-context";
 import { HomeSidebar } from "@/components/home/sidebar";
+import { HomePanel } from "@/components/home/panel";
 import { cn } from "@/lib/utils";
 
-type HomeLayoutProps = {
+type MainLayoutProps = {
   children: React.ReactNode;
   header: React.ReactNode;
   pathname: string;
 };
 
-export const HomeLayout = (props: HomeLayoutProps) => {
-  const { sidebarOpen, isMobile } = useHomeContext();
+export const MainLayout = (props: MainLayoutProps) => {
+  const { sidebarOpen, isMobile } = useMainContext();
   const isSidebarVisible = sidebarOpen && !isMobile;
 
   return (

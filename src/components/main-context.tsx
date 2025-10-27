@@ -3,24 +3,24 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { useMobile } from "@/hooks/use-mobile";
 
-type HomeContextType = {
+type MainContextType = {
   sidebarOpen: boolean;
   setSidebarOpen: (isOpen: boolean) => void;
   isMobile: boolean;
 };
 
-const HomeContext = createContext<HomeContextType | undefined>(undefined);
+const MainContext = createContext<MainContextType | undefined>(undefined);
 
-type HomeProviderProps = {
+type MainProviderProps = {
   children: ReactNode;
 };
 
-export const HomeProvider = (props: HomeProviderProps) => {
+export const MainProvider = (props: MainProviderProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isMobile = useMobile(1280);
 
   return (
-    <HomeContext.Provider
+    <MainContext.Provider
       value={{
         sidebarOpen,
         setSidebarOpen,
@@ -28,14 +28,14 @@ export const HomeProvider = (props: HomeProviderProps) => {
       }}
     >
       {props.children}
-    </HomeContext.Provider>
+    </MainContext.Provider>
   );
 };
 
-export const useHomeContext = () => {
-  const context = useContext(HomeContext);
+export const useMainContext = () => {
+  const context = useContext(MainContext);
   if (context === undefined) {
-    throw new Error("useHomeContext must be used within a HomeProvider");
+    throw new Error("useMainContext must be used within a MainProvider");
   }
   return context;
 };
