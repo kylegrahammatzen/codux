@@ -39,10 +39,10 @@ function ScrollBar({
 			data-slot="scroll-area-scrollbar"
 			orientation={orientation}
 			className={cn(
-				"m-1 flex touch-none p-px opacity-0 transition-[border-color,opacity] delay-200 select-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:duration-100 data-scrolling:opacity-100 data-scrolling:delay-0 data-scrolling:duration-100",
-				orientation === "vertical" && "w-2.5 border-l border-l-transparent",
+				"flex touch-none p-px opacity-0 transition-[border-color,opacity] delay-200 select-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:duration-100 data-scrolling:opacity-100 data-scrolling:delay-0 data-scrolling:duration-100",
+				orientation === "vertical" && "m-1 w-2.5 border-l border-l-transparent",
 				orientation === "horizontal" &&
-					"h-2.5 flex-col border-t border-t-transparent",
+				"mx-1 h-2.5 flex-col border-t border-t-transparent",
 				className
 			)}
 			{...props}
