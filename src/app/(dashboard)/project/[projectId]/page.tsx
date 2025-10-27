@@ -32,22 +32,6 @@ export default async function ProjectPage(props: ProjectPageProps) {
       <EditorLayout>
         <AppHeader>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon-sm" className="bg-white">
-              <svg
-                className="size-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </Button>
-
             <span className="text-sm font-medium">Logo</span>
 
             <Separator orientation="vertical" className="h-4 rotate-12" />
@@ -59,10 +43,11 @@ export default async function ProjectPage(props: ProjectPageProps) {
             <Button
               variant="outline"
               size="sm"
-              className="bg-white"
+              className="bg-card"
               render={<Link href="https://github.com/kylegrahammatzen/codux" target="_blank" rel="noopener noreferrer" />}
             >
-              <Image src="/github-mark.png" alt="GitHub" width={20} height={20} className="size-5" />
+              GH
+              {/* <Image src="/github-mark.png" alt="GitHub" width={20} height={20} className="size-5" /> */}
             </Button>
             <Button size="sm">Deploy</Button>
             <UserDropdown user={session.user} />

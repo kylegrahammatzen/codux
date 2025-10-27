@@ -15,7 +15,7 @@ export default async function DashboardLayout(props: DashboardLayoutProps) {
     }
 
     return (
-        <div className="bg-gray-100 h-full flex flex-col overflow-hidden">
+        <div className="bg-background h-full flex flex-col overflow-hidden">
             {props.children}
         </div>
     );
