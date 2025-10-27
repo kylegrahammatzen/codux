@@ -3,14 +3,15 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { useMobile } from "@/hooks/use-mobile";
 
-type ViewportMode = "desktop" | "tablet" | "mobile" | "custom";
+export type PreviewMode = "preview" | "code";
 
-type Dimensions = {
-  width: number;
-  height: number;
+export type ProjectFiles = Record<string, string>;
+
+export type ProjectDependencies = Record<string, string>;
+
+export type ProjectOptions = {
+  externalResources?: string[];
 };
-
-type PreviewMode = "preview" | "code";
 
 type ProjectContextType = {
   // Layout state
@@ -19,12 +20,6 @@ type ProjectContextType = {
 
   // Responsive state
   isMobile: boolean;
-
-  // Preview viewport state
-  viewportMode: ViewportMode;
-  setViewportMode: (mode: ViewportMode) => void;
-  customDimensions: Dimensions | null;
-  setCustomDimensions: (dims: Dimensions | null) => void;
 
   // UI mode state
   previewMode: PreviewMode;
@@ -49,10 +44,6 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
   // Responsive state
   const isMobile = useMobile(1280); // Below xl breakpoint
 
-  // Viewport state
-  const [viewportMode, setViewportMode] = useState<ViewportMode>("desktop");
-  const [customDimensions, setCustomDimensions] = useState<Dimensions | null>(null);
-
   // UI mode state
   const [previewMode, setPreviewMode] = useState<PreviewMode>("preview");
   const [fullscreen, setFullscreenState] = useState(false);
@@ -60,11 +51,9 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
 
   const setFullscreen = (value: boolean) => {
     if (value) {
-      // Entering fullscreen - save current panel state and close panel
       setPreviousPanelState(panelOpen);
       setPanelOpen(false);
     } else {
-      // Exiting fullscreen - restore previous panel state
       setPanelOpen(previousPanelState);
     }
     setFullscreenState(value);
@@ -76,10 +65,6 @@ export const ProjectProvider = (props: ProjectProviderProps) => {
         panelOpen,
         setPanelOpen,
         isMobile,
-        viewportMode,
-        setViewportMode,
-        customDimensions,
-        setCustomDimensions,
         previewMode,
         setPreviewMode,
         fullscreen,
