@@ -1,9 +1,8 @@
-import { hasSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { DashboardLayout } from "@/components/dashboard-layout";
+import { UserProfileContent } from "./user-profile-content";
 
 type UserProfilePageProps = {
   params: Promise<{
@@ -12,8 +11,6 @@ type UserProfilePageProps = {
 };
 
 export default async function UserProfilePage(props: UserProfilePageProps) {
-  const session = await hasSession();
-
   const params = await props.params;
   const username = params.username;
 
@@ -31,19 +28,8 @@ export default async function UserProfilePage(props: UserProfilePageProps) {
     .limit(1);
 
   if (!userData[0]) {
-    redirect(`/@${session.user.username}`);
+    redirect("/");
   }
 
-  const profileUser = userData[0];
-  const isOwnProfile = session.user.id === profileUser.id;
-
-  return (
-    <DashboardLayout user={session.user}>
-      <div>
-        <h1>@{profileUser.displayUsername}</h1>
-        <p>{profileUser.name}</p>
-        <p>{isOwnProfile ? "This is your profile" : "Viewing another user's profile"}</p>
-      </div>
-    </DashboardLayout>
-  );
+  return <UserProfileContent profileUser={userData[0]} />;
 }
