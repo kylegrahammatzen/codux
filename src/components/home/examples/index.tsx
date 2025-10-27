@@ -1,19 +1,10 @@
 import { ExampleCard } from "./example-card";
+import { CreateTaskCard } from "./create-task-card";
+import { ConnectCalendarCard } from "./connect-calendar-card";
+import { BrowseAgentsCard } from "./browse-agents-card";
 
 export const ExampleCards = () => {
   const examples = [
-    {
-      title: "Create new task",
-      description: "Start something new.",
-    },
-    {
-      title: "Connect calendar",
-      description: "Sync your schedule.",
-    },
-    {
-      title: "Browse available agents",
-      description: "See what agents can do.",
-    },
     {
       title: "Upload your first file",
       description: "Drop in a doc.",
@@ -30,9 +21,12 @@ export const ExampleCards = () => {
 
   return (
     <>
+      <CreateTaskCard />
+      <ConnectCalendarCard />
+      <BrowseAgentsCard />
       {examples.map((example, i) => (
         <ExampleCard key={i} title={example.title} description={example.description}>
-          <span className="text-4xl font-bold text-muted-foreground">{i + 1}</span>
+          <span className="text-4xl font-bold text-muted-foreground">{i + 4}</span>
         </ExampleCard>
       ))}
     </>
