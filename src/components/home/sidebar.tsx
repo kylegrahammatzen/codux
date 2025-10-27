@@ -5,18 +5,26 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Plus, Home, Compass, Headphones, Settings, Gem } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type HomeSidebarProps = {
   pathname: string;
 };
 
 export const HomeSidebar = (props: HomeSidebarProps) => {
+  const router = useRouter();
   const isActive = (path: string) => props.pathname === path;
+
+  const handleStartChat = () => {
+    if (props.pathname !== "/") {
+      router.push("/");
+    }
+  };
 
   return (
     <div className="flex flex-col justify-between h-full pt-2 min-w-max">
       <div className="flex flex-col">
-        <Button size="sm">
+        <Button size="sm" onClick={handleStartChat}>
           <Plus className="size-4" />
           Start Chat
         </Button>
