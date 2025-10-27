@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ChatInputActions } from "@/components/chat/input-actions";
 import { cn } from "@/lib/utils";
+import { SendHorizontal } from "lucide-react";
 
 type ChatInputProps = {
   className?: string;
@@ -22,7 +23,7 @@ export const ChatInput = (props: ChatInputProps) => {
         <ChatInputActions />
 
         <Button variant="default" size="icon-sm">
-          <span className="font-semibold">S</span>
+          <SendHorizontal />
         </Button>
       </div>
     </div>
