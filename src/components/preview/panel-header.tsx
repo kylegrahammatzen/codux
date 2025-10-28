@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumbs";
-import { useProjectContext } from "@/components/project-context";
+import { useProjectContext } from "@/providers/project-provider";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { BreadcrumbItem } from "@/components/ui/breadcrumbs";
-import { useProjectContext } from "@/components/project-context";
+import { useProjectContext } from "@/providers/project-provider";
 import { PreviewModeToggle } from "@/components/preview/mode-toggle";
 import { PreviewPanelHeader } from "@/components/preview/panel-header";
 import { CodePanel } from "@/components/preview/code-panel/panel";

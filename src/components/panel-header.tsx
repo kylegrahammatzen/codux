@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumbs";
-import { useMainContext } from "@/components/main-context";
+import { useMainContext } from "@/providers/main-provider";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 type PanelHeaderProps = {

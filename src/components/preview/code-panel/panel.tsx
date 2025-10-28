@@ -1,6 +1,6 @@
 "use client";
 
-import { useProjectContext } from "@/components/project-context";
+import { useProjectContext } from "@/providers/project-provider";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftToLine } from "lucide-react";
 import { FileTree } from "./file-tree";

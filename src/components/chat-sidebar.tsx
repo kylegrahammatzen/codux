@@ -1,6 +1,6 @@
 "use client";
 
-import { useProjectContext } from "@/components/project-context";
+import { useProjectContext } from "@/providers/project-provider";
 import { CollapsiblePanel } from "@/components/collapsible-panel";
 import { ChatPanel } from "@/components/chat/panel";
 import { Card } from "@/components/ui/card";

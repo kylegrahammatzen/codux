@@ -1,6 +1,6 @@
 "use client";
 
-import { useProjectContext } from "@/components/project-context";
+import { useProjectContext } from "@/providers/project-provider";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { FileItem } from "./file-item";
 import { FolderItem } from "./folder-item";

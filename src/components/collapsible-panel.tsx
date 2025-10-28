@@ -13,7 +13,7 @@ export const CollapsiblePanel = (props: CollapsiblePanelProps) => {
   return (
     <div
       className={cn(
-        "flex-shrink-0 transition-all duration-300",
+        "transition-all duration-300",
         props.isOpen ? "mr-2" : "",
         props.className
       )}
