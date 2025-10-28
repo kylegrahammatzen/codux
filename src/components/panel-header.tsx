@@ -1,9 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumbs";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem } from "@/components/ui/breadcrumbs";
 import { useMainContext } from "@/providers/main-provider";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 type PanelHeaderProps = {
   children?: React.ReactNode;
@@ -28,7 +29,7 @@ export const PanelHeader = (props: PanelHeaderProps) => {
           </BreadcrumbItem>
           {props.children && (
             <>
-              <BreadcrumbSeparator />
+              <Separator orientation="vertical" className="h-4" />
               {props.children}
             </>
           )}

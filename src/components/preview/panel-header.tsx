@@ -1,10 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumbs";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem } from "@/components/ui/breadcrumbs";
 import { useProjectContext } from "@/providers/project-provider";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Separator } from "../ui/separator";
 
 type PreviewPanelHeaderProps = {
   children?: React.ReactNode;
@@ -34,7 +35,7 @@ export const PreviewPanelHeader = (props: PreviewPanelHeaderProps) => {
             </BreadcrumbItem>
             {props.children && (
               <>
-                <BreadcrumbSeparator variant="slash" />
+                <Separator orientation="vertical" className="h-4" />
                 {props.children}
               </>
             )}
