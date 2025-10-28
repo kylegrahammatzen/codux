@@ -8,6 +8,8 @@ import { hasSession } from "@/lib/auth";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { getProject } from "@/actions/project";
+import { ProjectThreadManager } from "@/components/project/thread-manager";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -21,14 +23,20 @@ export default async function ProjectPage(props: ProjectPageProps) {
   const params = await props.params;
   const projectId = params.projectId;
 
-  // TODO: Check if project exists in database
-  // For now, just validate projectId format
   if (!projectId || projectId.length === 0) {
     notFound();
   }
 
-  // TODO: Later fetch from database based on projectId
-  const files = {
+  const projectResult = await getProject(projectId);
+
+  if (!projectResult.success || !projectResult.project) {
+    notFound();
+  }
+
+  const project = projectResult.project;
+
+  // Use project files if they exist, otherwise use default files
+  const files = (project.files as Record<string, string>) ?? {
     "/App.tsx": `export default function App() {
   return (
     <div className="p-8">
@@ -60,7 +68,7 @@ root.render(
     ),
   };
 
-  const dependencies = {
+  const dependencies = (project.dependencies as Record<string, string>) ?? {
     react: "^19.2.0",
     "react-dom": "^19.2.0",
   };
@@ -82,7 +90,7 @@ root.render(
               </BreadcrumbItem>
               <BreadcrumbSeparator variant="slash" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Untitled Project</BreadcrumbPage>
+                <BreadcrumbPage>{project.name}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -102,6 +110,7 @@ root.render(
           </div>
         </AppHeader>
       </EditorLayout>
+      <ProjectThreadManager projectId={projectId} initialThreadId={project.tamboThreadId ?? undefined} />
     </ProjectProvider>
   );
 }
