@@ -92,7 +92,7 @@ export const ScrollableMessageContainer = React.forwardRef<
     <div
       ref={scrollViewportRef}
       onScroll={handleScroll}
-      className={cn("flex-1 max-w-md overflow-y-auto", className)}
+      className={cn("flex-1 max-w-md overflow-y-scroll", className)}
       {...props}
     >
       {children}
