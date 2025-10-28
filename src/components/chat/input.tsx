@@ -101,6 +101,7 @@ export const ChatInput = (props: ChatInputProps) => {
                 ref={fileInputRef}
                 type="file"
                 multiple
+                accept="image/*"
                 onChange={handleFileChange}
                 className="hidden"
                 aria-hidden="true"
