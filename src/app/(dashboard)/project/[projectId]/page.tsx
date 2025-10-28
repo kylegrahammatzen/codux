@@ -110,7 +110,7 @@ root.render(
           </div>
         </AppHeader>
       </EditorLayout>
-      <ProjectThreadManager projectId={projectId} initialThreadId={project.tamboThreadId ?? undefined} />
+      <ProjectThreadManager projectId={projectId} hasExistingThreadId={!!project.tamboThreadId} />
     </ProjectProvider>
   );
 }
