@@ -13,17 +13,23 @@ type ChatInputProps = {
 };
 
 export const ChatInput = (props: ChatInputProps) => {
-  const { value, setValue, submit, images, removeImage, clearImages, addImages } = useTamboThreadInput();
+  const { value, setValue, submit, images, removeImage, clearImages, addImages, isPending } = useTamboThreadInput();
   const { cancel } = useTamboThread();
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [displayValue, setDisplayValue] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  React.useEffect(() => {
+    setDisplayValue(value);
+  }, [value]);
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
       if ((!value.trim() && images.length === 0) || isSubmitting) return;
 
+      setDisplayValue("");
       setIsSubmitting(true);
 
       if (images.length > 0) {
@@ -33,17 +39,16 @@ export const ChatInput = (props: ChatInputProps) => {
       try {
         await submit({ streamResponse: true });
         setValue("");
-        setTimeout(() => {
-          textareaRef.current?.focus();
-        }, 0);
       } catch (error) {
         console.error("Failed to submit message:", error);
+        setDisplayValue(value);
         await cancel();
       } finally {
         setIsSubmitting(false);
+        textareaRef.current?.focus();
       }
     },
-    [value, submit, setValue, cancel, isSubmitting, images, clearImages],
+    [value, submit, setValue, cancel, images, clearImages, isSubmitting],
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -74,11 +79,14 @@ export const ChatInput = (props: ChatInputProps) => {
 
         <Textarea
           ref={textareaRef}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          value={displayValue}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setDisplayValue(e.target.value);
+          }}
           onKeyDown={handleKeyDown}
           placeholder="Ask about the code..."
-          className="bg-transparent border-none shadow-none min-h-20 resize-none focus-visible:ring-0 px-0"
+          className="bg-transparent border-none shadow-none min-h-20 resize-none focus-visible:ring-0 px-0 min-w-max"
         />
 
         <div className="flex justify-between items-center">
@@ -108,7 +116,7 @@ export const ChatInput = (props: ChatInputProps) => {
             </div>
           </div>
 
-          <Button type="submit" variant="default" size="icon-sm" disabled={!value.trim() && images.length === 0}>
+          <Button type="submit" variant="default" size="icon-sm" disabled={isPending || isSubmitting || (!displayValue.trim() && images.length === 0)}>
             <SendHorizontal />
           </Button>
         </div>
