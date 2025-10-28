@@ -12,6 +12,8 @@ import {
 import { cn } from "@/lib/utils";
 import { type TamboThreadMessage, useTambo } from "@tambo-ai/react";
 import { type VariantProps } from "tailwind-variants";
+import { Loader2 } from "lucide-react";
+import { checkHasContent } from "@/lib/thread-hooks";
 import * as React from "react";
 
 /**
@@ -129,13 +131,16 @@ const ThreadContentMessages = React.forwardRef<
   const { messages, isGenerating, variant } = useThreadContentContext();
 
   const filteredMessages = messages.filter(
-    (message) => message.role !== "system" && !message.parentMessageId,
+    (message) =>
+      message.role !== "system" &&
+      !message.parentMessageId &&
+      (message.role !== "assistant" || checkHasContent(message.content)),
   );
 
   return (
     <div
       ref={ref}
-      className={cn("flex flex-col gap-2", className)}
+      className={cn("flex flex-col gap-3", className)}
       data-slot="thread-content-messages"
       {...props}
     >
@@ -144,8 +149,7 @@ const ThreadContentMessages = React.forwardRef<
           <div
             key={
               message.id ??
-              `${message.role}-${
-                message.createdAt ?? Date.now()
+              `${message.role}-${message.createdAt ?? Date.now()
               }-${message.content?.toString().substring(0, 10)}`
             }
             data-slot="thread-content-item"
@@ -156,32 +160,42 @@ const ThreadContentMessages = React.forwardRef<
               variant={variant}
               isLoading={isGenerating && index === filteredMessages.length - 1}
               className={cn(
-                "flex w-full",
+                "flex",
                 message.role === "assistant" ? "justify-start" : "justify-end",
               )}
             >
-              <div
-                className={cn(
-                  "flex flex-col max-w-full overflow-hidden",
-                  message.role === "assistant" ? "w-full" : "max-w-3xl",
-                )}
-              >
-                <ReasoningInfo />
-                <MessageImages />
-                <MessageContent
-                  className={
-                    message.role === "assistant"
-                      ? "text-primary font-sans"
-                      : "text-primary bg-container hover:bg-backdrop font-sans"
-                  }
-                />
-                <ToolcallInfo />
-                <MessageRenderedComponentArea className="w-full" />
-              </div>
+              <ReasoningInfo />
+              <MessageImages />
+              <MessageContent
+                className={
+                  message.role === "assistant"
+                    ? "text-foreground font-sans bg-accent"
+                    : "text-foreground font-sans bg-muted"
+                }
+              />
+              <ToolcallInfo />
+              <MessageRenderedComponentArea className="w-full" />
             </Message>
           </div>
         );
       })}
+      {isGenerating && (
+        filteredMessages.length === 0 ||
+        filteredMessages[filteredMessages.length - 1]?.role !== "assistant" ||
+        !checkHasContent(filteredMessages[filteredMessages.length - 1]?.content)
+      ) && (
+        <div
+          data-slot="thread-content-loading"
+          className="flex justify-start"
+        >
+          <div className="flex flex-col w-fit max-w-[80%]">
+            <div className="relative flex items-center gap-2 rounded-md px-4 py-1.5 text-[15px] leading-normal transition-all duration-200 font-normal text-foreground font-sans bg-accent break-words">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Thinking...
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 });
