@@ -1,5 +1,5 @@
-import { EditorLayout } from "@/components/editor-layout";
-import { ProjectProvider } from "@/components/project-context";
+import { EditorLayout } from "@/components/preview/editor-layout";
+import { ProjectProvider } from "@/providers/project-provider";
 import { AppHeader } from "@/components/app-header";
 import { UserDropdown } from "@/components/user-dropdown";
 import { Button } from "@/components/ui/button";

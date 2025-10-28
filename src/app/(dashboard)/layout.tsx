@@ -1,6 +1,6 @@
 import { hasSession } from "@/lib/auth";
 import { checkOnboardingCompleted } from "@/actions/onboarding";
-import { SessionProvider } from "@/components/session-provider";
+import { SessionProvider } from "@/providers/session-provider";
 import { redirect } from "next/navigation";
 
 type DashboardLayoutProps = {

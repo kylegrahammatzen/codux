@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "@/components/session-provider";
+import { useSession } from "@/providers/session-provider";
 
 type UserProfileContentProps = {
   profileUser: {

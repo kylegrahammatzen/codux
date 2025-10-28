@@ -1,6 +1,6 @@
 "use client";
 
-import { useMainContext } from "@/components/main-context";
+import { useMainContext } from "@/providers/main-provider";
 import { HomeSidebar } from "@/components/home/sidebar";
 import { CollapsiblePanel } from "@/components/collapsible-panel";
 
