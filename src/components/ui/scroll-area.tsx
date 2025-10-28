@@ -7,9 +7,13 @@ function ScrollArea({
 	className,
 	children,
 	orientation,
+	viewportRef,
+	onScroll,
 	...props
 }: React.ComponentProps<typeof BaseScrollArea.Root> & {
 	orientation?: "horizontal" | "vertical"
+	viewportRef?: React.RefObject<HTMLDivElement | null>
+	onScroll?: (event: React.UIEvent<HTMLDivElement>) => void
 }) {
 	return (
 		<BaseScrollArea.Root
@@ -18,6 +22,8 @@ function ScrollArea({
 			{...props}
 		>
 			<BaseScrollArea.Viewport
+				ref={viewportRef}
+				onScroll={onScroll}
 				data-slot="scroll-area-viewport"
 				className="focus-visible:ring-ring/50 size-full overscroll-contain rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline"
 			>
