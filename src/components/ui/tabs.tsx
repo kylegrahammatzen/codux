@@ -52,7 +52,7 @@ function TabsList({
 		<BaseTabs.List
 			data-slot="tabs-list"
 			className={cn(
-				"text-muted-foreground relative z-0 inline-flex h-9 w-fit items-center justify-center gap-x-1 p-1",
+				"text-muted-foreground relative z-0 inline-flex h-8 w-fit items-center justify-center gap-x-1 p-1",
 				variant === "capsule" ? "bg-card border rounded-lg shadow-xs" : "",
 				className
 			)}
@@ -72,7 +72,7 @@ function TabsTrigger({
 		<BaseTabs.Tab
 			data-slot="tabs-trigger"
 			className={cn(
-				"text-muted-foreground data-selected:text-foreground focus-visible:ring-ring/50 z-[1] inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1 text-sm text-nowrap whitespace-nowrap outline-none focus-visible:ring-[3px] cursor-pointer select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+				"text-muted-foreground data-selected:text-foreground focus-visible:ring-ring/50 z-[1] inline-flex flex-1 items-center justify-center gap-1 rounded-md px-2 py-0.5 text-sm text-nowrap whitespace-nowrap outline-none focus-visible:ring-[3px] cursor-pointer select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
 				className
 			)}
 			{...props}

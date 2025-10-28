@@ -1,5 +1,6 @@
 import { hasSession } from "@/lib/auth";
 import { checkOnboardingCompleted } from "@/actions/onboarding";
+import { SessionProvider } from "@/providers/session-provider";
 import { redirect } from "next/navigation";
 
 type DashboardLayoutProps = {
@@ -15,8 +16,10 @@ export default async function DashboardLayout(props: DashboardLayoutProps) {
     }
 
     return (
-        <div className="bg-background h-full flex flex-col overflow-hidden root">
-            {props.children}
-        </div>
+        <SessionProvider session={session}>
+            <div className="bg-background h-full flex flex-col overflow-hidden root">
+                {props.children}
+            </div>
+        </SessionProvider>
     );
 } 

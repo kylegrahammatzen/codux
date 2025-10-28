@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Plus, Home, Compass, Headphones, Settings, Gem } from "lucide-react";
+import { Plus, Home, Search, Folder, HatGlasses, Settings, Gem } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -21,6 +21,12 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
     }
   };
 
+  const handleNavigation = (path: string) => {
+    if (props.pathname !== path) {
+      router.push(path);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-between h-full pt-2 min-w-max">
       <div className="flex flex-col">
@@ -35,6 +41,7 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => handleNavigation("/")}
             className={cn(
               "justify-start",
               isActive("/") && "bg-accent"
@@ -46,28 +53,43 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => handleNavigation("/search")}
             className={cn(
               "justify-start",
-              isActive("/explore") && "bg-accent"
+              isActive("/search") && "bg-accent"
             )}
           >
-            <Compass className="size-4" />
-            Explore
+            <Search className="size-4" />
+            Search
           </Button>
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => handleNavigation("/projects")}
             className={cn(
               "justify-start",
-              isActive("/assistants") && "bg-accent"
+              isActive("/projects") && "bg-accent"
             )}
           >
-            <Headphones className="size-4" />
-            Assistants
+            <Folder className="size-4" />
+            Projects
           </Button>
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => handleNavigation("/agents")}
+            className={cn(
+              "justify-start",
+              isActive("/agents") && "bg-accent"
+            )}
+          >
+            <HatGlasses className="size-4" />
+            Agents
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleNavigation("/settings")}
             className={cn(
               "justify-start",
               isActive("/settings") && "bg-accent"

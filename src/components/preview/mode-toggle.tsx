@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useProjectContext } from "@/components/project-context";
+import { useProjectContext } from "@/providers/project-provider";
 
 export const PreviewModeToggle = () => {
   const { setPreviewMode } = useProjectContext();

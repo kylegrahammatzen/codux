@@ -7,9 +7,13 @@ function ScrollArea({
 	className,
 	children,
 	orientation,
+	viewportRef,
+	onScroll,
 	...props
 }: React.ComponentProps<typeof BaseScrollArea.Root> & {
 	orientation?: "horizontal" | "vertical"
+	viewportRef?: React.RefObject<HTMLDivElement | null>
+	onScroll?: (event: React.UIEvent<HTMLDivElement>) => void
 }) {
 	return (
 		<BaseScrollArea.Root
@@ -18,6 +22,8 @@ function ScrollArea({
 			{...props}
 		>
 			<BaseScrollArea.Viewport
+				ref={viewportRef}
+				onScroll={onScroll}
 				data-slot="scroll-area-viewport"
 				className="focus-visible:ring-ring/50 size-full overscroll-contain rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline"
 			>
@@ -39,10 +45,10 @@ function ScrollBar({
 			data-slot="scroll-area-scrollbar"
 			orientation={orientation}
 			className={cn(
-				"m-1 flex touch-none p-px opacity-0 transition-[border-color,opacity] delay-200 select-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:duration-100 data-scrolling:opacity-100 data-scrolling:delay-0 data-scrolling:duration-100",
-				orientation === "vertical" && "w-2.5 border-l border-l-transparent",
+				"flex touch-none p-px opacity-0 transition-[border-color,opacity] delay-200 select-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:duration-100 data-scrolling:opacity-100 data-scrolling:delay-0 data-scrolling:duration-100",
+				orientation === "vertical" && "m-1 w-2.5 border-l border-l-transparent",
 				orientation === "horizontal" &&
-					"h-2.5 flex-col border-t border-t-transparent",
+				"mx-1 h-2.5 flex-col border-t border-t-transparent",
 				className
 			)}
 			{...props}

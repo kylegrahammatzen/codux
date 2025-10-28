@@ -2,13 +2,12 @@
 
 import * as React from "react"
 import { Avatar as AvatarBase } from "@base-ui-components/react/avatar"
-import { cva, VariantProps } from "class-variance-authority"
+import { tv, VariantProps } from "tailwind-variants"
 
 import { cn } from "@/lib/utils"
 
-const avatarVariants = cva(
-	"relative flex shrink-0 overflow-hidden rounded-full",
-	{
+const avatarVariants = tv({
+	base: "relative flex shrink-0 overflow-hidden rounded-full",
 		variants: {
 			size: {
 				sm: "size-8 text-sm",
