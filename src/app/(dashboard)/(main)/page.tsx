@@ -1,7 +1,7 @@
 import { hasSession } from "@/lib/auth";
 import { PanelHeader } from "@/components/panel-header";
 import { HomeGreeting } from "@/components/home/greeting";
-import { ChatInput } from "@/components/chat/input";
+import { MainInput } from "@/components/chat/main-input";
 import { CreateTaskCard } from "@/components/home/examples/create-task-card";
 import { ConnectCalendarCard } from "@/components/home/examples/connect-calendar-card";
 import { BrowseAgentsCard } from "@/components/home/examples/browse-agents-card";
@@ -32,7 +32,7 @@ export default async function Home() {
         </div>
       </div>
       <div className="w-full max-w-2xl mx-auto px-4 sm:px-0 pb-4">
-        <ChatInput />
+        <MainInput userId={session.user.id} />
       </div>
     </>
   );
