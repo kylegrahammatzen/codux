@@ -9,6 +9,7 @@ import { HomePanel } from "@/components/home/panel";
 import { DashboardHeader } from "@/components/dashboard-header";
 import { UserDropdown } from "@/components/user-dropdown";
 import { useSession } from "@/providers/session-provider";
+import { FileUploadProvider } from "@/contexts/file-upload-context";
 
 type ClientLayoutProps = {
   children: React.ReactNode;
@@ -20,21 +21,23 @@ export const ClientLayout = (props: ClientLayoutProps) => {
   const session = useSession();
 
   return (
-    <TamboProvider apiKey={env.NEXT_PUBLIC_TAMBO_API_KEY} userToken={props.userToken}>
-      <MainProvider>
-        <MainLayout
-          pathname={pathname}
-          header={
-            <DashboardHeader>
-              <UserDropdown user={session.user} />
-            </DashboardHeader>
-          }
-        >
-          <HomePanel>
-            {props.children}
-          </HomePanel>
-        </MainLayout>
-      </MainProvider>
-    </TamboProvider>
+    <FileUploadProvider>
+      <TamboProvider apiKey={env.NEXT_PUBLIC_TAMBO_API_KEY} userToken={props.userToken}>
+        <MainProvider>
+          <MainLayout
+            pathname={pathname}
+            header={
+              <DashboardHeader>
+                <UserDropdown user={session.user} />
+              </DashboardHeader>
+            }
+          >
+            <HomePanel>
+              {props.children}
+            </HomePanel>
+          </MainLayout>
+        </MainProvider>
+      </TamboProvider>
+    </FileUploadProvider>
   );
 };

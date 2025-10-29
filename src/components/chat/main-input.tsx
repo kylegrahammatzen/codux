@@ -8,7 +8,7 @@ import { SendHorizontal, Mic, File } from "lucide-react";
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { createProject } from "@/actions/project";
-import type { StagedImage } from "@tambo-ai/react";
+import { useFileUpload } from "@/contexts/file-upload-context";
 
 type MainInputProps = {
   className?: string;
@@ -21,7 +21,7 @@ export const MainInput = (props: MainInputProps) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [value, setValue] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [images, setImages] = React.useState<StagedImage[]>([]);
+  const { images, addImages, removeImage } = useFileUpload();
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent) => {
@@ -60,30 +60,10 @@ export const MainInput = (props: MainInputProps) => {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-
-    const newImages: StagedImage[] = await Promise.all(
-      files.map(async (file) => {
-        const dataUrl = await new Promise<string>((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.readAsDataURL(file);
-        });
-
-        return {
-          id: Math.random().toString(36).substring(7),
-          name: file.name,
-          type: file.type,
-          dataUrl,
-        };
-      })
-    );
-
-    setImages((prev) => [...prev, ...newImages]);
+    if (files.length > 0) {
+      await addImages(files);
+    }
     e.target.value = "";
-  };
-
-  const removeImage = (fileId: string) => {
-    setImages((prev) => prev.filter((img) => img.id !== fileId));
   };
 
   return (
