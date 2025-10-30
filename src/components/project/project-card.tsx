@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,7 +42,7 @@ export const ProjectCard = (props: ProjectCardProps) => {
   };
 
   return (
-    <div className="group relative rounded-lg border border-border bg-card overflow-hidden hover:border-border/80 transition-colors">
+    <Card className="group p-0 gap-0 overflow-hidden hover:border-border/80 transition-colors">
       {/* Preview Image */}
       <div className="relative aspect-video bg-muted overflow-hidden">
         {props.previewImage ? (
@@ -60,19 +61,19 @@ export const ProjectCard = (props: ProjectCardProps) => {
       </div>
 
       {/* Card Content */}
-      <div className="p-4 space-y-1">
+      <div className="p-4 space-y-2">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-medium text-card-foreground truncate flex-1">
+          <h3 className="font-medium truncate flex-1">
             {props.name}
           </h3>
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={(props) => (
+              render={(triggerProps) => (
                 <Button
-                  {...props}
+                  {...triggerProps}
                   variant="ghost"
                   size="sm"
-                  className="size-6 p-0 -mt-1 -mr-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
                 />
               )}
             >
@@ -95,6 +96,6 @@ export const ProjectCard = (props: ProjectCardProps) => {
           Edited {formatRelativeTime(props.updatedAt)}
         </p>
       </div>
-    </div>
+    </Card>
   );
 };
