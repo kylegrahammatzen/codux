@@ -3,42 +3,35 @@ import { BreadcrumbItem, BreadcrumbPage } from "@/components/ui/breadcrumbs";
 import { ProjectsProvider, type Project } from "@/providers/projects-provider";
 import { ProjectSearchBar } from "@/components/project/search-bar";
 import { ProjectList } from "@/components/project/project-list";
+import { ProjectCount } from "@/components/project/project-count";
+import { getUserProjects } from "@/actions/project";
+import { hasSession } from "@/lib/auth";
 
-export default function ProjectsPage() {
-  // TODO: Fetch actual projects from database
-  const mockProjects: Project[] = [
-    {
-      id: "1",
-      name: "My Awesome Project",
-      updatedAt: new Date(Date.now() - 1000 * 60 * 30),
-    },
-    {
-      id: "2",
-      name: "Another Cool Project",
-      updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    },
-    {
-      id: "3",
-      name: "Test Project",
-      updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
-    },
-  ];
+export default async function ProjectsPage() {
+  const session = await hasSession();
+
+  const result = await getUserProjects(session.user.id);
+  const projects: Project[] = result.projects.map((project) => ({
+    id: project.id,
+    name: project.name,
+    updatedAt: new Date(project.updatedAt),
+  }));
 
   return (
-    <>
+    <ProjectsProvider initialProjects={projects}>
       <PanelHeader>
         <BreadcrumbItem>
-          <BreadcrumbPage>Projects</BreadcrumbPage>
+          <BreadcrumbPage>
+            Projects <ProjectCount />
+          </BreadcrumbPage>
         </BreadcrumbItem>
       </PanelHeader>
-      <div className="w-full h-full overflow-y-auto p-6">
-        <ProjectsProvider initialProjects={mockProjects}>
-          <div className="max-w-7xl mx-auto space-y-6">
-            <ProjectSearchBar />
-            <ProjectList />
-          </div>
-        </ProjectsProvider>
+      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto p-4">
+        <div className="flex flex-col gap-4">
+          <ProjectSearchBar />
+          <ProjectList />
+        </div>
       </div>
-    </>
+    </ProjectsProvider>
   );
 }
