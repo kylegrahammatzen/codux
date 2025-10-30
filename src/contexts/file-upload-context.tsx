@@ -28,8 +28,14 @@ export const FileUploadProvider = (props: FileUploadProviderProps) => {
   const [images, setImages] = React.useState<StagedImage[]>([]);
 
   const addImages = React.useCallback(async (files: File[]) => {
+    const currentLength = images.length;
+    const remainingSlots = 3 - currentLength;
+    if (remainingSlots <= 0) return;
+
+    const filesToAdd = files.slice(0, remainingSlots);
+
     const newImages: StagedImage[] = await Promise.all(
-      files.map(async (file) => {
+      filesToAdd.map(async (file) => {
         const dataUrl = await new Promise<string>((resolve) => {
           const reader = new FileReader();
           reader.onloadend = () => resolve(reader.result as string);
@@ -48,7 +54,7 @@ export const FileUploadProvider = (props: FileUploadProviderProps) => {
     );
 
     setImages((prev) => [...prev, ...newImages]);
-  }, []);
+  }, [images.length]);
 
   const removeImage = React.useCallback((fileId: string) => {
     setImages((prev) => prev.filter((img) => img.id !== fileId));

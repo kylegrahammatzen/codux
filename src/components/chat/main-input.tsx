@@ -55,6 +55,7 @@ export const MainInput = (props: MainInputProps) => {
   };
 
   const handleFileClick = () => {
+    if (images.length >= 3) return;
     fileInputRef.current?.click();
   };
 
@@ -85,7 +86,7 @@ export const MainInput = (props: MainInputProps) => {
             <Button type="button" variant="outline" size="icon-sm" className="bg-card">
               <Mic className="size-4" />
             </Button>
-            <Button type="button" variant="outline" size="sm" className="bg-card" onClick={handleFileClick}>
+            <Button type="button" variant="outline" size="sm" className="bg-card" onClick={handleFileClick} disabled={images.length >= 3}>
               <File className="size-4" />
               Add file
               <input
