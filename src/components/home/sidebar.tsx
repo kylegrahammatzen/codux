@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Plus, Home, Search, Folder, HatGlasses, Settings } from "lucide-react";
+import { Plus, Home, Search, Folder, HatGlasses, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -36,7 +36,7 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
 
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
-          <div className="text-xs font-medium text-muted-foreground px-2 mb-1">Navigate</div>
+          <div className="text-xs font-medium text-muted-foreground px-2 mb-1">Discover</div>
           <Button
             variant="ghost"
             size="sm"
@@ -64,7 +64,7 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
         </div>
 
         <div className="flex flex-col gap-1">
-          <div className="text-xs font-medium text-muted-foreground px-2 mb-1">Build</div>
+          <div className="text-xs font-medium text-muted-foreground px-2 mb-1">Workspace</div>
           <Button
             variant="ghost"
             size="sm"
@@ -93,6 +93,18 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
 
         <div className="flex flex-col gap-1">
           <div className="text-xs font-medium text-muted-foreground px-2 mb-1">Account</div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleNavigation("/profile")}
+            className={cn(
+              "justify-start",
+              isActive("/profile") && "bg-accent"
+            )}
+          >
+            <User className="size-4" />
+            Profile
+          </Button>
           <Button
             variant="ghost"
             size="sm"
