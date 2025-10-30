@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/providers/theme-provider";
 import "@/app/globals.css";
+import { ToastProvider } from "@/components/ui/toast";
 
 export const metadata: Metadata = {
   title: "Codux",
@@ -21,7 +22,9 @@ export default function RootLayout(props: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          {props.children}
+          <ToastProvider>
+            {props.children}
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>
