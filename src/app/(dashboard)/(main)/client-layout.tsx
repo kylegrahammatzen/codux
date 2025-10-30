@@ -26,6 +26,7 @@ export const ClientLayout = (props: ClientLayoutProps) => {
         <MainProvider>
           <MainLayout
             pathname={pathname}
+            user={session.user}
             header={
               <DashboardHeader>
                 <UserDropdown user={session.user} />

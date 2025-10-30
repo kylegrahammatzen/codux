@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Plus, Home, Search, Folder, HatGlasses, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import type { User as UserType } from "@/lib/auth";
 
 type HomeSidebarProps = {
   pathname: string;
+  user: UserType | null;
 };
 
 export const HomeSidebar = (props: HomeSidebarProps) => {
@@ -25,6 +27,13 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
     }
   };
 
+  const handleProfileClick = () => {
+    const profilePath = `/@${props.user?.username}`;
+    if (props.pathname !== profilePath) {
+      router.push(profilePath);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full pt-2 min-w-max">
       <Button size="sm" onClick={handleStartChat}>
@@ -36,7 +45,6 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
 
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
-          <div className="text-xs font-medium text-muted-foreground px-2 mb-1">Discover</div>
           <Button
             variant="ghost"
             size="sm"
@@ -61,10 +69,6 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
             <Search className="size-4" />
             Search
           </Button>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <div className="text-xs font-medium text-muted-foreground px-2 mb-1">Workspace</div>
           <Button
             variant="ghost"
             size="sm"
@@ -96,10 +100,10 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleNavigation("/profile")}
+            onClick={handleProfileClick}
             className={cn(
               "justify-start",
-              isActive("/profile") && "bg-accent"
+              isActive(`/@${props.user?.username}`) && "bg-accent"
             )}
           >
             <User className="size-4" />
