@@ -7,7 +7,7 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbS
 import { hasSession } from "@/lib/auth";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { getProject } from "@/actions/project";
 import { ProjectThreadManager } from "@/components/project/thread-manager";
 
@@ -24,13 +24,13 @@ export default async function ProjectPage(props: ProjectPageProps) {
   const projectId = params.projectId;
 
   if (!projectId || projectId.length === 0) {
-    notFound();
+    redirect("/");
   }
 
   const projectResult = await getProject(projectId);
 
   if (!projectResult.success || !projectResult.project) {
-    notFound();
+    redirect("/");
   }
 
   const project = projectResult.project;
