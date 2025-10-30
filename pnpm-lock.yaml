@@ -27,8 +27,8 @@ importers:
         specifier: ^0.13.8
         version: 0.13.8(typescript@5.9.3)(zod@4.1.12)
       '@tambo-ai/react':
-        specifier: ^0.58.1
-        version: 0.58.1(@types/node@20.19.21)(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3)
+        specifier: ^0.59.0
+        version: 0.59.0(@types/node@20.19.21)(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3)
       '@tambo-ai/typescript-sdk':
         specifier: ^0.75.1
         version: 0.75.1
@@ -1117,8 +1117,8 @@ packages:
   '@tailwindcss/postcss@4.1.14':
     resolution: {integrity: sha512-BdMjIxy7HUNThK87C7BC8I1rE8BVUsfNQSI5siQ4JK3iIa3w0XyVvVL9SXLWO//CtYTcp1v7zci0fYwJOjB+Zg==}
 
-  '@tambo-ai/react@0.58.1':
-    resolution: {integrity: sha512-1RvEzgGfWlIdGvqMGvNGqmp1hb4eVDx8hlkTwpCP+U0KupjsnOJ26JFOfd1dQjcZomu8FNN2NKfpXTPqZ4DKzQ==}
+  '@tambo-ai/react@0.59.0':
+    resolution: {integrity: sha512-hngMpaSxl8g2/bwnDzSKznCVIuu3vhA+JutABXTEv+lGgQfo1ZEi6zSHEcLuwLNzu2fFjHmBwQm7igrYlqaftQ==}
     engines: {node: '>=22', npm: '>=11'}
     peerDependencies:
       '@types/react': ^18.0.0 || ^19.0.0
@@ -4967,7 +4967,7 @@ snapshots:
       postcss: 8.5.6
       tailwindcss: 4.1.14
 
-  '@tambo-ai/react@0.58.1(@types/node@20.19.21)(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3)':
+  '@tambo-ai/react@0.59.0(@types/node@20.19.21)(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.20.2
       '@tambo-ai/typescript-sdk': 0.75.1
