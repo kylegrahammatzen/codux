@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export type Project = {
   id: string;
@@ -14,6 +15,9 @@ type ProjectsContextType = {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   filteredProjects: Project[];
+  updateProjectName: (projectId: string, newName: string) => void;
+  removeProject: (projectId: string) => void;
+  isSearching: boolean;
 };
 
 const ProjectsContext = createContext<ProjectsContextType | undefined>(undefined);
@@ -24,12 +28,27 @@ type ProjectsProviderProps = {
 };
 
 export const ProjectsProvider = (props: ProjectsProviderProps) => {
-  const [projects] = useState<Project[]>(props.initialProjects || []);
+  const [projects, setProjects] = useState<Project[]>(props.initialProjects || []);
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  const isSearching = searchQuery !== debouncedSearchQuery;
 
   const filteredProjects = projects.filter((project) =>
-    project.name.toLowerCase().includes(searchQuery.toLowerCase())
+    project.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
   );
+
+  const updateProjectName = (projectId: string, newName: string) => {
+    setProjects((prev) =>
+      prev.map((project) =>
+        project.id === projectId ? { ...project, name: newName } : project
+      )
+    );
+  };
+
+  const removeProject = (projectId: string) => {
+    setProjects((prev) => prev.filter((project) => project.id !== projectId));
+  };
 
   return (
     <ProjectsContext.Provider
@@ -38,6 +57,9 @@ export const ProjectsProvider = (props: ProjectsProviderProps) => {
         searchQuery,
         setSearchQuery,
         filteredProjects,
+        updateProjectName,
+        removeProject,
+        isSearching,
       }}
     >
       {props.children}

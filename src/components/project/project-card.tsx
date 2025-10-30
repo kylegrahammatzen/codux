@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, Pencil, Copy, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -10,7 +11,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Project } from "@/providers/projects-provider";
+import { RenameDialog } from "./rename-dialog";
+import { DeleteDialog } from "./delete-dialog";
+import { useProjects, type Project } from "@/providers/projects-provider";
+import { useToast } from "@/hooks/use-toast";
 
 type ProjectCardProps = Project;
 
@@ -26,25 +30,36 @@ const formatRelativeTime = (date: Date): string => {
   return `${Math.floor(diffInSeconds / 2592000)}mo ago`;
 };
 
+const truncateText = (text: string, maxLength: number = 30): string => {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength) + "...";
+};
+
 export const ProjectCard = (props: ProjectCardProps) => {
-  const handleRename = () => {
-    // TODO: Implement rename functionality
-    console.log("Rename project:", props.id);
-  };
+  const { updateProjectName, removeProject } = useProjects();
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const handleCopyId = async () => {
     await navigator.clipboard.writeText(props.id);
+    toast.add({
+      title: "Project ID copied",
+      description: "The project ID has been copied to your clipboard",
+    });
   };
 
-  const handleDelete = () => {
-    // TODO: Implement delete functionality
-    console.log("Delete project:", props.id);
+  const handleRenameSuccess = (newName: string) => {
+    updateProjectName(props.id, newName);
+  };
+
+  const handleDeleteSuccess = () => {
+    removeProject(props.id);
   };
 
   return (
-    <Card className="group p-0 gap-0 overflow-hidden hover:border-border/80 transition-colors">
+    <Card className="group p-0 gap-0 overflow-hidden min-w-0">
       {/* Preview Image */}
-      <div className="relative aspect-video bg-muted overflow-hidden">
+      <div className="relative aspect-video border-b border-border/70 dark:border-border/50">
         {props.previewImage ? (
           <Image
             src={props.previewImage}
@@ -54,48 +69,64 @@ export const ProjectCard = (props: ProjectCardProps) => {
             className="object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm bg-background">
             No preview
           </div>
         )}
       </div>
 
       {/* Card Content */}
-      <div className="p-4 space-y-2 bg-background">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="font-medium truncate flex-1">
-            {props.name}
-          </h3>
+      <div className="p-4 bg-background min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-medium">
+              {truncateText(props.name)}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Edited {formatRelativeTime(props.updatedAt)}
+            </p>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={(triggerProps) => (
-                <Button
-                  {...triggerProps}
-                  variant="ghost"
-                  size="sm"
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                />
+                <Button {...triggerProps} variant="ghost" size="sm" className="shrink-0" />
               )}
             >
               <MoreVertical className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleRename}>
+              <DropdownMenuItem onClick={() => setRenameDialogOpen(true)}>
+                <Pencil className="size-4" />
                 Rename
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleCopyId}>
+                <Copy className="size-4" />
                 Copy Project ID
               </DropdownMenuItem>
-              <DropdownMenuItem variant="destructive" onClick={handleDelete}>
+              <DropdownMenuItem variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
+                <Trash2 className="size-4" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Edited {formatRelativeTime(props.updatedAt)}
-        </p>
       </div>
+
+      <RenameDialog
+        projectId={props.id}
+        currentName={props.name}
+        open={renameDialogOpen}
+        onOpenChange={setRenameDialogOpen}
+        onSuccess={handleRenameSuccess}
+      />
+
+      <DeleteDialog
+        projectId={props.id}
+        projectName={props.name}
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onSuccess={handleDeleteSuccess}
+      />
     </Card>
   );
 };
