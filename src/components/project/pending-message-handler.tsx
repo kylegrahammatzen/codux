@@ -36,16 +36,13 @@ export const PendingMessageHandler = (props: { userId: string }) => {
       .then((existingResult) => {
         if (existingResult.success) {
           // Project already exists
-          console.log("[PendingMessageHandler] Project already exists:", projectId);
           return;
         }
 
         // Project doesn't exist, create it
         return createProject(props.userId, projectId)
           .then((result) => {
-            if (result.success) {
-              console.log("[PendingMessageHandler] Project created in database:", projectId);
-            } else {
+            if (!result.success) {
               console.error("[PendingMessageHandler] Failed to create project:", result.message);
             }
           });
@@ -66,9 +63,6 @@ export const PendingMessageHandler = (props: { userId: string }) => {
 
     // Generate AI thread name
     generateThreadName(thread.id)
-      .then(() => {
-        console.log("[PendingMessageHandler] Thread name generated");
-      })
       .catch((error) => {
         console.error("[PendingMessageHandler] Failed to generate thread name:", error);
       });
@@ -91,8 +85,6 @@ export const PendingMessageHandler = (props: { userId: string }) => {
       // Verify this message is for this project
       if (pending.projectId !== projectId) return;
 
-      console.log("[PendingMessageHandler] Found pending message:", pending);
-
       // Clear from storage immediately to prevent resubmission
       sessionStorage.removeItem("pending-message");
       hasSubmitted.current = true;
@@ -102,7 +94,6 @@ export const PendingMessageHandler = (props: { userId: string }) => {
 
       // Submit after a brief delay to ensure TamboProvider is ready
       setTimeout(async () => {
-        console.log("[PendingMessageHandler] Submitting message");
         await submit({ streamResponse: true });
 
         // Clear the input and images after submission
