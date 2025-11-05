@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { renameProject } from "@/actions/project";
+import { useTamboThread, useTamboThreadList } from "@tambo-ai/react";
 
 type RenameDialogProps = {
   projectId: string;
@@ -23,13 +23,34 @@ type RenameDialogProps = {
 
 export const RenameDialog = (props: RenameDialogProps) => {
   const [name, setName] = useState(props.currentName);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { updateThreadName } = useTamboThread();
+  const contextKey = `project-${props.projectId}`;
+  const { data: threads, refetch } = useTamboThreadList({ contextKey });
+
+  // Update name when dialog opens or currentName changes
+  useEffect(() => {
+    if (props.open) {
+      setName(props.currentName);
+    }
+  }, [props.open, props.currentName]);
 
   const handleRename = async () => {
-    if (!name.trim()) return;
-    const result = await renameProject(props.projectId, name.trim());
-    if (result.success) {
+    if (!name.trim() || isSubmitting) return;
+
+    const threadId = threads?.items?.[0]?.id;
+    if (!threadId) return;
+
+    setIsSubmitting(true);
+    try {
+      await updateThreadName(name.trim(), threadId);
+      await refetch(); // Refresh the thread list to get updated name
       props.onOpenChange(false);
       props.onSuccess?.(name.trim());
+    } catch (error) {
+      console.error("Failed to rename thread:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -53,11 +74,11 @@ export const RenameDialog = (props: RenameDialogProps) => {
           }}
         />
         <DialogFooter>
-          <Button variant="ghost" onClick={() => props.onOpenChange(false)}>
+          <Button variant="ghost" onClick={() => props.onOpenChange(false)} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button onClick={handleRename} disabled={!name.trim()}>
-            Rename
+          <Button onClick={handleRename} disabled={!name.trim() || isSubmitting}>
+            {isSubmitting ? "Renaming..." : "Rename"}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -38,16 +38,16 @@ const truncateText = (text: string, maxLength: number = 30): string => {
 };
 
 export const ProjectCard = (props: ProjectCardProps) => {
-  const { updateProjectName, removeProject } = useProjects();
+  const { removeProject } = useProjects();
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const toast = useToast();
   const contextKey = `project-${props.id}`;
   const { data: threads } = useTamboThreadList({ contextKey });
-  const [displayName, setDisplayName] = useState(props.name);
+  const [displayName, setDisplayName] = useState("Untitled Project");
 
   useEffect(() => {
-    // Use thread name from Tambo if available, otherwise use database name
+    // Use thread name from Tambo if available
     if (threads?.items?.[0]?.name) {
       setDisplayName(threads.items[0].name);
     }
@@ -62,7 +62,7 @@ export const ProjectCard = (props: ProjectCardProps) => {
   };
 
   const handleRenameSuccess = (newName: string) => {
-    updateProjectName(props.id, newName);
+    setDisplayName(newName);
   };
 
   const handleDeleteSuccess = () => {
@@ -76,7 +76,7 @@ export const ProjectCard = (props: ProjectCardProps) => {
         {props.previewImage ? (
           <Image
             src={props.previewImage}
-            alt={props.name}
+            alt={displayName}
             fill
             unoptimized
             className="object-cover"
@@ -135,7 +135,7 @@ export const ProjectCard = (props: ProjectCardProps) => {
 
       <RenameDialog
         projectId={props.id}
-        currentName={props.name}
+        currentName={displayName}
         open={renameDialogOpen}
         onOpenChange={setRenameDialogOpen}
         onSuccess={handleRenameSuccess}
@@ -143,7 +143,7 @@ export const ProjectCard = (props: ProjectCardProps) => {
 
       <DeleteDialog
         projectId={props.id}
-        projectName={props.name}
+        projectName={displayName}
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         onSuccess={handleDeleteSuccess}
