@@ -90,7 +90,7 @@ export function createProjectTools(userId: string, projectId: string): TamboTool
     {
       name: "get_project_files",
       description:
-        "Get all files and their content from the current project.",
+        "Get all files and their content from the current project. ALWAYS call this first before making any file updates to understand the existing code structure and avoid breaking changes.",
       tool: readFiles,
       toolSchema: z
         .function()
@@ -106,7 +106,7 @@ export function createProjectTools(userId: string, projectId: string): TamboTool
     {
       name: "update_project_files",
       description:
-        "Update or create files in the current project with new content.",
+        "Update or create files in the current project with new content. IMPORTANT: Always call get_project_files first to read existing files before updating them. Preserve existing imports, dependencies, and code structure unless explicitly asked to change them.",
       tool: updateFiles,
       toolSchema: z
         .function()
