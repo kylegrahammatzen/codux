@@ -4,8 +4,13 @@ import { Button } from "@/components/ui/button";
 import { ScrollableMessageContainer } from "@/components/tambo/scrollable-message-container";
 import { ThreadContent, ThreadContentMessages } from "@/components/tambo/thread-content";
 import { ChatInput } from "@/components/chat/input";
+import { useContextKey } from "@/hooks/use-context-key";
+import { useProjectThread } from "@/hooks/use-project-thread";
 
 export const ChatPanel = () => {
+  const contextKey = useContextKey();
+  useProjectThread(contextKey);
+
   return (
     <div className="flex flex-col h-full w-full">
       <div className="flex items-center justify-between px-2 border-b h-12 bg-card rounded-t-md shrink-0">
