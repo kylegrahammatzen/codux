@@ -126,6 +126,14 @@ export async function updateProjectFile(
   content: string
 ) {
   try {
+    if (!filename) {
+      console.error("updateProjectFile called with undefined filename");
+      return {
+        success: false,
+        message: "Filename is required",
+      };
+    }
+
     const cleanFilename = filename.startsWith("/") ? filename.slice(1) : filename;
     const path = `${userId}/${projectId}/${cleanFilename}`;
 

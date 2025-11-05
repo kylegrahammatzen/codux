@@ -1,71 +1,120 @@
 import { z } from "zod";
 import type { TamboTool } from "@tambo-ai/react";
-import { updateProjectFile } from "@/actions/storage";
+import { updateProjectFile, getProjectFiles } from "@/actions/storage";
 
 /**
- * Tambo tool for updating project files
- * Allows the AI to edit files in Supabase Storage
+ * Create project-specific tools with userId and projectId baked in
+ * This way Tambo doesn't need to pass these on every call
  */
-const updateFiles = async (params: {
-  userId: string;
-  projectId: string;
-  files: Record<string, string>;
-}) => {
-  const { userId, projectId, files } = params;
+export function createProjectTools(userId: string, projectId: string): TamboTool[] {
+  /**
+   * Tambo tool for reading project files
+   * Automatically uses the current userId and projectId
+   */
+  const readFiles = async () => {
+    try {
+      const result = await getProjectFiles(userId, projectId);
 
-  try {
-    // Update each file in storage
-    const updatePromises = Object.entries(files).map(([filename, content]) =>
-      updateProjectFile(userId, projectId, filename, content)
-    );
+      if (!result.success) {
+        return {
+          success: false,
+          message: result.message || "Failed to read files",
+          files: {},
+        };
+      }
 
-    const results = await Promise.all(updatePromises);
-
-    const failures = results.filter((r) => !r.success);
-    if (failures.length > 0) {
+      return {
+        success: true,
+        message: `Found ${Object.keys(result.files).length} file(s)`,
+        files: result.files,
+      };
+    } catch (error) {
+      console.error("Tool error reading files:", error);
       return {
         success: false,
-        message: `Failed to update ${failures.length} file(s)`,
+        message: "Failed to read files",
+        files: {},
       };
     }
+  };
 
-    return {
-      success: true,
-      message: `Successfully updated ${Object.keys(files).length} file(s)`,
-      files: Object.keys(files),
-    };
-  } catch (error) {
-    console.error("Tool error updating files:", error);
-    return {
-      success: false,
-      message: "Failed to update files",
-    };
-  }
-};
+  /**
+   * Tambo tool for updating project files
+   * Automatically uses the current userId and projectId
+   */
+  const updateFiles = async (files: Array<{ path: string; content: string }>) => {
+    try {
+      console.log("updateFiles called with:", JSON.stringify(files, null, 2));
 
-export const projectTools: TamboTool[] = [
-  {
-    name: "update_project_files",
-    description:
-      "Update one or more files in the current project. Use this when the user asks to edit code, add features, fix bugs, or modify files. Each file should include the complete content, not just changes.",
-    tool: updateFiles,
-    toolSchema: z.function(
-      z.tuple([
-        z.object({
-          userId: z.string().describe("The ID of the user who owns the project"),
-          projectId: z.string().describe("The ID of the project to update"),
-          files: z
-            .record(z.string(), z.string())
-            .describe(
-              "Object mapping file paths (e.g., '/App.tsx') to their complete content. Include leading slash in filenames."
-            ),
-        }),
-      ]),
-      z.object({
-        success: z.boolean(),
-        message: z.string(),
-        files: z.array(z.string()).optional(),
-      })
-    ),
-  },
-];
+      // Update each file in storage
+      const updatePromises = files.map(({ path, content }) => {
+        console.log("Updating file:", { path, content: content?.substring(0, 50) });
+        return updateProjectFile(userId, projectId, path, content);
+      });
+
+      const results = await Promise.all(updatePromises);
+
+      const failures = results.filter((r) => !r.success);
+      if (failures.length > 0) {
+        return {
+          success: false,
+          message: `Failed to update ${failures.length} file(s)`,
+        };
+      }
+
+      return {
+        success: true,
+        message: `Successfully updated ${files.length} file(s)`,
+        files: files.map(f => f.path),
+      };
+    } catch (error) {
+      console.error("Tool error updating files:", error);
+      return {
+        success: false,
+        message: "Failed to update files",
+      };
+    }
+  };
+
+  return [
+    {
+      name: "get_project_files",
+      description:
+        "Get all files and their content from the current project.",
+      tool: readFiles,
+      toolSchema: z
+        .function()
+        .args()
+        .returns(
+          z.object({
+            success: z.boolean(),
+            message: z.string(),
+            files: z.record(z.string(), z.string()),
+          })
+        ),
+    },
+    {
+      name: "update_project_files",
+      description:
+        "Update or create files in the current project with new content.",
+      tool: updateFiles,
+      toolSchema: z
+        .function()
+        .args(
+          z.array(
+            z.object({
+              path: z.string().describe("File path including leading slash (e.g., '/App.tsx')"),
+              content: z.string().describe("Complete file content"),
+            })
+          ).describe("Array of files to update")
+        )
+        .returns(
+          z.object({
+            success: z.boolean(),
+            message: z.string(),
+            files: z.array(z.string()).optional(),
+          })
+        ),
+    },
+  ];
+}
