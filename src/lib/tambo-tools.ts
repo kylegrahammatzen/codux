@@ -44,76 +44,41 @@ export function createProjectTools(userId: string, projectId: string): TamboTool
    */
   const updateFiles = async (files: Array<{ path: string; content: string }>) => {
     try {
-      console.log("[updateFiles] Raw input type:", typeof files, Array.isArray(files));
-      console.log("[updateFiles] Raw input:", JSON.stringify(files).substring(0, 200));
-
       if (!files || files.length === 0) {
-        console.error("[updateFiles] No files provided");
         return {
           success: false,
           message: "No files provided to update",
         };
       }
 
-      // Log structure of each file
-      files.forEach((f, idx) => {
-        console.log(`[updateFiles] File ${idx}:`, {
-          type: typeof f,
-          isObject: typeof f === 'object',
-          hasPath: 'path' in (f || {}),
-          hasContent: 'content' in (f || {}),
-          pathValue: f?.path,
-          contentLength: f?.content?.length,
-          keys: Object.keys(f || {}),
-        });
-      });
-
-      // Validate all files have required fields
       const invalidFiles = files.filter(f => !f?.path || f?.content === undefined);
       if (invalidFiles.length > 0) {
-        console.error("[updateFiles] Found invalid files:", invalidFiles.length);
-        invalidFiles.forEach((f, idx) => {
-          console.error(`[updateFiles] Invalid file ${idx}:`, {
-            raw: typeof f === 'string' ? f.substring(0, 100) : JSON.stringify(f).substring(0, 100),
-            hasPath: !!f?.path,
-            hasContent: f?.content !== undefined,
-          });
-        });
         return {
           success: false,
           message: `${invalidFiles.length} file(s) missing path or content`,
         };
       }
 
-      // Update each file in storage
-      const updatePromises = files.map(async ({ path, content }, index) => {
-        console.log(`[updateFiles] Processing file ${index + 1}/${files.length}:`, { path, contentLength: content?.length });
-        const result = await updateProjectFile(userId, projectId, path, content);
-        if (!result.success) {
-          console.error(`[updateFiles] Failed to update ${path}:`, result.message);
-        }
-        return result;
+      const updatePromises = files.map(async ({ path, content }) => {
+        return updateProjectFile(userId, projectId, path, content);
       });
 
       const results = await Promise.all(updatePromises);
 
       const failures = results.filter((r) => !r.success);
       if (failures.length > 0) {
-        console.error(`[updateFiles] ${failures.length} file(s) failed to update`);
         return {
           success: false,
           message: `Failed to update ${failures.length} file(s)`,
         };
       }
 
-      console.log(`[updateFiles] Successfully updated ${files.length} file(s)`);
       return {
         success: true,
         message: `Successfully updated ${files.length} file(s)`,
         files: files.map(f => f.path),
       };
     } catch (error) {
-      console.error("[updateFiles] Unexpected error:", error);
       return {
         success: false,
         message: `Failed to update files: ${error instanceof Error ? error.message : String(error)}`,
