@@ -36,14 +36,15 @@ export const HomeSidebar = (props: HomeSidebarProps) => {
 
   return (
     <div className="flex flex-col h-full pt-2 min-w-max">
-      <Button size="sm" onClick={handleStartChat}>
-        <Plus className="size-4" />
-        Start Project
-      </Button>
 
-      <div className="h-4" />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <Button size="sm" onClick={handleStartChat}>
+            <Plus className="size-4" />
+            Start Project
+          </Button>
+        </div>
 
-      <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <Button
             variant="ghost"

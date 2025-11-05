@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { SendHorizontal, Mic, File } from "lucide-react";
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { createProject } from "@/actions/project";
+import { useTamboThreadInput } from "@tambo-ai/react";
 import { useFileUpload } from "@/contexts/file-upload-context";
 
 type MainInputProps = {
@@ -15,36 +15,52 @@ type MainInputProps = {
   userId: string;
 };
 
+function generateProjectId(): string {
+  return typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 export const MainInput = (props: MainInputProps) => {
   const router = useRouter();
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const [value, setValue] = React.useState("");
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const { images, addImages, removeImage } = useFileUpload();
+  const { value, setValue, submit, isPending } = useTamboThreadInput();
+  const { images, addImages, removeImage, clearImages } = useFileUpload();
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!value.trim() || isSubmitting) return;
+      if ((!value.trim() && images.length === 0) || isPending) return;
 
-      setIsSubmitting(true);
+      // Generate projectId client-side
+      const projectId = generateProjectId();
 
+      // Store pending message in sessionStorage to be submitted from project page
+      // Note: Images are not transferred in initial message (can be added after)
       try {
-        const result = await createProject(props.userId);
-
-        if (result.success && result.projectId) {
-          router.push(`/project/${result.projectId}`);
-        } else {
-          console.error("Failed to create project:", result.message);
-          setIsSubmitting(false);
-        }
+        sessionStorage.setItem(
+          "pending-message",
+          JSON.stringify({
+            message: value,
+            projectId,
+          }),
+        );
       } catch (error) {
-        console.error("Failed to create project:", error);
-        setIsSubmitting(false);
+        console.error("[MainInput] Failed to store pending message:", error);
       }
+
+      // Clear form state before navigation
+      setValue("");
+      if (images.length > 0) {
+        clearImages();
+      }
+
+      // Navigate to project page (will submit message there with correct contextKey)
+      console.log("[MainInput] Navigating to:", `/project/${projectId}`);
+      router.push(`/project/${projectId}`);
     },
-    [value, isSubmitting, props.userId, router],
+    [value, setValue, isPending, images, clearImages, router],
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -101,7 +117,7 @@ export const MainInput = (props: MainInputProps) => {
             </Button>
           </div>
 
-          <Button type="submit" variant="default" size="icon-sm" disabled={isSubmitting || !value.trim()}>
+          <Button type="submit" variant="default" size="icon-sm" disabled={isPending || (!value.trim() && images.length === 0)}>
             <SendHorizontal />
           </Button>
         </div>

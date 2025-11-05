@@ -35,23 +35,31 @@ export default function Home() {
       >
         <HomePanel>
           <PanelHeader />
-          <div className="flex-1 flex flex-col min-h-0 overflow-y-auto items-center justify-center">
-            <div className="flex flex-col h-full md:h-auto w-full max-w-2xl mx-auto px-4 md:px-0 min-h-0">
-              <HomeGreeting firstName={firstName} />
-              <div className="flex-1 min-h-0 overflow-y-auto md:overflow-visible mb-8 md:mb-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <CreateTaskCard />
-                  <ConnectCalendarCard />
-                  <BrowseAgentsCard />
-                  <UploadFileCard />
-                  <ExploreUseCasesCard />
-                  <ManageProjectsCard />
+          <div className="flex-1 flex flex-col min-h-0 md:justify-center">
+            <div className="flex-1 flex flex-col min-h-0 md:flex-initial">
+              <div className="overflow-y-scroll md:overflow-y-visible">
+                <div className="w-full max-w-2xl mx-auto px-4">
+                  <HomeGreeting firstName={firstName} />
+                </div>
+              </div>
+              <div className="flex-1 min-h-0 overflow-y-auto md:overflow-y-visible">
+                <div className="w-full max-w-2xl mx-auto px-4 mb-8 md:mb-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <CreateTaskCard />
+                    <ConnectCalendarCard />
+                    <BrowseAgentsCard />
+                    <UploadFileCard />
+                    <ExploreUseCasesCard />
+                    <ManageProjectsCard />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-full max-w-2xl mx-auto px-4 sm:px-0 pb-4">
-            <MainInput userId={session.user.id} />
+          <div className="overflow-y-scroll md:overflow-y-visible">
+            <div className="w-full max-w-2xl mx-auto px-4 py-4 md:pt-0">
+              <MainInput userId={session.user.id} />
+            </div>
           </div>
         </HomePanel>
       </MainLayout>
