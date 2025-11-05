@@ -4,7 +4,7 @@ import { useTamboThreadInput, useTamboThread } from "@tambo-ai/react";
 import { useFileUpload } from "@/contexts/file-upload-context";
 import { useParams } from "next/navigation";
 import * as React from "react";
-import { createProject } from "@/actions/project";
+import { createProject, getProject } from "@/actions/project";
 
 /**
  * Handles submitting a pending message from the home page.
@@ -18,7 +18,7 @@ export const PendingMessageHandler = (props: { userId: string }) => {
   const hasSubmitted = React.useRef(false);
   const hasCreatedProject = React.useRef(false);
 
-  // Create project in database after first message submission
+  // Create project in database after first message submission (only if it doesn't exist)
   React.useEffect(() => {
     if (hasCreatedProject.current || !thread?.id) return;
 
@@ -30,17 +30,27 @@ export const PendingMessageHandler = (props: { userId: string }) => {
 
     hasCreatedProject.current = true;
 
-    // Create project in database with the client-generated ID
-    createProject(props.userId, thread.name || "Untitled Project", projectId)
-      .then((result) => {
-        if (result.success) {
-          console.log("[PendingMessageHandler] Project created in database:", projectId);
-        } else {
-          console.error("[PendingMessageHandler] Failed to create project:", result.message);
+    // Check if project exists first, then create if needed
+    getProject(projectId)
+      .then((existingResult) => {
+        if (existingResult.success) {
+          // Project already exists
+          console.log("[PendingMessageHandler] Project already exists:", projectId);
+          return;
         }
+
+        // Project doesn't exist, create it
+        return createProject(props.userId, thread.name || "Untitled Project", projectId)
+          .then((result) => {
+            if (result.success) {
+              console.log("[PendingMessageHandler] Project created in database:", projectId);
+            } else {
+              console.error("[PendingMessageHandler] Failed to create project:", result.message);
+            }
+          });
       })
       .catch((error) => {
-        console.error("[PendingMessageHandler] Error creating project:", error);
+        console.error("[PendingMessageHandler] Error handling project creation:", error);
       });
   }, [thread?.id, thread?.messages, thread?.name, params, props.userId]);
 
