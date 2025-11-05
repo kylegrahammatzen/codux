@@ -2,7 +2,6 @@
 
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { useTambo } from "@tambo-ai/react";
-import { getProjectFiles } from "@/actions/storage";
 import * as React from "react";
 
 type FileSyncHandlerProps = {
@@ -15,9 +14,9 @@ export const FileSyncHandler = (props: FileSyncHandlerProps) => {
   const { thread } = useTambo();
   const lastProcessedMessageId = React.useRef<string | null>(null);
 
-  // Monitor thread for file update tool completions
+  // Monitor thread for file update tool calls
   React.useEffect(() => {
-    if (!thread?.messages || !props.userId || !props.projectId) return;
+    if (!thread?.messages) return;
 
     const messages = thread.messages;
     if (messages.length === 0) return;
@@ -30,58 +29,41 @@ export const FileSyncHandler = (props: FileSyncHandlerProps) => {
     const toolRequest = lastMessage.toolCallRequest ?? lastMessage.component?.toolCallRequest;
     if (!toolRequest || toolRequest.toolName !== "update_project_files") return;
 
-    // Look for tool response after the assistant message
-    let toolResponse = null;
-    for (let i = messages.length - 1; i >= 0; i--) {
-      const msg = messages[i];
-      if (msg.id === lastMessage.id) break;
-      if (msg.role === "tool") {
-        toolResponse = msg;
-        break;
+    console.log("[FileSyncHandler] Found update_project_files tool call");
+
+    // Extract files from tool parameters
+    const parameters = toolRequest.parameters;
+    if (!parameters || parameters.length === 0) return;
+
+    // The first parameter should be the array of files
+    const filesParam = parameters[0];
+    if (!filesParam?.parameterValue) return;
+
+    try {
+      // Parse the parameter value (should be JSON array of {path, content})
+      const files = JSON.parse(filesParam.parameterValue);
+
+      if (!Array.isArray(files)) {
+        console.error("[FileSyncHandler] Files parameter is not an array");
+        return;
       }
-    }
 
-    // If we have a tool response, check if it was successful
-    if (toolResponse?.content) {
-      try {
-        const content = typeof toolResponse.content === 'string'
-          ? toolResponse.content
-          : Array.isArray(toolResponse.content)
-            ? toolResponse.content.map(item => item.type === 'text' ? item.text : '').join('')
-            : '';
+      console.log("[FileSyncHandler] Updating Sandpack with files:", files.map(f => f.path));
+      lastProcessedMessageId.current = lastMessage.id;
 
-        const parsed = JSON.parse(content);
-        if (parsed.success) {
-          console.log("[FileSyncHandler] File update tool succeeded, waiting before refetch");
-          lastProcessedMessageId.current = lastMessage.id;
-
-          // Wait a bit for storage to fully commit
-          setTimeout(() => {
-            console.log("[FileSyncHandler] Refetching files from storage");
-            getProjectFiles(props.userId, props.projectId).then((result) => {
-              if (result.success && Object.keys(result.files).length > 0) {
-                console.log("[FileSyncHandler] Files refetched:", Object.keys(result.files));
-
-                // Update each file in Sandpack
-                Object.entries(result.files).forEach(([path, content]) => {
-                  console.log(`[FileSyncHandler] Updating ${path} (${content.length} chars)`);
-                  sandpack.updateFile(path, content);
-                });
-
-                console.log("[FileSyncHandler] Sandpack files updated successfully");
-              } else {
-                console.warn("[FileSyncHandler] No files returned from storage");
-              }
-            }).catch((error) => {
-              console.error("[FileSyncHandler] Failed to refetch files:", error);
-            });
-          }, 500);
+      // Update each file in Sandpack immediately
+      files.forEach(({ path, content }: { path: string; content: string }) => {
+        if (path && content !== undefined) {
+          console.log(`[FileSyncHandler] Updating ${path} (${content.length} chars)`);
+          sandpack.updateFile(path, content);
         }
-      } catch (error) {
-        // Not JSON or parse failed, ignore
-      }
+      });
+
+      console.log("[FileSyncHandler] Sandpack files updated successfully");
+    } catch (error) {
+      console.error("[FileSyncHandler] Failed to parse tool parameters:", error);
     }
-  }, [thread?.messages, props.userId, props.projectId, sandpack]);
+  }, [thread?.messages, sandpack]);
 
   return null;
 };
