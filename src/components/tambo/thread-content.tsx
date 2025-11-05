@@ -133,7 +133,7 @@ const ThreadContentMessages = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn("flex flex-col gap-2", className)}
+      className={cn("flex flex-col gap-4", className)}
       data-slot="thread-content-messages"
       {...props}
     >
@@ -155,6 +155,7 @@ const ThreadContentMessages = React.forwardRef<
               role={message.role === "assistant" ? "assistant" : "user"}
               message={message}
               isLoading={isGenerating && index === filteredMessages.length - 1}
+              className="flex flex-col"
             >
               <ReasoningInfo />
               <MessageImages />
