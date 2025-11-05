@@ -16,7 +16,7 @@ export const DashboardHeader = (props: DashboardHeaderProps) => {
 
   return (
     <AppHeader>
-      <span className="text-sm font-medium cursor-pointer" onClick={handleLogoClick}>Logo</span>
+      <span className="text-sm font-medium cursor-pointer" onClick={handleLogoClick}>Codux</span>
       {props.children}
     </AppHeader>
   );
