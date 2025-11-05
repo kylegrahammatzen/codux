@@ -5,9 +5,9 @@ import { project } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { generateId } from "better-auth";
 
-export async function createProject(userId: string, name?: string) {
+export async function createProject(userId: string, name?: string, customProjectId?: string) {
   try {
-    const projectId = generateId();
+    const projectId = customProjectId || generateId();
 
     await db.insert(project).values({
       id: projectId,

@@ -9,7 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getProject } from "@/actions/project";
-import { ProjectThreadManager } from "@/components/project/thread-manager";
+import { ProjectTitle } from "@/components/project/project-title";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -27,16 +27,12 @@ export default async function ProjectPage(props: ProjectPageProps) {
     redirect("/");
   }
 
+  // Try to get project from DB, but allow it to not exist yet (will be created on first response)
   const projectResult = await getProject(projectId);
-
-  if (!projectResult.success || !projectResult.project) {
-    redirect("/");
-  }
-
-  const project = projectResult.project;
+  const project = projectResult.success ? projectResult.project : null;
 
   // Use project files if they exist, otherwise use default files
-  const files = (project.files as Record<string, string>) ?? {
+  const files = (project?.files as Record<string, string>) ?? {
     "/App.tsx": `export default function App() {
   return (
     <div className="p-8">
@@ -68,7 +64,7 @@ root.render(
     ),
   };
 
-  const dependencies = (project.dependencies as Record<string, string>) ?? {
+  const dependencies = (project?.dependencies as Record<string, string>) ?? {
     react: "^19.2.0",
     "react-dom": "^19.2.0",
   };
@@ -79,7 +75,7 @@ root.render(
 
   return (
     <ProjectProvider>
-      <EditorLayout files={files} dependencies={dependencies} options={options}>
+      <EditorLayout files={files} dependencies={dependencies} options={options} userId={session.user.id}>
         <AppHeader>
           <Breadcrumb>
             <BreadcrumbList>
@@ -90,7 +86,9 @@ root.render(
               </BreadcrumbItem>
               <BreadcrumbSeparator variant="slash" />
               <BreadcrumbItem>
-                <BreadcrumbPage>{project.name}</BreadcrumbPage>
+                <BreadcrumbPage>
+                  <ProjectTitle fallbackName={project?.name} />
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -110,7 +108,6 @@ root.render(
           </div>
         </AppHeader>
       </EditorLayout>
-      <ProjectThreadManager projectId={projectId} hasExistingThreadId={!!project.tamboThreadId} />
     </ProjectProvider>
   );
 }
