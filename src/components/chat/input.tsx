@@ -29,11 +29,12 @@ export const ChatInput = (props: ChatInputProps) => {
       e.preventDefault();
       if ((!value.trim() && images.length === 0) || isSubmitting) return;
 
-      setDisplayValue("");
       setIsSubmitting(true);
 
+      // Clear input immediately for better UX
+      setDisplayValue("");
       if (images.length > 0) {
-        setTimeout(() => clearImages(), 0);
+        clearImages();
       }
 
       try {
@@ -41,14 +42,12 @@ export const ChatInput = (props: ChatInputProps) => {
         setValue("");
       } catch (error) {
         console.error("Failed to submit message:", error);
-        setDisplayValue(value);
-        await cancel();
       } finally {
         setIsSubmitting(false);
         textareaRef.current?.focus();
       }
     },
-    [value, submit, setValue, cancel, images, clearImages, isSubmitting],
+    [value, submit, setValue, images, clearImages, isSubmitting],
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
