@@ -96,7 +96,7 @@ root.render(
 
   return (
     <ProjectProvider>
-      <EditorLayout files={files} dependencies={dependencies} options={options} userId={session.user.id}>
+      <EditorLayout files={files} dependencies={dependencies} options={options} userId={session.user.id} projectId={projectId}>
         <AppHeader>
           <Breadcrumb>
             <BreadcrumbList>

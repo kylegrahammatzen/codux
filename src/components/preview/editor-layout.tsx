@@ -12,6 +12,7 @@ type EditorLayoutProps = {
   dependencies: ProjectDependencies;
   options?: ProjectOptions;
   userId: string;
+  projectId?: string;
 };
 
 export const EditorLayout = (props: EditorLayoutProps) => {
@@ -25,6 +26,8 @@ export const EditorLayout = (props: EditorLayoutProps) => {
         files={props.files}
         dependencies={props.dependencies}
         options={props.options}
+        userId={props.userId}
+        projectId={props.projectId}
       />
     </EditorContainer>
   );
