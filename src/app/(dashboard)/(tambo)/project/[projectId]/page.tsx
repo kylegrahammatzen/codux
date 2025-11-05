@@ -8,8 +8,8 @@ import { hasSession } from "@/lib/auth";
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { getProject } from "@/actions/project";
 import { ProjectTitle } from "@/components/project/project-title";
+import { getProjectFiles, uploadProjectFiles } from "@/actions/storage";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -27,15 +27,13 @@ export default async function ProjectPage(props: ProjectPageProps) {
     redirect("/");
   }
 
-  // Try to get project from DB, but allow it to not exist yet (will be created on first response)
-  const projectResult = await getProject(projectId);
-  const project = projectResult.success ? projectResult.project : null;
+  // Project will be created in DB on first message submission if it doesn't exist
 
-  // Use project files if they exist, otherwise use default files
-  const files = (project?.files as Record<string, string>) ?? {
+  // Default files for new projects
+  const defaultFiles = {
     "/App.tsx": `export default function App() {
   return (
-    <div className="p-8">
+    <div className="p-2">
       <h1 className="text-2xl font-bold mb-2">Hello World</h1>
       <p className="text-gray-600">Edit App.tsx to get started!</p>
     </div>
@@ -64,10 +62,33 @@ root.render(
     ),
   };
 
-  const dependencies = (project?.dependencies as Record<string, string>) ?? {
+  // Load files from Supabase Storage
+  const filesResult = await getProjectFiles(session.user.id, projectId);
+  let files: Record<string, string> = filesResult.files;
+
+  // If no files exist in storage, upload default files
+  if (Object.keys(files).length === 0) {
+    await uploadProjectFiles(session.user.id, projectId, defaultFiles);
+    files = defaultFiles;
+  }
+
+  // Parse dependencies from package.json
+  let dependencies: Record<string, string> = {
     react: "^19.2.0",
     "react-dom": "^19.2.0",
   };
+
+  const packageJson = files["/package.json"];
+  if (packageJson) {
+    try {
+      const parsed = JSON.parse(packageJson);
+      if (parsed.dependencies) {
+        dependencies = parsed.dependencies;
+      }
+    } catch (error) {
+      console.error("Failed to parse package.json:", error);
+    }
+  }
 
   const options = {
     externalResources: ["https://cdn.tailwindcss.com"],
