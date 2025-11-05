@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { MoreVertical, Pencil, Copy, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Copy, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,6 +40,7 @@ export const ProjectCard = (props: ProjectCardProps) => {
   const { updateProjectName, removeProject } = useProjects();
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const toast = useToast();
 
   const handleCopyId = async () => {
     await navigator.clipboard.writeText(props.id);
@@ -86,6 +88,14 @@ export const ProjectCard = (props: ProjectCardProps) => {
               Edited {formatRelativeTime(props.updatedAt)}
             </p>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="shrink-0"
+            render={<Link href={`/project/${props.id}`} />}
+          >
+            <Eye className="size-4" />
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={(triggerProps) => (
