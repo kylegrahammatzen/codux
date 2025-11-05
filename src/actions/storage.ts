@@ -126,16 +126,49 @@ export async function updateProjectFile(
   content: string
 ) {
   try {
+    console.log("[updateProjectFile] Called with:", {
+      userId,
+      projectId,
+      filename,
+      contentLength: content?.length,
+    });
+
+    if (!userId) {
+      console.error("[updateProjectFile] userId is required");
+      return {
+        success: false,
+        message: "User ID is required",
+      };
+    }
+
+    if (!projectId) {
+      console.error("[updateProjectFile] projectId is required");
+      return {
+        success: false,
+        message: "Project ID is required",
+      };
+    }
+
     if (!filename) {
-      console.error("updateProjectFile called with undefined filename");
+      console.error("[updateProjectFile] filename is required");
       return {
         success: false,
         message: "Filename is required",
       };
     }
 
+    if (content === undefined || content === null) {
+      console.error("[updateProjectFile] content is required");
+      return {
+        success: false,
+        message: "File content is required",
+      };
+    }
+
     const cleanFilename = filename.startsWith("/") ? filename.slice(1) : filename;
     const path = `${userId}/${projectId}/${cleanFilename}`;
+
+    console.log("[updateProjectFile] Uploading to path:", path);
 
     const { error } = await supabase.storage
       .from(BUCKET_NAME)
@@ -145,21 +178,26 @@ export async function updateProjectFile(
       });
 
     if (error) {
-      console.error("Failed to update file:", error);
+      console.error("[updateProjectFile] Supabase error:", {
+        message: error.message,
+        statusCode: error.statusCode,
+        error: error,
+      });
       return {
         success: false,
-        message: "Failed to update file",
+        message: `Failed to update file: ${error.message}`,
       };
     }
 
+    console.log("[updateProjectFile] Successfully uploaded:", path);
     return {
       success: true,
     };
   } catch (error) {
-    console.error("Failed to update project file:", error);
+    console.error("[updateProjectFile] Unexpected error:", error);
     return {
       success: false,
-      message: "Failed to update project file",
+      message: `Failed to update project file: ${error instanceof Error ? error.message : String(error)}`,
     };
   }
 }
