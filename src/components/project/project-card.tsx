@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { MoreVertical, Pencil, Copy, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
+import { useTamboThreadList } from "@tambo-ai/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +42,16 @@ export const ProjectCard = (props: ProjectCardProps) => {
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const toast = useToast();
+  const contextKey = `project-${props.id}`;
+  const { data: threads } = useTamboThreadList({ contextKey });
+  const [displayName, setDisplayName] = useState(props.name);
+
+  useEffect(() => {
+    // Use thread name from Tambo if available, otherwise use database name
+    if (threads?.items?.[0]?.name) {
+      setDisplayName(threads.items[0].name);
+    }
+  }, [threads]);
 
   const handleCopyId = async () => {
     await navigator.clipboard.writeText(props.id);
@@ -82,7 +93,7 @@ export const ProjectCard = (props: ProjectCardProps) => {
         <div className="flex items-center gap-2 min-w-0">
           <div className="flex-1 min-w-0">
             <h3 className="font-medium">
-              {truncateText(props.name)}
+              {truncateText(displayName)}
             </h3>
             <p className="text-sm text-muted-foreground">
               Edited {formatRelativeTime(props.updatedAt)}
