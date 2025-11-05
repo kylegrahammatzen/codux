@@ -4,7 +4,7 @@ import { useTamboThreadInput, useTamboThread } from "@tambo-ai/react";
 import { useFileUpload } from "@/contexts/file-upload-context";
 import { useParams } from "next/navigation";
 import * as React from "react";
-import { createProject, getProject } from "@/actions/project";
+import { createProject, getProject, renameProject } from "@/actions/project";
 
 /**
  * Handles submitting a pending message from the home page.
@@ -13,10 +13,12 @@ import { createProject, getProject } from "@/actions/project";
 export const PendingMessageHandler = (props: { userId: string }) => {
   const params = useParams();
   const { submit, setValue } = useTamboThreadInput();
-  const { thread } = useTamboThread();
+  const { thread, generateThreadName } = useTamboThread();
   const { images, clearImages } = useFileUpload();
   const hasSubmitted = React.useRef(false);
   const hasCreatedProject = React.useRef(false);
+  const hasGeneratedName = React.useRef(false);
+  const hasSyncedName = React.useRef(false);
 
   // Create project in database after first message submission (only if it doesn't exist)
   React.useEffect(() => {
@@ -53,6 +55,46 @@ export const PendingMessageHandler = (props: { userId: string }) => {
         console.error("[PendingMessageHandler] Error handling project creation:", error);
       });
   }, [thread?.id, thread?.messages, thread?.name, params, props.userId]);
+
+  // Auto-generate thread name after first message
+  React.useEffect(() => {
+    if (hasGeneratedName.current || !thread?.id) return;
+
+    // Wait for at least one message and no existing name
+    if (!thread.messages || thread.messages.length === 0 || thread.name) return;
+
+    hasGeneratedName.current = true;
+
+    // Generate AI thread name
+    generateThreadName(thread.id)
+      .then(() => {
+        console.log("[PendingMessageHandler] Thread name generation triggered");
+      })
+      .catch((error) => {
+        console.error("[PendingMessageHandler] Failed to generate thread name:", error);
+      });
+  }, [thread?.id, thread?.messages, thread?.name, generateThreadName]);
+
+  // Sync thread name to database when it updates
+  React.useEffect(() => {
+    if (hasSyncedName.current || !thread?.name) return;
+
+    const projectId = params?.projectId as string;
+    if (!projectId) return;
+
+    hasSyncedName.current = true;
+
+    // Sync the thread name to the project name in database
+    renameProject(projectId, thread.name)
+      .then((result) => {
+        if (result.success) {
+          console.log("[PendingMessageHandler] Project name synced:", thread.name);
+        }
+      })
+      .catch((error) => {
+        console.error("[PendingMessageHandler] Failed to sync project name:", error);
+      });
+  }, [thread?.name, params]);
 
   React.useEffect(() => {
     // Only run once when component mounts

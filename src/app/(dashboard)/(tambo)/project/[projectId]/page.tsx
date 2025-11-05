@@ -87,7 +87,7 @@ root.render(
               <BreadcrumbSeparator variant="slash" />
               <BreadcrumbItem>
                 <BreadcrumbPage>
-                  <ProjectTitle fallbackName={project?.name} />
+                  <ProjectTitle />
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
