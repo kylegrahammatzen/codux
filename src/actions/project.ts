@@ -5,14 +5,13 @@ import { project } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { generateId } from "better-auth";
 
-export async function createProject(userId: string, name?: string, customProjectId?: string) {
+export async function createProject(userId: string, customProjectId?: string) {
   try {
     const projectId = customProjectId || generateId();
 
     await db.insert(project).values({
       id: projectId,
       userId,
-      name: name || "Untitled Project",
     });
 
     return {
@@ -97,24 +96,6 @@ export async function getUserProjects(userId: string) {
   }
 }
 
-export async function renameProject(projectId: string, name: string) {
-  try {
-    await db
-      .update(project)
-      .set({ name })
-      .where(eq(project.id, projectId));
-
-    return {
-      success: true,
-    };
-  } catch (error) {
-    console.error("Failed to rename project:", error);
-    return {
-      success: false,
-      message: "Failed to rename project",
-    };
-  }
-}
 
 export async function deleteProject(projectId: string) {
   try {

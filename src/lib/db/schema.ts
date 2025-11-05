@@ -67,7 +67,6 @@ export const project = pgTable("project", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  name: text("name").default("Untitled Project").notNull(),
   tamboThreadId: text("tambo_thread_id"),
   files: jsonb("files"),
   dependencies: jsonb("dependencies"),
