@@ -13,7 +13,6 @@ export default async function ProjectsPage() {
   const result = await getUserProjects(session.user.id);
   const projects: Project[] = result.projects.map((project) => ({
     id: project.id,
-    name: project.name,
     updatedAt: new Date(project.updatedAt),
   }));
 

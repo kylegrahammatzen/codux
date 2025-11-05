@@ -1,10 +1,26 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useProjects } from "@/providers/projects-provider";
 import { ProjectCard } from "./project-card";
 
 export const ProjectList = () => {
   const { filteredProjects } = useProjects();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filteredProjects.map((project) => (
+          <div key={project.id} className="bg-card rounded-lg border h-[280px] animate-pulse" />
+        ))}
+      </div>
+    );
+  }
 
   if (filteredProjects.length === 0) {
     return (
