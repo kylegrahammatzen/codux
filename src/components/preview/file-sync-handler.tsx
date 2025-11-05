@@ -52,24 +52,30 @@ export const FileSyncHandler = (props: FileSyncHandlerProps) => {
 
         const parsed = JSON.parse(content);
         if (parsed.success) {
-          console.log("[FileSyncHandler] File update tool succeeded, refetching files");
+          console.log("[FileSyncHandler] File update tool succeeded, waiting before refetch");
           lastProcessedMessageId.current = lastMessage.id;
 
-          // Refetch files from storage
-          getProjectFiles(props.userId, props.projectId).then((result) => {
-            if (result.success && Object.keys(result.files).length > 0) {
-              console.log("[FileSyncHandler] Files refetched, updating Sandpack");
+          // Wait a bit for storage to fully commit
+          setTimeout(() => {
+            console.log("[FileSyncHandler] Refetching files from storage");
+            getProjectFiles(props.userId, props.projectId).then((result) => {
+              if (result.success && Object.keys(result.files).length > 0) {
+                console.log("[FileSyncHandler] Files refetched:", Object.keys(result.files));
 
-              // Update each file in Sandpack
-              Object.entries(result.files).forEach(([path, content]) => {
-                sandpack.updateFile(path, content);
-              });
+                // Update each file in Sandpack
+                Object.entries(result.files).forEach(([path, content]) => {
+                  console.log(`[FileSyncHandler] Updating ${path} (${content.length} chars)`);
+                  sandpack.updateFile(path, content);
+                });
 
-              console.log("[FileSyncHandler] Sandpack files updated successfully");
-            }
-          }).catch((error) => {
-            console.error("[FileSyncHandler] Failed to refetch files:", error);
-          });
+                console.log("[FileSyncHandler] Sandpack files updated successfully");
+              } else {
+                console.warn("[FileSyncHandler] No files returned from storage");
+              }
+            }).catch((error) => {
+              console.error("[FileSyncHandler] Failed to refetch files:", error);
+            });
+          }, 500);
         }
       } catch (error) {
         // Not JSON or parse failed, ignore
