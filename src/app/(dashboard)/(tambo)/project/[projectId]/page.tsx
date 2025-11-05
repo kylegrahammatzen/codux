@@ -81,7 +81,7 @@ root.render(
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/">Logo</Link>
+                  <Link href="/">Codux</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator variant="slash" />
