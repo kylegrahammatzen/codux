@@ -7,11 +7,9 @@ import {
   MessageRenderedComponentArea,
   ReasoningInfo,
   ToolcallInfo,
-  type messageVariants,
 } from "@/components/tambo/message";
 import { cn } from "@/lib/utils";
 import { type TamboThreadMessage, useTambo } from "@tambo-ai/react";
-import { type VariantProps } from "tailwind-variants";
 import { Loader2 } from "lucide-react";
 import { checkHasContent } from "@/lib/thread-hooks";
 import * as React from "react";
@@ -21,13 +19,11 @@ import * as React from "react";
  * @property {Array} messages - Array of message objects in the thread
  * @property {boolean} isGenerating - Whether a response is being generated
  * @property {string|undefined} generationStage - Current generation stage
- * @property {VariantProps<typeof messageVariants>["variant"]} [variant] - Optional styling variant for messages
  */
 interface ThreadContentContextValue {
   messages: TamboThreadMessage[];
   isGenerating: boolean;
   generationStage?: string;
-  variant?: VariantProps<typeof messageVariants>["variant"];
 }
 
 /**
@@ -59,8 +55,6 @@ const useThreadContentContext = () => {
  */
 export interface ThreadContentProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  /** Optional styling variant for the message container */
-  variant?: VariantProps<typeof messageVariants>["variant"];
   /** The child elements to render within the container. */
   children?: React.ReactNode;
 }
@@ -77,7 +71,7 @@ export interface ThreadContentProps
  * ```
  */
 const ThreadContent = React.forwardRef<HTMLDivElement, ThreadContentProps>(
-  ({ children, className, variant, ...props }, ref) => {
+  ({ children, className, ...props }, ref) => {
     const { thread, generationStage, isIdle } = useTambo();
     const isGenerating = !isIdle;
 
@@ -86,9 +80,8 @@ const ThreadContent = React.forwardRef<HTMLDivElement, ThreadContentProps>(
         messages: thread?.messages ?? [],
         isGenerating,
         generationStage,
-        variant,
       }),
-      [thread?.messages, isGenerating, generationStage, variant],
+      [thread?.messages, isGenerating, generationStage],
     );
 
     return (
@@ -128,7 +121,7 @@ const ThreadContentMessages = React.forwardRef<
   HTMLDivElement,
   ThreadContentMessagesProps
 >(({ className, ...props }, ref) => {
-  const { messages, isGenerating, variant } = useThreadContentContext();
+  const { messages, isGenerating } = useThreadContentContext();
 
   const filteredMessages = messages.filter(
     (message) =>
@@ -140,7 +133,7 @@ const ThreadContentMessages = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn("flex flex-col gap-3", className)}
+      className={cn("flex flex-col gap-4", className)}
       data-slot="thread-content-messages"
       {...props}
     >
@@ -153,16 +146,16 @@ const ThreadContentMessages = React.forwardRef<
               }-${message.content?.toString().substring(0, 10)}`
             }
             data-slot="thread-content-item"
+            className={cn(
+              "flex",
+              message.role === "assistant" ? "justify-start" : "justify-end",
+            )}
           >
             <Message
               role={message.role === "assistant" ? "assistant" : "user"}
               message={message}
-              variant={variant}
               isLoading={isGenerating && index === filteredMessages.length - 1}
-              className={cn(
-                "flex",
-                message.role === "assistant" ? "justify-start" : "justify-end",
-              )}
+              className="flex flex-col"
             >
               <ReasoningInfo />
               <MessageImages />
@@ -184,18 +177,13 @@ const ThreadContentMessages = React.forwardRef<
         filteredMessages[filteredMessages.length - 1]?.role !== "assistant" ||
         !checkHasContent(filteredMessages[filteredMessages.length - 1]?.content)
       ) && (
-        <div
-          data-slot="thread-content-loading"
-          className="flex justify-start"
-        >
-          <div className="flex flex-col w-fit max-w-[80%]">
+          <div className="flex justify-start">
             <div className="relative flex items-center gap-2 rounded-md px-4 py-1.5 text-[15px] leading-normal transition-all duration-200 font-normal text-foreground font-sans bg-accent break-words">
               <Loader2 className="w-4 h-4 animate-spin" />
               Thinking...
             </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 });

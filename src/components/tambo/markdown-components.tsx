@@ -183,19 +183,19 @@ export const createMarkdownComponents = (): Record<
    * Unordered list component with disc-style bullets
    * Indented from the left margin
    */
-  ul: ({ children }) => <ul className="list-disc pl-5">{children}</ul>,
+  ul: ({ children }) => <ul className="list-disc pl-5 flex flex-col gap-1 my-2">{children}</ul>,
 
   /**
    * Ordered list component with decimal numbering
    * Indented from the left margin
    */
-  ol: ({ children }) => <ol className="list-decimal pl-5">{children}</ol>,
+  ol: ({ children }) => <ol className="list-decimal pl-5 flex flex-col gap-1 my-2">{children}</ol>,
 
   /**
    * List item component with normal line height
    * Used within both ordered and unordered lists
    */
-  li: ({ children }) => <li className="leading-normal">{children}</li>,
+  li: ({ children }) => <li className="leading-normal block">{children}</li>,
 
   /**
    * Blockquote component for quoted content

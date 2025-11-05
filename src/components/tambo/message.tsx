@@ -13,10 +13,14 @@ import type TamboAI from "@tambo-ai/typescript-sdk";
 import { tv, type VariantProps } from "tailwind-variants";
 import stringify from "json-stringify-pretty-compact";
 import { Check, ChevronDown, ExternalLink, Loader2, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import * as React from "react";
 import { useState } from "react";
 import { Streamdown } from "streamdown";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 
 /**
  * CSS variants for the message container
@@ -25,7 +29,7 @@ import { Streamdown } from "streamdown";
  * @property {string} solid - Solid styling with shadow effects
  */
 const messageVariants = tv({
-  base: "flex",
+  base: "flex flex-col gap-2 max-w-[85%]",
   variants: {
     variant: {
       default: "",
@@ -344,28 +348,6 @@ const ToolcallInfo = React.forwardRef<HTMLDivElement, ToolcallInfoProps>(
     const [isExpanded, setIsExpanded] = useState(false);
     const { message, isLoading } = useMessageContext();
     const { thread } = useTambo();
-    const toolDetailsId = React.useId();
-
-    const associatedToolResponse = React.useMemo(() => {
-      if (!thread?.messages) return null;
-      const currentMessageIndex = thread.messages.findIndex(
-        (m: TamboThreadMessage) => m.id === message.id,
-      );
-      if (currentMessageIndex === -1) return null;
-      for (let i = currentMessageIndex + 1; i < thread.messages.length; i++) {
-        const nextMessage = thread.messages[i];
-        if (nextMessage.role === "tool") {
-          return nextMessage;
-        }
-        if (
-          nextMessage.role === "assistant" &&
-          getToolCallRequest(nextMessage)
-        ) {
-          break;
-        }
-      }
-      return null;
-    }, [message, thread?.messages]);
 
     if (message.role !== "assistant" || !getToolCallRequest(message)) {
       return null;
@@ -373,75 +355,113 @@ const ToolcallInfo = React.forwardRef<HTMLDivElement, ToolcallInfoProps>(
 
     const toolCallRequest: TamboAI.ToolCallRequest | undefined =
       getToolCallRequest(message);
-    const hasToolError = message.error;
+
+    let associatedToolResponse = null;
+    if (thread?.messages) {
+      const currentMessageIndex = thread.messages.findIndex(
+        (m: TamboThreadMessage) => m.id === message.id,
+      );
+      if (currentMessageIndex !== -1) {
+        for (let i = currentMessageIndex + 1; i < thread.messages.length; i++) {
+          const nextMessage = thread.messages[i];
+          if (nextMessage.role === "tool") {
+            associatedToolResponse = nextMessage;
+            break;
+          }
+          if (
+            nextMessage.role === "assistant" &&
+            getToolCallRequest(nextMessage)
+          ) {
+            break;
+          }
+        }
+      }
+    }
+
+    // Check if tool response indicates failure
+    let toolResponseHasError = false;
+    if (associatedToolResponse?.content) {
+      try {
+        const content = typeof associatedToolResponse.content === 'string'
+          ? associatedToolResponse.content
+          : Array.isArray(associatedToolResponse.content)
+            ? associatedToolResponse.content.map(item => item.type === 'text' ? item.text : '').join('')
+            : '';
+        const parsed = JSON.parse(content);
+        toolResponseHasError = parsed.success === false;
+      } catch {
+        toolResponseHasError = false;
+      }
+    }
+
+    const hasToolError = message.error || toolResponseHasError;
 
     const toolStatusMessage = getToolStatusMessage(message, isLoading);
 
     return (
       <div
         ref={ref}
-        className={cn(
-          "flex flex-col items-start text-xs opacity-50",
-          className,
-        )}
+        className={cn(className)}
         data-slot="toolcall-info"
         {...props}
       >
-        <div className="flex flex-col w-full">
-          <button
-            type="button"
-            aria-expanded={isExpanded}
-            aria-controls={toolDetailsId}
-            onClick={() => setIsExpanded(!isExpanded)}
-            className={cn(
-              "flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded-md p-1 select-none w-fit",
-            )}
-          >
-            {hasToolError ? (
-              <X className="w-3 h-3 text-bold text-red-500" />
-            ) : isLoading ? (
-              <Loader2 className="w-3 h-3 text-muted-foreground text-bold animate-spin" />
-            ) : (
-              <Check className="w-3 h-3 text-bold text-green-500" />
-            )}
-            <span>{toolStatusMessage}</span>
-            <ChevronDown
-              className={cn(
-                "w-3 h-3 transition-transform duration-200",
-                !isExpanded && "-rotate-90",
+        <div className="overflow-hidden rounded-lg border border-border">
+          <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+            <CollapsibleTrigger
+              render={(triggerProps) => (
+                <Button
+                  {...triggerProps}
+                  variant="ghost"
+                  className="h-auto w-full justify-between rounded-none bg-accent px-2 py-2 hover:bg-accent/80"
+                >
+                  <div className="flex items-center gap-2">
+                    {hasToolError ? (
+                      <X className="h-4 w-4" />
+                    ) : isLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Check className="h-4 w-4" />
+                    )}
+                    <span className="font-mono text-sm font-medium">
+                      {toolCallRequest?.toolName}
+                    </span>
+                    {hasToolError ? (
+                      <Badge variant="danger">Error</Badge>
+                    ) : isLoading ? (
+                      <Badge variant="info">Running</Badge>
+                    ) : (
+                      <Badge variant="success">Completed</Badge>
+                    )}
+                  </div>
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      !isExpanded && "-rotate-90"
+                    )}
+                  />
+                </Button>
               )}
             />
-          </button>
-          <div
-            id={toolDetailsId}
-            className={cn(
-              "flex flex-col gap-1 p-3 pl-7 overflow-auto transition-[max-height,opacity,padding] duration-300 w-full truncate",
-              isExpanded ? "max-h-auto opacity-100" : "max-h-0 opacity-0 p-0",
-            )}
-          >
-            <span className="whitespace-pre-wrap pl-2">
-              tool: {toolCallRequest?.toolName}
-            </span>
-            <span className="whitespace-pre-wrap pl-2">
-              parameters:{"\n"}
-              {stringify(keyifyParameters(toolCallRequest?.parameters))}
-            </span>
-            <SamplingSubThread parentMessageId={message.id} />
-            {associatedToolResponse && (
-              <div className="pl-2">
-                <span className="whitespace-pre-wrap">result:</span>
-                <div>
-                  {!associatedToolResponse.content ? (
-                    <span className="text-muted-foreground italic">
-                      Empty response
-                    </span>
-                  ) : (
-                    formatToolResult(associatedToolResponse.content, markdown)
-                  )}
-                </div>
+
+            <CollapsibleContent>
+              <div className="flex flex-col gap-2 bg-card">
+                {associatedToolResponse && !associatedToolResponse.content && (
+                  <div className="border-t border-border p-2 text-xs text-muted-foreground italic">
+                    Empty response
+                  </div>
+                )}
+
+                {associatedToolResponse?.content && formatToolResult(associatedToolResponse.content, markdown)}
+
+                {hasToolError && message.error && (
+                  <div className="border-t border-destructive/20 p-2 text-xs">
+                    <div className="font-medium text-destructive mb-2">Error</div>
+                    {message.error}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </div>
     );
@@ -464,7 +484,6 @@ const SamplingSubThread = ({
 }) => {
   const { thread } = useTambo();
   const [isExpanded, setIsExpanded] = useState(false);
-  const samplingDetailsId = React.useId();
 
   const childMessages = React.useMemo(() => {
     return thread?.messages?.filter(
@@ -475,52 +494,43 @@ const SamplingSubThread = ({
   if (!childMessages?.length) return null;
 
   return (
-    <div className="flex flex-col gap-1">
-      <button
-        type="button"
-        aria-expanded={isExpanded}
-        aria-controls={samplingDetailsId}
-        onClick={() => setIsExpanded(!isExpanded)}
-        className={cn(
-          "flex items-center gap-1 cursor-pointer hover:bg-muted-foreground/10 rounded-md p-2 select-none w-fit",
-        )}
-      >
-        <span>{titleText}</span>
-        <ChevronDown
-          className={cn(
-            "w-3 h-3 transition-transform duration-200",
-            !isExpanded && "-rotate-90",
+    <div>
+      <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+        <CollapsibleTrigger
+          render={(triggerProps) => (
+            <Button
+              {...triggerProps}
+              variant="ghost"
+              className="h-auto w-full justify-start gap-2 rounded px-0 py-1"
+            >
+              <span className="text-xs font-medium">{titleText}</span>
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 transition-transform duration-200",
+                  !isExpanded && "-rotate-90"
+                )}
+              />
+            </Button>
           )}
         />
-      </button>
-      <div
-        id={samplingDetailsId}
-        className={cn(
-          "transition-[max-height,opacity] duration-300",
-          isExpanded
-            ? "max-h-96 opacity-100 overflow-auto"
-            : "max-h-0 opacity-0 overflow-hidden",
-        )}
-        aria-hidden={!isExpanded}
-      >
-        <div className="pl-2">
-          <div className="border-l-2 border-muted-foreground p-2 flex flex-col gap-4">
+
+        <CollapsibleContent>
+          <div className="flex flex-col gap-2 border-l-2 border-border pl-2">
             {childMessages?.map((m: TamboThreadMessage) => (
-              <div key={m.id} className={`${m.role === "user" && "pl-2"}`}>
-                <span
-                  className={cn(
-                    "whitespace-pre-wrap",
-                    m.role === "assistant" &&
-                      "bg-muted/50 rounded-md p-2 inline-block w-fit",
-                  )}
-                >
-                  {getSafeContent(m.content)}
-                </span>
+              <div key={m.id}>
+                <div className="border border-border  p-2 text-xs">
+                  <div className="mb-2 text-xs font-medium text-muted-foreground">
+                    {m.role === "user" ? "User" : "Assistant"}
+                  </div>
+                  <div className="whitespace-pre-wrap">
+                    {getSafeContent(m.content)}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 };
@@ -543,7 +553,6 @@ export type ReasoningInfoProps = Omit<
 const ReasoningInfo = React.forwardRef<HTMLDivElement, ReasoningInfoProps>(
   ({ className, ...props }, ref) => {
     const { message, isLoading } = useMessageContext();
-    const reasoningDetailsId = React.useId();
     const [isExpanded, setIsExpanded] = useState(true);
     const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -585,67 +594,68 @@ const ReasoningInfo = React.forwardRef<HTMLDivElement, ReasoningInfoProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          "flex flex-col items-start text-xs opacity-50",
-          className,
-        )}
+        className={cn(className)}
         data-slot="reasoning-info"
         {...props}
       >
-        <div className="flex flex-col w-full">
-          <button
-            type="button"
-            aria-expanded={isExpanded}
-            aria-controls={reasoningDetailsId}
-            onClick={() => setIsExpanded(!isExpanded)}
-            className={cn(
-              "flex items-center gap-1 cursor-pointer hover:bg-muted-foreground/10 rounded-md px-3 py-1 select-none w-fit",
-            )}
-          >
-            <span className={isLoading ? "animate-thinking-gradient" : ""}>
-              {isLoading
-                ? "Thinking "
-                : message.reasoningDurationMS
-                  ? formatReasoningDuration(message.reasoningDurationMS) + " "
-                  : "Done Thinking "}
-              {message.reasoning.length > 1
-                ? `(${message.reasoning.length} steps)`
-                : ""}
-            </span>
-            <ChevronDown
-              className={cn(
-                "w-3 h-3 transition-transform duration-200",
-                !isExpanded && "-rotate-90",
+        <div className="overflow-hidden rounded-lg border border-border">
+          <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+            <CollapsibleTrigger
+              render={(triggerProps) => (
+                <Button
+                  {...triggerProps}
+                  variant="ghost"
+                  className="h-auto w-full justify-between rounded-none bg-accent px-2 py-2 hover:bg-accent/80"
+                >
+                  <div className="flex items-center gap-2">
+                    <Loader2 className={cn("h-4 w-4", isLoading && "animate-spin")} />
+                    <span className={cn("text-sm font-medium", isLoading && "animate-thinking-gradient")}>
+                      {isLoading
+                        ? "Thinking"
+                        : message.reasoningDurationMS
+                          ? formatReasoningDuration(message.reasoningDurationMS)
+                          : "Done Thinking"}
+                    </span>
+                    {message.reasoning && message.reasoning.length > 1 && (
+                      <Badge variant="info">{message.reasoning.length} steps</Badge>
+                    )}
+                  </div>
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      !isExpanded && "-rotate-90"
+                    )}
+                  />
+                </Button>
               )}
             />
-          </button>
-          <div
-            ref={scrollContainerRef}
-            id={reasoningDetailsId}
-            className={cn(
-              "flex flex-col gap-1 px-3 py-3 overflow-auto transition-[max-height,opacity,padding] duration-300 w-full",
-              isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0 p-0",
-            )}
-          >
-            {message.reasoning.map((reasoningStep, index) => (
-              <div key={index} className="flex flex-col gap-1">
-                {message.reasoning?.length && message.reasoning.length > 1 && (
-                  <span className="text-muted-foreground text-xs font-medium">
-                    Step {index + 1}:
-                  </span>
-                )}
-                {reasoningStep ? (
-                  <div className="bg-muted/50 rounded-md p-3 text-xs overflow-x-auto overflow-y-auto max-w-full">
-                    <div className="whitespace-pre-wrap break-words">
-                      <Streamdown components={markdownComponents}>
-                        {reasoningStep}
-                      </Streamdown>
-                    </div>
+
+            <CollapsibleContent>
+              <div
+                ref={scrollContainerRef}
+                className="flex max-h-96 flex-col gap-2 overflow-auto p-2 text-xs"
+              >
+                {message.reasoning?.map((reasoningStep, index) => (
+                  <div key={index} className="flex flex-col gap-2">
+                    {message.reasoning && message.reasoning.length > 1 && (
+                      <h4 className="text-sm font-medium text-muted-foreground">
+                        Step {index + 1}
+                      </h4>
+                    )}
+                    {reasoningStep ? (
+                      <div className="rounded border border-border bg-background p-2 text-xs">
+                        <div className="whitespace-pre-wrap break-words">
+                          <Streamdown components={markdownComponents}>
+                            {reasoningStep}
+                          </Streamdown>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
-                ) : null}
+                ))}
               </div>
-            ))}
-          </div>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </div>
     );
@@ -710,27 +720,35 @@ function formatToolResult(
     try {
       const parsed = JSON.parse(contentString);
       return (
-        <pre
-          className={cn(
-            "bg-muted/50 rounded-md p-3 text-xs overflow-x-auto overflow-y-auto max-w-full max-h-64",
-          )}
-        >
-          <code className="font-mono break-words whitespace-pre-wrap">
+        <div className="max-h-60 overflow-auto bg-accent/30">
+          <pre className="whitespace-pre-wrap break-words font-mono text-xs">
             {JSON.stringify(parsed, null, 2)}
-          </code>
-        </pre>
+          </pre>
+        </div>
       );
     } catch {
       // JSON parsing failed, render as markdown or plain text
-      if (!enableMarkdown) return contentString;
+      if (!enableMarkdown) {
+        return (
+          <div className="max-h-60 overflow-auto text-xs bg-accent/30">
+            {contentString}
+          </div>
+        );
+      }
       return (
-        <Streamdown components={markdownComponents}>{contentString}</Streamdown>
+        <div className="max-h-60 overflow-auto text-xs bg-accent/30">
+          <Streamdown components={markdownComponents}>{contentString}</Streamdown>
+        </div>
       );
     }
   }
 
   // If content is not a string or array, use getSafeContent as fallback
-  return getSafeContent(content);
+  return (
+    <div className="text-xs bg-accent/30">
+      {getSafeContent(content)}
+    </div>
+  );
 }
 
 /**

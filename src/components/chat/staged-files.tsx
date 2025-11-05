@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { X, File } from "lucide-react";
+import { X } from "lucide-react";
 import * as React from "react";
 import Image from "next/image";
 import type { StagedImage } from "@tambo-ai/react";
@@ -35,11 +35,14 @@ const truncateFilename = (filename: string, maxLength = 12): string => {
 };
 
 export const StagedFiles = (props: StagedFilesProps) => {
-  if (props.files.length === 0) return null;
-
   const isImage = (file: StagedImage) => {
     return file.type.startsWith("image/");
   };
+
+  // Only show images for now
+  const imageFiles = props.files.filter(isImage);
+
+  if (imageFiles.length === 0) return null;
 
   const filePreview = (file: StagedImage) => (
     <div
@@ -64,14 +67,16 @@ export const StagedFiles = (props: StagedFilesProps) => {
               {truncateFilename(file.name)}
             </div>
           </>
-        ) : (
+        ) : null}
+        {/* File support commented out for now - only images supported */}
+        {/* ) : (
           <>
             <File className="size-8 text-muted-foreground" />
             <div className="absolute bottom-2 left-2 right-2 text-muted-foreground text-xs font-medium text-center truncate">
               {truncateFilename(file.name)}
             </div>
           </>
-        )}
+        )} */}
       </div>
       <Button
         type="button"
@@ -92,15 +97,15 @@ export const StagedFiles = (props: StagedFilesProps) => {
     <div
       className={cn(
         "transition-all duration-300 ease-[cubic-bezier(.165,.84,.44,1)]",
-        props.files.length > 0 ? "opacity-100" : "opacity-0"
+        imageFiles.length > 0 ? "opacity-100" : "opacity-0"
       )}
       style={{
         transitionProperty: "opacity, height",
       }}
     >
-      <ScrollArea key={props.files.length} orientation="horizontal">
+      <ScrollArea key={imageFiles.length} orientation="horizontal">
         <div className="flex items-center gap-2.5 mt-2">
-          {props.files.map((file) => filePreview(file))}
+          {imageFiles.map((file) => filePreview(file))}
         </div>
       </ScrollArea>
     </div>

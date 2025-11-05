@@ -8,7 +8,7 @@ import { tv, type VariantProps } from "tailwind-variants"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = tv({
-	base: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all ease-[cubic-bezier(.25,.46,.45,.94)] duration-200 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0",
+	base: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all ease-[cubic-bezier(.25,.46,.45,.94)] duration-200 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 cursor-pointer disabled:cursor-not-allowed disabled:select-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0",
 		variants: {
 			variant: {
 				default:

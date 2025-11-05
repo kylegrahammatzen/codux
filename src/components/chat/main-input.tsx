@@ -4,50 +4,63 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { StagedFiles } from "@/components/chat/staged-files";
 import { cn } from "@/lib/utils";
-import { SendHorizontal, Mic, File, SquareDashedMousePointer } from "lucide-react";
-import { useTamboThreadInput, useTamboThread } from "@tambo-ai/react";
+import { SendHorizontal, Mic, File } from "lucide-react";
 import * as React from "react";
+import { useRouter } from "next/navigation";
+import { useTamboThreadInput } from "@tambo-ai/react";
+import { useFileUpload } from "@/contexts/file-upload-context";
 
-type ChatInputProps = {
+type MainInputProps = {
   className?: string;
+  userId: string;
 };
 
-export const ChatInput = (props: ChatInputProps) => {
-  const { value, setValue, submit, images, removeImage, clearImages, addImages, isPending } = useTamboThreadInput();
-  const { cancel } = useTamboThread();
+function generateProjectId(): string {
+  return typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+export const MainInput = (props: MainInputProps) => {
+  const router = useRouter();
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const [displayValue, setDisplayValue] = React.useState("");
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  React.useEffect(() => {
-    setDisplayValue(value);
-  }, [value]);
+  const { value, setValue, submit, isPending } = useTamboThreadInput();
+  const { images, addImages, removeImage, clearImages } = useFileUpload();
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      if ((!value.trim() && images.length === 0) || isSubmitting) return;
+      if ((!value.trim() && images.length === 0) || isPending) return;
 
-      setIsSubmitting(true);
+      // Generate projectId client-side
+      const projectId = generateProjectId();
 
-      // Clear input immediately for better UX
-      setDisplayValue("");
+      // Store pending message in sessionStorage to be submitted from project page
+      // Note: Images are not transferred in initial message (can be added after)
+      try {
+        sessionStorage.setItem(
+          "pending-message",
+          JSON.stringify({
+            message: value,
+            projectId,
+          }),
+        );
+      } catch (error) {
+        console.error("[MainInput] Failed to store pending message:", error);
+      }
+
+      // Clear form state before navigation
+      setValue("");
       if (images.length > 0) {
         clearImages();
       }
 
-      try {
-        await submit({ streamResponse: true });
-        setValue("");
-      } catch (error) {
-        console.error("Failed to submit message:", error);
-      } finally {
-        setIsSubmitting(false);
-        textareaRef.current?.focus();
-      }
+      // Navigate to project page (will submit message there with correct contextKey)
+      console.log("[MainInput] Navigating to:", `/project/${projectId}`);
+      router.push(`/project/${projectId}`);
     },
-    [value, submit, setValue, images, clearImages, isSubmitting],
+    [value, setValue, isPending, images, clearImages, router],
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -58,15 +71,14 @@ export const ChatInput = (props: ChatInputProps) => {
   };
 
   const handleFileClick = () => {
+    if (images.length >= 3) return;
     fileInputRef.current?.click();
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    try {
+    if (files.length > 0) {
       await addImages(files);
-    } catch (error) {
-      console.error("Failed to add selected files:", error);
     }
     e.target.value = "";
   };
@@ -78,22 +90,19 @@ export const ChatInput = (props: ChatInputProps) => {
 
         <Textarea
           ref={textareaRef}
-          value={displayValue}
-          onChange={(e) => {
-            setValue(e.target.value);
-            setDisplayValue(e.target.value);
-          }}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask about the code..."
+          placeholder="Describe what you want to build..."
           className="bg-transparent border-none shadow-none min-h-20 resize-none focus-visible:ring-0 px-0 min-w-max"
         />
 
         <div className="flex justify-between items-center">
-          <div className="flex gap-2 overflow-hidden">
+          <div className="flex gap-2">
             <Button type="button" variant="outline" size="icon-sm" className="bg-card">
               <Mic className="size-4" />
             </Button>
-            <Button type="button" variant="outline" size="sm" className="bg-card" onClick={handleFileClick}>
+            <Button type="button" variant="outline" size="sm" className="bg-card" onClick={handleFileClick} disabled={images.length >= 3}>
               <File className="size-4" />
               Add file
               <input
@@ -106,17 +115,9 @@ export const ChatInput = (props: ChatInputProps) => {
                 aria-hidden="true"
               />
             </Button>
-            <div className="overflow-hidden -ml-2 pl-2">
-              <Button type="button" variant="outline" size="sm" className="bg-card transition-all duration-300 -translate-x-[10rem] opacity-0 pointer-events-none xl:translate-x-0 xl:opacity-100 xl:pointer-events-auto" style={{
-                transitionTimingFunction: "cubic-bezier(.165, .84, .44, 1)"
-              }} disabled>
-                <SquareDashedMousePointer className="size-4" />
-                Edit
-              </Button>
-            </div>
           </div>
 
-          <Button type="submit" variant="default" size="icon-sm" disabled={isPending || isSubmitting || (!displayValue.trim() && images.length === 0)}>
+          <Button type="submit" variant="default" size="icon-sm" disabled={isPending || (!value.trim() && images.length === 0)}>
             <SendHorizontal />
           </Button>
         </div>

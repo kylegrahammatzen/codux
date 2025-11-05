@@ -7,7 +7,9 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbS
 import { hasSession } from "@/lib/auth";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
+import { ProjectTitle } from "@/components/project/project-title";
+import { getProjectFiles, uploadProjectFiles } from "@/actions/storage";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -21,17 +23,17 @@ export default async function ProjectPage(props: ProjectPageProps) {
   const params = await props.params;
   const projectId = params.projectId;
 
-  // TODO: Check if project exists in database
-  // For now, just validate projectId format
   if (!projectId || projectId.length === 0) {
-    notFound();
+    redirect("/");
   }
 
-  // TODO: Later fetch from database based on projectId
-  const files = {
+  // Project will be created in DB on first message submission if it doesn't exist
+
+  // Default files for new projects
+  const defaultFiles = {
     "/App.tsx": `export default function App() {
   return (
-    <div className="p-8">
+    <div className="p-2">
       <h1 className="text-2xl font-bold mb-2">Hello World</h1>
       <p className="text-gray-600">Edit App.tsx to get started!</p>
     </div>
@@ -60,10 +62,33 @@ root.render(
     ),
   };
 
-  const dependencies = {
+  // Load files from Supabase Storage
+  const filesResult = await getProjectFiles(session.user.id, projectId);
+  let files: Record<string, string> = filesResult.files;
+
+  // If no files exist in storage, upload default files
+  if (Object.keys(files).length === 0) {
+    await uploadProjectFiles(session.user.id, projectId, defaultFiles);
+    files = defaultFiles;
+  }
+
+  // Parse dependencies from package.json
+  let dependencies: Record<string, string> = {
     react: "^19.2.0",
     "react-dom": "^19.2.0",
   };
+
+  const packageJson = files["/package.json"];
+  if (packageJson) {
+    try {
+      const parsed = JSON.parse(packageJson);
+      if (parsed.dependencies) {
+        dependencies = parsed.dependencies;
+      }
+    } catch (error) {
+      console.error("Failed to parse package.json:", error);
+    }
+  }
 
   const options = {
     externalResources: ["https://cdn.tailwindcss.com"],
@@ -71,18 +96,20 @@ root.render(
 
   return (
     <ProjectProvider>
-      <EditorLayout files={files} dependencies={dependencies} options={options}>
+      <EditorLayout files={files} dependencies={dependencies} options={options} userId={session.user.id} projectId={projectId}>
         <AppHeader>
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/">Logo</Link>
+                  <Link href="/">Codux</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator variant="slash" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Untitled Project</BreadcrumbPage>
+                <BreadcrumbPage>
+                  <ProjectTitle />
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
